@@ -10,7 +10,7 @@ header {
 }
 
 #main_screen {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../images/kabiur-rahman-riyad-YzZJUXjb9aw-unsplash.jpg");
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./images/kabiur-rahman-riyad-YzZJUXjb9aw-unsplash.jpg");
   background-blend-mode: normal;
   background-repeat: no-repeat;
   background-size: cover;
@@ -108,7 +108,7 @@ main {
   margin-top: 150px;
 }
 
-button {
+.button {
   background: #E5581A;
   background-blend-mode: normal;
   border-radius: 8px;
