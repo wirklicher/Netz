@@ -1,8 +1,8 @@
 import os
 from flask import Flask
 
-template_dir = os.path.abspath('../templates')
-static_dir = os.path.abspath('../static')
+template_dir = os.path.relpath('../templates')
+static_dir = os.path.relpath('../static')
 
 
 def create_app():
