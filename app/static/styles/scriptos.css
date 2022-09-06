@@ -28,4 +28,30 @@ main {
 
 #main_logo {
   margin-top: 0.5em;
+}
+
+.submenu {
+  overflow: hidden;
+  transition: max-height 0.3s;
+  max-height: 0;
+}
+
+.submenu a {
+  display: block;
+}
+
+.menu {
+  text-align: center;
+}
+
+.card {
+  background-color: white;
+}
+
+li {
+  list-style: none;
+}
+
+li a {
+  text-decoration: none;
 }/*# sourceMappingURL=scriptos.css.map */
