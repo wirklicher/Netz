@@ -11,3 +11,8 @@ def home():
 @views.route('/scriptos')
 def scriptos():
     return render_template('scriptos.html')
+
+@views.route('proc_jsou')
+def proc_jsou():
+    return render_template('proc_jsou.html')
+

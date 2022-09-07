@@ -149,6 +149,7 @@ main {
     margin-left: $main_margin;
     cursor: pointer;
     color: white;
+    overflow: hidden;
 }
 
 #headline {
@@ -210,6 +211,15 @@ main {
     width: 50%;
 }
 
+
+@media only screen and (max-width: 600px) {
+    #mot_text {
+        font-size: 1em;
+    }
+    #main_logo {
+        width: 30%;
+    }
+}
 
 
 

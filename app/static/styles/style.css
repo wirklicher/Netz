@@ -119,6 +119,7 @@ main {
   margin-left: 100px;
   cursor: pointer;
   color: white;
+  overflow: hidden;
 }
 
 #headline {
@@ -178,4 +179,13 @@ main {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+
+@media only screen and (max-width: 600px) {
+  #mot_text {
+    font-size: 1em;
+  }
+  #main_logo {
+    width: 30%;
+  }
 }/*# sourceMappingURL=style.css.map */
