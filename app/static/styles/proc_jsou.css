@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "ArgentumSans";
+  src: url("./fonts/ArgentumSans-Bold.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  color: yellow;
+  text-align: center;
+  font-family: "ArgentumSans" sans-serif;
+}/*# sourceMappingURL=proc_jsou.css.map */

@@ -1,0 +1,15 @@
+@font-face{
+    font-family: 'ArgentumSans';
+    src: url("./fonts/ArgentumSans-Bold.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+$mainfont: "ArgentumSans";
+
+
+
+body {
+    color: yellow;
+    text-align: center;
+    font-family: $mainfont sans-serif;
+}
