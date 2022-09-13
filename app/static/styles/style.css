@@ -241,6 +241,8 @@ main {
   .btn_menu {
     width: 100vw;
     height: 100%;
+  }
+  .li_btn {
     border-bottom: solid black 0.1em;
   }
   .burger {
