@@ -256,6 +256,9 @@ main {
     width: 10em;
     line-height: 1.2em;
   }
+  .describe {
+    font-size: 1.2em;
+  }
   .reasons {
     width: 90%;
     margin: auto;
