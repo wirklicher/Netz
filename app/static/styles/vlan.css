@@ -4,8 +4,16 @@
   font-weight: normal;
   font-style: normal;
 }
+html {
+  background-color: white;
+}
+
 body {
-  color: yellow;
+  color: black;
   text-align: center;
-  font-family: "ArgentumSans" sans-serif;
-}/*# sourceMappingURL=proc_jsou.css.map */
+  font-family: sans-serif;
+}
+
+h1 {
+  font-family: "ArgentumSans";
+}/*# sourceMappingURL=vlan.css.map */

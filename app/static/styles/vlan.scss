@@ -6,10 +6,16 @@
 }
 $mainfont: "ArgentumSans";
 
-
+html {
+    background-color: white;
+}
 
 body {
-    color: yellow;
+    color: black;
     text-align: center;
-    font-family: $mainfont sans-serif;
+    font-family: sans-serif;
+}
+
+h1 {
+    font-family: $mainfont
 }

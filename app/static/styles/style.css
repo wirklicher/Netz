@@ -124,8 +124,8 @@ main {
   background: #E5581A;
   background-blend-mode: normal;
   border-radius: 8px;
-  width: 261px;
-  height: 58px;
+  width: 16.3em;
+  height: 3.6em;
   font-family: "ArgentumSans";
   border: #E5581A;
   cursor: pointer;
@@ -183,14 +183,14 @@ main {
 }
 
 .headline4 {
-  font-size: 24px;
+  font: size 24vw;
   margin-bottom: 10px;
 }
 
 #image {
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  max-width: 50%;
 }
 
 @media only screen and (max-width: 600px) {
@@ -204,7 +204,7 @@ main {
   }
   .nav-links {
     position: absolute;
-    width: 100vw;
+    width: 100%;
     height: 93vh;
     background: #333;
     top: 7vh;
@@ -216,7 +216,7 @@ main {
   .nav-links ul {
     margin-left: 0;
   }
-  .navbar nav ul li a {
+  .navbar nav ul li {
     display: block;
   }
   .navbar nav ul li a {
@@ -225,6 +225,9 @@ main {
   }
   .navbar a {
     padding-bottom: 0;
+  }
+  #login {
+    padding-right: 0;
   }
   nav ul li:hover {
     background-color: #07313f;
@@ -239,7 +242,7 @@ main {
     height: 45px;
   }
   .btn_menu {
-    width: 100vw;
+    width: 100%;
     height: 100%;
   }
   .li_btn {
@@ -252,7 +255,7 @@ main {
     padding-top: 14em;
   }
   #mot_text {
-    font-size: 35px;
+    font-size: 10px;
     width: 10em;
     line-height: 1.2em;
   }

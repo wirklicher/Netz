@@ -12,7 +12,7 @@ def home():
 def scriptos():
     return render_template('scriptos.html')
 
-@views.route('proc_jsou')
-def proc_jsou():
-    return render_template('proc_jsou.html')
+@views.route('vlan')
+def vlan():
+    return render_template('vlan.html')
 

@@ -19,7 +19,7 @@
                     <li class="card" id="vlan">
                         <a href="#vlan" class="btn" >VLAN</a>
                         <div class="submenu">
-                            <a href="#" id="proc_jsou" class="sub_btn">Proč jsou potřeba?</a>
+                            <a href="#proc_su" id="proc_jsou" class="sub_btn">Proč jsou potřeba?</a>
                             <a href="#" id="druhy_vlan" class="sub_btn">Druhy VLAN</a>
                             <a href="#" id="dtp_vtp" class="sub_btn">DTP a VTP protocols</a>
                         </div>
@@ -35,8 +35,13 @@
                 </ul>
         </div>
         </nav>
-        <main id="main"></iframe></main>
+        <main id="main"><iframe src="vlan" id="frame" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></main>
         <script src="../static/main.js"></script>
+        <script>
+            function resizeIframe(obj) {
+              obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+            }
+          </script>
 </div>
 </body>
 </html>
