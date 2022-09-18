@@ -7,41 +7,72 @@
     <link rel="stylesheet" href="{{
         url_for('static', filename='styles/scriptos.css')
     }}">
+    <link rel="icon" href="../static/styles/images/logos/icon.svg" type="image/png">
     <title>Scriptos - Netzwe</title>
 </head>
 <body>
     
     <div class="container">
         <nav class="nav">
-            <a href="/"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></a>
+            <a href="/"><picture><source media="(max-width: 600px)" srcset="../static/styles/images/logos/icon.svg"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></picture></a>
+            <div id="line"></div>
             <div class="menu">
                 <ul>
                     <li class="card" id="vlan">
-                        <a href="#vlan" class="btn" >VLAN</a>
+                        <div class="btns">
+                            <a href="#vlan" class="btn" >VLAN</a>
+                            <img src="../static/styles/images/logos/caret-down-solid.svg" alt="caret-down-solid" width="20em" height="20em" id="caret-down-solid">
+                        </div>
+                        <div id="line2"></div>
                         <div class="submenu">
                             <a href="#proc_su" id="proc_jsou" class="sub_btn">Proč jsou potřeba?</a>
+                            <div id="line3"></div>
                             <a href="#" id="druhy_vlan" class="sub_btn">Druhy VLAN</a>
+                            <div id="line3"></div>
                             <a href="#" id="dtp_vtp" class="sub_btn">DTP a VTP protocols</a>
+                            <div id="line3"></div>
                         </div>
                     </li>
                     <li class="card" id="routing_protocols">
                         <a href="#routing_protocols" class="btn" >Routing Protocols</a>
+                        <div id="line2"></div>
                         <div class="submenu">
                             <a href="#" id="rip" class="sub_btn">RIP</a>
+                            <div id="line3"></div>
                             <a href="#" id="eigrp" class="sub_btn">EIGRP</a>
+                            <div id="line3"></div>
                             <a href="#" id="ospf" class="sub_btn">OSPF</a>
+                            <div id="line3"></div>
+                            <a href="#" id="BGP" class="sub_btn">BGP</a>
+                            <div id="line3"></div>
+                        </div>
+                    </li>
+                    <li class="card" id="stp">
+                        <a href="#stp" class="btn">STP</a>
+                        <div id="line2"></div>
+                        <div class="submenu">
+                        </div>
+                    </li>
+                    <li class="card" id="ipv6">
+                        <a href="#ipv6" class="btn">IPv6</a>
+                        <div id="line2"></div>
+                        <div class="submenu">
+                        </div>
+                    </li>
+                    <li class="card" id="ssh-telnet">
+                        <a href="#ssh-telnet" class="btn">SSH & Telnet</a>
+                        <div id="line2"></div>
+                        <div class="submenu">
                         </div>
                     </li>
                 </ul>
         </div>
         </nav>
-        <main id="main"><iframe src="vlan" id="frame" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></main>
+        <main id="main"></main>
+
         <script src="../static/main.js"></script>
-        <script>
-            function resizeIframe(obj) {
-              obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-            }
-          </script>
+       
+
 </div>
 </body>
 </html>

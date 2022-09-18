@@ -241,82 +241,36 @@ main {
         background-position: 55%;
     }
 
-    .nav-links {
-      position: absolute;
-      width: 100%;
-      height: 93vh;
-      background: #333;
-      top: 7vh;
-      left: -250%;
-      transition: 0.5s;
-      text-align: center;
-      padding: 0;
-      
-    }
     
-    .nav-links ul {
-        margin-left: 0;
-    }
-
     
-    .navbar nav ul li {
-        display: block;
-    }
 
-    .navbar nav ul li a{
-        font-size: 2em;
-        text-align: center;
-    }
 
-    .navbar a {
-        padding-bottom: 0;
-    }
-
-    #login {
+    #scriptos {
         padding-right: 0;
+        font-size: 2em;
     }
 
-    nav ul li:hover {
-        background-color: #07313f;
-        
-    }
-    .navbar nav ul li a:hover {
-        color:#E5581A;
-    }
 
-    nav ul li a:after {
-        display: none;
-        
-    }
 
-    li {
-        height: 45px;
-        
-    }
 
-    .btn_menu {
-        width: 100%;
-        height: 100%;
-        
-    }
 
-    .li_btn {
-        border-bottom: solid black 0.1em;
-    }
+
+ 
+
+
     
 
-    .burger {
-        display: block;
-    }
 
-    .maindialog {
-        padding-top: 14em;
-    }
+
+   
 
     #mot_text {
-        font-size: 10px;
+        font-size: 34px;
         width: 10em;
         line-height: 1.2em;
+        font-family: monospace;
+        font-weight: bold;
+
         
     }
 
@@ -340,40 +294,23 @@ main {
     .article_card {
         margin-top: 3em;
         margin-right: 0;
+
+        h4{
+            font-size: 2.7em;
+        }
+
+        p {
+            font-size: 2em;
+        }
     }
 
-
-
     
-
-    
-
-    
-
-    #main_logo {
-        width: 75%;
-    }
-
-
 
 }
 
-.nav-active {
-    left: 0;
-  }
 
 
-  @keyframes navLinkFade {
-    from {
-        opacity: 0;
-        transform: translateX(50px) ;
 
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0px);
-    }
-  }
 
 
 

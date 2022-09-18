@@ -5,11 +5,38 @@
     font-style: normal;
 }
 $mainfont: "ArgentumSans";
+$secondarycolor: #B77924;
+
 
 body {
     margin: 0;
     padding: 0;
 }
+
+#line {
+    text-align: center;
+    width: calc(237px*0.75);
+    height: 1px;
+    border-bottom: solid 2px #db861f;
+    margin: auto;
+    
+}
+
+#line2 {
+    width: 148.5px;
+    height: 2px;
+    border-bottom: solid 2px #db861f;
+    margin-bottom: 14.5px;
+}
+
+#line3 {
+    width: 207.5px;
+    height: 0px;
+    border-bottom: solid 2px #db861f;
+    margin-bottom: 14.5px;
+}
+
+
 
 
 .container {
@@ -18,56 +45,76 @@ body {
     justify-content: space-evenly;
 }
 
+.btns {
+    display:flex;
+}
+
+.menu {
+    width: 75%;
+    margin: auto;
+    padding-top: 32px;
+}
+
 
 .nav {
+    left: 0;
+    position: fixed;
     background-color: #07313f;
-    width: 100%;
+    width: 15%;
     height: 100vh;
     flex: 1;
+    font-family: monospace;
+    font-size: 18px;
+    color: $secondarycolor;
+    font-weight: 400;
+    overflow: auto;
+
     text-align: center;
-    font-family: "ArgentumSans", sans-serif;
-    color: #E5581A;
-    border-right: solid black 0.2em;
-     
+}
+
+nav a picture {
+    text-align: center;
 }
 
 main {
-    width: 100%;
+    text-align: center;
+    width: 85%;
+    margin-left: 15%;
     height: 100vh;
     flex: 5;
+
+    h1 {
+        font-family: $mainfont, sans-serif;
+    }
 }
 
 #main_logo {
-    margin-top: .5em;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
 }
 
 .submenu {
     overflow: hidden;
     transition: max-height 0.3s;
     max-height: 0;
+    padding-left: 1em;
 }
 
 .submenu a{
     display: block;
-    text-align: start;
+    position: static;
+    color: $secondarycolor;
+    margin: 0;
+    font-weight: 400;
 }
 
-
-.menu {
-    text-align: center;
-}
-
-
-.card {
-    border-top: solid 0.1em black;
-    background-color: white;
-    padding: 0.5em 1em;
-}
 
 ul {
     padding: 0;
     padding-top: 1em;
     margin: 0;
+    background-color: #07313f;
+    text-align: start;
 }
 
 li {
@@ -85,8 +132,10 @@ ul li a {
 }
 
 .btn {
-    color: #E5581A;
-   font-size: 1.2em;  
+    color: $secondarycolor;
+    font-size: 24px;
+    font-family: monospace;
+
 }
 
 .card:target .submenu{
