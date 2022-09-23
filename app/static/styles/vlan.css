@@ -4,16 +4,24 @@
   font-weight: normal;
   font-style: normal;
 }
+* {
+  padding: 0;
+  margin: 0;
+}
+
 html {
   background-color: white;
 }
 
 body {
   color: black;
-  text-align: center;
   font-family: sans-serif;
+  width: 90%;
+  margin: auto;
 }
 
 h1 {
-  font-family: "ArgentumSans";
+  font-family: monospace;
+  font-weight: 400;
+  font-size: 64px;
 }/*# sourceMappingURL=vlan.css.map */

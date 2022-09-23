@@ -13,5 +13,13 @@ proc_jsou.addEventListener('click', () => {
 
 vlan.addEventListener('click', () => {
     scriptos_content.innerHTML = "<iframe id='iframe1' src='vlan' frameborder='0' scrolling='no' style='width: 100%; height: 100%; overflow:hidden;'>";
+    let iframe = document.querySelector("#iframe1");
+
+	iframe.addEventListener('load', function() {
+		iframe.style.height = (iframe.contentDocument.body.scrollHeight+100) + 'px';
+		
+        console.log(iframe.style.height);
+
+	});	
 })
 

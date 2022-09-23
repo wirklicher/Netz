@@ -67,10 +67,9 @@ nav a picture {
 }
 
 main {
-  text-align: center;
   width: 85%;
   margin-left: 15%;
-  height: 500vh;
+  height: 100%;
   flex: 5;
 }
 main h1 {
