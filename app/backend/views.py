@@ -16,3 +16,6 @@ def scriptos():
 def vlan():
     return render_template('vlan.html')
 
+@views.route('rip')
+def rip():
+    return render_template('rip.html')

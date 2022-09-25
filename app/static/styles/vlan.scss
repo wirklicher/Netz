@@ -5,6 +5,7 @@
     font-style: normal;
 }
 $mainfont: "ArgentumSans";
+$spacer: 15px;
 
 * {
     padding: 0;
@@ -12,18 +13,47 @@ $mainfont: "ArgentumSans";
 }
 html {
     background-color: white;
+    
 }
 
 body {
+    font-family: monospace;
     color: black;
-    font-family: sans-serif;
     width: 90%;
     margin: auto;
+    font-size: 18px;
 }
 
 h1 {
-    font-family: monospace;
+    padding-top: 30px;
     font-weight: 400;
     font-size: 64px;
 
+}
+
+#line {
+    margin-top: $spacer;
+    width: 100%;
+    height: 1px;
+    border-top: solid 2px #db861f;
+    
+}
+
+#line2 {
+    width: 292.9px;
+    height: 1px;
+    border-top: solid 2px #db861f;
+}
+
+#znalosti {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: $spacer;
+    margin-bottom: $spacer;
+}
+
+#proc_su {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 10px;
 }
