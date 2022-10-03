@@ -11,15 +11,53 @@
 </head>
 <body>
     <h1>VLAN</h1>
-    <div id="line"></div>
+    <div id="vlanline"></div>
     <h5 for="" id="znalosti">Předpokládané znalosti:</h5>
     <h3 id="proc_su">Proč jsou potřeba?</h3>
-    <div id="line2"></div>
+    <div id="vlanline2"></div>
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Quisque porta. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Maecenas libero. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Aenean fermentum risus id tortor. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. In enim a arcu imperdiet malesuada. Aenean id metus id velit ullamcorper pulvinar.
 
         Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Aenean placerat. Aenean id metus id velit ullamcorper pulvinar. Mauris tincidunt sem sed arcu. Vivamus ac leo pretium faucibus. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Sed vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Ut tempus purus at lorem.
         
         
-        </p>
+    </p>
+    <div class="height_spacer"></div>
+    <h3 style="text-align: center;">Chcete si latku procvicit?</h3>
+    <div id="vlanline2" style='margin: auto;'></div>
+    <div class="height_spacer"></div>
+    <div class="btns_quiz">
+        <a class="btnquiz" id="play">Hrat</a>
+        <div class="width_spacer"></div>
+        <a href="vlan" class="btnquiz" id="highscore-btn">Highscores</a>
+    </div>
+    <div class="quiz" id="quiz">
+        
+        <div class="question" id="question">
+            <h2 id="questionNo">1.</h2>
+            <h2 id="questionText">Mas rad uwu?</h2>
+            <div class="timer" id="timer">
+                <h6>Time Left</h6>
+                <h6 id="time">00</h6>
+            </div>
+        </div>
+        <div id="optionList">
+            <div class="height_spacer"></div>
+            <h4 class='choice_que' id="opt1">Ano, zboznuji!</h4>
+            <div class="height_spacer"></div>
+            <h4 class='choice_que' id="opt2">Ne</h4>
+            <div class="height_spacer"></div>
+            <h4 class='choice_que' id="opt3">Jasnacka</h4>
+            <div class="height_spacer"></div>
+            <h4 class='choice_que' id="opt4">UwU!!!</h4>
+            <div class="height_spacer"></div>
+        </div>
+
+        <div id="answersSection">
+            <h3 id="total_correct">3 Of 10 Questions</h3>
+            <h3 id="next_question">Next</h3>
+        </div>
+    </div>
+    <div class="height_spacer"></div>
+<script src="../static/quiz.js"></script>
 </body>
 </html>

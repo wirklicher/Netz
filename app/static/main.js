@@ -12,12 +12,18 @@ hamburger.addEventListener("click", () => {
     navmenu.classList.toggle("active");
 })
 
+function mainer(){
+    let iframe = document.querySelector("#iframe1");
+    
+    console.log(iframe.contentWindow.main())
+}
+
 
 
 function height_of_iframe(){
     let iframe = document.querySelector("#iframe1");
     iframe.addEventListener('load', function() {
-		iframe.style.height = (iframe.contentDocument.body.scrollHeight+100) + 'px';
+		iframe.style.height = (iframe.contentDocument.body.scrollHeight) + 'rem';
         console.log(iframe.style.height);
 
 	});
@@ -29,13 +35,14 @@ proc_jsou.addEventListener('click', () => {
 })
 
 vlan.addEventListener('click', () => {
-    scriptos_content.innerHTML = "<iframe id='iframe1' src='vlan' frameborder='0' scrolling='no' style='width: 100%; height: 100%; overflow:hidden;'>";
+   $('#main').load('vlan');
     
-    height_of_iframe();	
+    //height_of_iframe();	
+    //mainer(); 
 })
 
 rip.addEventListener('click', () => {
     scriptos_content.innerHTML = "<iframe id='iframe1' src='rip' frameborder='0' scrolling='no' style='width: 100%; height: 100%; overflow:hidden;'>";
-    height_of_iframe();
+    //height_of_iframe();
 })
 

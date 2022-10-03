@@ -18,7 +18,7 @@ body {
     text-align: center;
     width: calc(237px*0.75);
     height: 1px;
-    border-bottom: solid 2px #db861f;
+    border-top: solid 2px #db861f;
     margin: auto;
     
 }
@@ -26,14 +26,14 @@ body {
 #line2 {
     width: 148.5px;
     height: 2px;
-    border-bottom: solid 2px #db861f;
+    border-top: solid 2px #db861f;
     margin-bottom: 14.5px;
 }
 
 #line3 {
     width: 207.5px;
     height: 0px;
-    border-bottom: solid 2px #db861f;
+    border-top: solid 2px #db861f;
     margin-bottom: 14.5px;
 }
 
@@ -48,6 +48,8 @@ body {
 
 
 
+
+
 .btns {
     display:flex;
 }
@@ -56,6 +58,7 @@ body {
     width: 75%;
     margin: auto;
     padding-top: 32px;
+    
 }
 
 
@@ -95,9 +98,8 @@ nav a picture {
 }
 
 main {
-    
     width: 85%;
-    margin-left: 15%;
+    padding-left: 15%;
     height: 100%;
     flex: 5;
 
@@ -176,6 +178,12 @@ ul li a {
 }
 
 @media only screen and (max-width: 600px) {
+    #main {
+        padding-top: 10%;
+        padding-left: 0;
+        flex: 0;
+        margin: 0;
+    }
     .container {
         flex-direction: column;
     }
@@ -234,16 +242,20 @@ ul li a {
     #line {
         display:none;
     }
+
+    #line2 {
+        margin: 0 auto;
+    }
+
+    #line3{
+        margin: 0 auto;
+    }
     #iframe1 {
         margin-top: 100px;
     }
 
 
-    main {
-        height: 100px;
-        flex: 0;
-        margin: 0;
-    }
+    
 
     
 }
