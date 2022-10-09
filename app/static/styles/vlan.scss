@@ -110,7 +110,7 @@ h3 {
 
 .question {
     height: 75px;
-    background-color: #083a4a;
+    background-color: #0A4F65;
     display: flex;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -123,7 +123,7 @@ h3 {
 .choice_que {
     width: 85%;
     margin: auto;
-    background-color: #083a4a;
+    background-color: #0A4F65;
     text-align: center;
     height: 70px;
     cursor: pointer;
@@ -141,4 +141,8 @@ h3 {
 
 #next_question {
     cursor: pointer;
+}
+
+#optionList .disabled {
+    pointer-events: none;
 }

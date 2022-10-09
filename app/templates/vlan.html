@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{
         url_for('static', filename='styles/vlan.css')
     }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Scriptos - Netzwe</title>
 </head>
 <body>
@@ -34,7 +35,7 @@
         
         <div class="question" id="question">
             <h2 id="questionNo">1.</h2>
-            <h2 id="questionText">Mas rad uwu?</h2>
+            <h2 id="questionText"></h2>
             <div class="timer" id="timer">
                 <h6>Time Left</h6>
                 <h6 id="time">00</h6>
@@ -42,22 +43,27 @@
         </div>
         <div id="optionList">
             <div class="height_spacer"></div>
-            <h4 class='choice_que' id="opt1">Ano, zboznuji!</h4>
+            <h4 class='choice_que' id="opt1"></h4>
             <div class="height_spacer"></div>
-            <h4 class='choice_que' id="opt2">Ne</h4>
+            <h4 class='choice_que' id="opt2"></h4>
             <div class="height_spacer"></div>
-            <h4 class='choice_que' id="opt3">Jasnacka</h4>
+            <h4 class='choice_que' id="opt3"></h4>
             <div class="height_spacer"></div>
-            <h4 class='choice_que' id="opt4">UwU!!!</h4>
+            <h4 class='choice_que' id="opt4"></h4>
             <div class="height_spacer"></div>
         </div>
 
         <div id="answersSection">
-            <h3 id="total_correct">3 Of 10 Questions</h3>
-            <h3 id="next_question">Next</h3>
+            <h3 id="total_correct"></h3>
+            <h3 id="next_quest">Next</h3>
+        </div>
+
+        <div class="result">
+            <p id="points"></p>
         </div>
     </div>
     <div class="height_spacer"></div>
 <script src="../static/quiz.js"></script>
+<script src="../static/quest.js"></script>
 </body>
 </html>
