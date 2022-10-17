@@ -34,42 +34,62 @@
     <div class="quiz" id="quiz">
         
         <div class="question" id="question">
-            <h2 id="questionNo">1.</h2>
-            <h2 id="questionText">Zkusebni text</h2>
-            <div class="timer" id="timer">
-                <h6>Time Left </h6>
-                <h6 id="time">00</h6>
+            <div class="headerquest">
+                <h2 id="questionNo">1.</h2>
+                <h2 id="questionText">Zkusebni text</h2>
+                <div class="timer" id="timer">
+                    <h6>Time Left:&nbsp</h6>
+                    
+                    <div class="timenum">
+                        <div class="line2"></div>
+                        <div class="circleback">
+                            <h6 id="time">00</h6>
+                        </div>
+                        <div class="line2"></div>
+                    </div>
+            </div>
             </div>
         </div>
         <div class="mainer">
-            <div class="abc">
-                <p class="letter">A</p>
-                <p class="letter">B</p>
-                <p class="letter">C</p>
-                <p class="letter">D</p>
-            </div>
-            <div class="line"></div>
-            <div id="optionList">
-                <div class="height_spacer"></div>
-                <h4 class='choice_que' id="opt1"></h4>
-                <div class="height_spacer"></div>
-                <h4 class='choice_que' id="opt2"></h4>
-                <div class="height_spacer"></div>
-                <h4 class='choice_que' id="opt3"></h4>
-                <div class="height_spacer"></div>
-                <h4 class='choice_que' id="opt4"></h4>
-                <div class="height_spacer"></div>
+            <div class="height_spacer"></div>
+            <div class="cont">
+                <div class="abc">
+                    <p class="letter">A</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">B</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">C</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">D</p>
+                </div>
+                
+                <div class="line"></div>
+                <div id="optionList">
+                    <h4 class='choice_que' id="opt1"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que' id="opt2"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que' id="opt3"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que' id="opt4"></h4>
+                    <div class="height_spacer"></div>
+                </div>
             </div>
         </div>
 
         <div id="answersSection">
-            <h3 id="total_correct"></h3>
-            <h3 id="next_quest">Next</h3>
+            <div class="answers">
+                <div class="bgans"><h3 id="total_correct"></h3></div>
+                <div class="bgbtn" id="next_quest">
+                    <h3>Next</h3>
+                </div>
+            </div>
         </div>
 
-        <div class="result">
-            <p id="points"></p>
-        </div>
+        
+    </div>
+    <div class="result">
+        <p id="points"></p>
     </div>
     <div class="height_spacer"></div>
 <script src="../static/quiz.js"></script>

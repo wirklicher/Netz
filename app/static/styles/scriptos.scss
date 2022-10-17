@@ -98,8 +98,8 @@ nav a picture {
 }
 
 main {
-    width: 85%;
-    padding-left: 15%;
+    width: calc(100% - 250px);
+    padding-left: 250px;
     height: 100%;
     flex: 5;
 

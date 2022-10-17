@@ -36,6 +36,8 @@ proc_jsou.addEventListener('click', () => {
 
 vlan.addEventListener('click', () => {
    $('#main').load('vlan');
+
+   index = 0;
     
     //height_of_iframe();	
     //mainer(); 

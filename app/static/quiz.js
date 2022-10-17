@@ -24,6 +24,7 @@ if(typeof questNo === 'undefined'){
 if(typeof questText === 'undefined'){
     questText = document.querySelector('#questionText');
 }
+console.log(questText);
 if(typeof time === 'undefined'){
     time = document.querySelector('#time');
 }
@@ -91,11 +92,13 @@ if(typeof points === 'undefined'){
 
 
 
-    play.addEventListener('click', ()=>{
+play.addEventListener('click', ()=>{
     btns_quiz.style.display = "none";
+    //console.log(btns_quiz.style.display);
     quiz.style.display = 'block';
 
     interval = setInterval(countDown, 1000);
+    //console.log(index);
     loadData();
 })
 
@@ -103,6 +106,33 @@ if (typeof countDown === "undefined"){
      countDown = ()=>{
         if(timer === 20){
             clearInterval(interval);
+            if(index !== MCQS.length - 1){
+                index++;
+                choice_que.forEach(removeActive => {
+                    removeActive.classList.remove("active");
+                    removeActive.classList.remove("disabled");
+                })
+        
+                loadData();
+        
+                total_correct.innerHTML = `${correct} Out Of ${MCQS.length} Questions`;
+                clearInterval(interval);
+                interval = setInterval(countDown, 1000);
+                
+            }
+            
+            else {
+                index = 0;
+        
+                clearInterval(interval);
+                quiz.style.display = "none";
+                points.innerHTML = `You got ${correct} Out Of ${MCQS.length}`;
+                result.style.display = "block";
+            }
+            
+            for (i = 0; i <= 3; i++){
+                choice_que[i].classList.remove("disabled");
+            }
         }
         else {
             timer++;
@@ -113,7 +143,7 @@ if (typeof countDown === "undefined"){
 }
 
 
-if(typeof loadData === 'undefined'){
+
     loadData = ()=>{
         questNo.innerText = index + 1 + ". ";
         questText.innerText = MCQS[index].question;
@@ -121,10 +151,13 @@ if(typeof loadData === 'undefined'){
         opt2.innerText = MCQS[index].choice2;
         opt3.innerText = MCQS[index].choice3;
         opt4.innerText = MCQS[index].choice4;
+
+        //console.log(MCQS[index].question);
+        //console.log(questText);
     
         timer = 0;
     }
-}
+
 
 
 choice_que.forEach((choices, choiceNo) => {
@@ -133,8 +166,10 @@ choice_que.forEach((choices, choiceNo) => {
 
         if(choiceNo === MCQS[index].answer)
         {
+            choice_que[choiceNo].style.color = 'green';
+            choice_que[choiceNo].style.borderColor = 'green';
             correct++;
-            console.log(correct);
+            
         }
         else {
             correct += 0;
@@ -152,8 +187,7 @@ choice_que.forEach((choices, choiceNo) => {
 
 next_quest.addEventListener("click", ()=> {
 
-    console.log(index);
-    console.log(MCQS.length - 1);
+
 
     if(index !== MCQS.length - 1){
         index++;
