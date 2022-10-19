@@ -115,6 +115,7 @@ main {
 }
 
 .submenu {
+    position: relative;
     overflow: hidden;
     transition: max-height 0.3s;
     max-height: 0;
@@ -164,7 +165,7 @@ ul li a {
 }
 
 .card:hover .submenu {
-    max-height: 10em;
+    max-height: 15em;
     
 }
 
@@ -176,6 +177,14 @@ ul li a {
     height: 100%;
 
     
+}
+
+.arrow {
+    position: absolute;
+        width: 11px;
+        height: 11px;
+        top: -.36rem;
+        box-sizing: border-box;
 }
 
 @media only screen and (max-width: 600px) {
@@ -201,10 +210,12 @@ ul li a {
 
     .btnAtributtes {
         align-items: center;
+        padding: 1rem 0;
     }
 
     #caret {
         width: 2.5%;
+        padding-right: 8.5%;
     }
 
     .menu {
@@ -253,6 +264,10 @@ ul li a {
         text-align: center;
     }
 
+    .card:target .submenu {
+        max-height: 15em;
+    }
+
     .menu.active{
         display: block;
         position: fixed;
@@ -267,17 +282,23 @@ ul li a {
     }
 
     ul {
-
-        width: 85%;
-        margin: auto;
         background-color: #0D3544;
+        padding-top: 0;
         
+    }
+    .btn {
+        width:75%;
+        margin: auto;
+    }
+
+    .sub_btn {
+        padding-left: 10%;
+        padding-top: 1.2em;
+        padding-bottom: 1.2em;
+        z-index: 3;
     }
     
 
-    .card {
-        padding: 1rem 0;
-    }
     #line {
         display:none;
     }
@@ -295,6 +316,15 @@ ul li a {
 
     .icon {
         z-index: 1;
+    }
+
+    .arrow {
+        z-index: 1;
+        background-color: #0D3544;
+        left: 12.7%;
+        transform: scale(1.1) rotate(45deg);
+        transition: .5s;
+        
     }
 
     
