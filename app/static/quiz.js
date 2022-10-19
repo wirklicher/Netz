@@ -1,30 +1,32 @@
 
 //Start
-if(typeof btns_quiz === 'undefined'){
-     btns_quiz = document.querySelector('.btns_quiz');
-}
+btns_quiz = document.querySelector('.btns_quiz');
 
-if(typeof play === 'undefined'){
-    play = document.querySelector('#play');
-}
 
-if(typeof result === 'undefined'){
-    result = document.querySelector('.result');
-}
+
+play = document.querySelector('#play');
+
+
+playagain = document.querySelector('#playagain');
+
+
+result = document.querySelector('.result');
+
 
 // Quiz
-if(typeof quiz === 'undefined'){
-    quiz = document.querySelector('#quiz');
-}
+
+quiz = document.querySelector('#quiz');
+
 
 //Question Section
-if(typeof questNo === 'undefined'){
-    questNo = document.querySelector('#questionNo');
-}
-if(typeof questText === 'undefined'){
-    questText = document.querySelector('#questionText');
-}
-console.log(questText);
+
+questNo = document.querySelector('#questionNo');
+
+questText = document.querySelector('#questionText');
+
+trophy = document.querySelector('#trophy');
+
+
 if(typeof time === 'undefined'){
     time = document.querySelector('#time');
 }
@@ -48,91 +50,62 @@ if(typeof opt4 === 'undefined'){
 
 
 //Correct And Next Button
-if(typeof total_correct === 'undefined'){
+
     total_correct = document.querySelector('#total_correct');
-}
-if(typeof next_quest === 'undefined'){
+
+
     next_quest = document.querySelector('#next_quest');
-}
+
 
 
 //Get All H4 From Quiz Sector
-if(typeof choice_que === 'undefined'){
     choice_que = document.querySelectorAll('.choice_que');
     
-}
 
 
-if(typeof index === 'undefined'){
-    index = 0;
-}
-if(typeof timer === 'undefined'){
-    timer = 0;
-}
-if(typeof interval === 'undefined'){
-    interval = 0;
-}
+var index = 0;
+
+
+timer = 0;
+
+
+interval = 0;
+
 
 
 //Total Points
-if(typeof correct === 'undefined'){
-    correct = 0;
-}
+correct = 0;
+
 
 
 //Store Answer Value
-if(typeof UserAns === 'undefined'){
-    UserAns = undefined;
-}
 
-if(typeof points === 'undefined'){
-    points = document.querySelector("#points")
-}
+UserAns = undefined;
+
+
+points = document.querySelector("#points")
+
 
 
 
 
 play.addEventListener('click', ()=>{
-    btns_quiz.style.display = "none";
+    correct = 0;
+    btns_quiz.classList.add('hidden');
     //console.log(btns_quiz.style.display);
     quiz.style.display = 'block';
+    
 
     interval = setInterval(countDown, 1000);
     //console.log(index);
     loadData();
+    total_correct.innerHTML = `${correct} z ${MCQS.length} otazek`;
 })
 
-if (typeof countDown === "undefined"){
      countDown = ()=>{
-        if(timer === 20){
+        if(timer === 60){
             clearInterval(interval);
-            if(index !== MCQS.length - 1){
-                index++;
-                choice_que.forEach(removeActive => {
-                    removeActive.classList.remove("active");
-                    removeActive.classList.remove("disabled");
-                })
-        
-                loadData();
-        
-                total_correct.innerHTML = `${correct} Out Of ${MCQS.length} Questions`;
-                clearInterval(interval);
-                interval = setInterval(countDown, 1000);
-                
-            }
-            
-            else {
-                index = 0;
-        
-                clearInterval(interval);
-                quiz.style.display = "none";
-                points.innerHTML = `You got ${correct} Out Of ${MCQS.length}`;
-                result.style.display = "block";
-            }
-            
-            for (i = 0; i <= 3; i++){
-                choice_que[i].classList.remove("disabled");
-            }
+            next_quest.click();
         }
         else {
             timer++;
@@ -140,7 +113,7 @@ if (typeof countDown === "undefined"){
             //console.log(timer);
         }
     }
-}
+
 
 
 
@@ -160,14 +133,14 @@ if (typeof countDown === "undefined"){
 
 
 
+
 choice_que.forEach((choices, choiceNo) => {
     choices.addEventListener("click", ()=>{
         choices.classList.add("active");
 
         if(choiceNo === MCQS[index].answer)
         {
-            choice_que[choiceNo].style.color = 'green';
-            choice_que[choiceNo].style.borderColor = 'green';
+            choice_que[choiceNo].classList.add('correct');
             correct++;
             
         }
@@ -179,6 +152,7 @@ choice_que.forEach((choices, choiceNo) => {
 
     for(i = 0; i <= 3; i++){
         choice_que[i].classList.add("disabled");
+        
     }
     })
 
@@ -194,11 +168,12 @@ next_quest.addEventListener("click", ()=> {
         choice_que.forEach(removeActive => {
             removeActive.classList.remove("active");
             removeActive.classList.remove("disabled");
+            removeActive.classList.remove('correct');
         })
 
         loadData();
 
-        total_correct.innerHTML = `${correct} Out Of ${MCQS.length} Questions`;
+        total_correct.innerHTML = `${correct} z ${MCQS.length} otazek`;
         clearInterval(interval);
         interval = setInterval(countDown, 1000);
         
@@ -206,18 +181,28 @@ next_quest.addEventListener("click", ()=> {
     
     else {
         index = 0;
+        
 
         clearInterval(interval);
         quiz.style.display = "none";
-        points.innerHTML = `You got ${correct} Out Of ${MCQS.length}`;
+        points.innerHTML = `Dostal si ${correct} z ${MCQS.length} bodu`;
         result.style.display = "block";
+
+        
     }
     
     for (i = 0; i <= 3; i++){
+        choice_que[i].classList.remove('correct');
         choice_que[i].classList.remove("disabled");
     }
 })
 
+playagain.addEventListener('click', () => {
+    result.style.display = 'none';
+    total_correct.innerText = '';
+    play.click();
+    
+})
 
 
 //Clicked Start Button

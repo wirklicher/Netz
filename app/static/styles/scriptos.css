@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "ArgentumSans";
-  src: url("./fonts/ArgentumSans-Bold.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
 body {
   margin: 0;
   padding: 0;
@@ -41,6 +35,13 @@ body {
   display: flex;
 }
 
+.btnAtributtes {
+  display: flex;
+}
+.btnAtributtes #caret {
+  filter: invert(71%) sepia(28%) saturate(3105%) hue-rotate(342deg) brightness(87%) contrast(97%);
+}
+
 .menu {
   width: 75%;
   margin: auto;
@@ -61,6 +62,7 @@ body {
   overflow: auto;
   text-align: center;
   min-width: 250px;
+  overflow-y: hidden;
 }
 
 nav a picture {
@@ -69,7 +71,6 @@ nav a picture {
 
 .hamburger {
   display: none;
-  cursor: pointer;
 }
 
 .bar {
@@ -77,7 +78,7 @@ nav a picture {
   width: 25px;
   height: 3px;
   margin: 5px auto;
-  transition: all 0.3 ease-in-out;
+  transition: all 0.3s ease-in-out;
   background-color: white;
 }
 
@@ -88,7 +89,7 @@ main {
   flex: 5;
 }
 main h1 {
-  font-family: "ArgentumSans", sans-serif;
+  font-family: monospace;
 }
 
 #main_logo {
@@ -156,7 +157,8 @@ ul li a {
 
 @media only screen and (max-width: 600px) {
   #main {
-    padding-top: 10%;
+    width: 100%;
+    padding-top: 90px;
     padding-left: 0;
     flex: 0;
     margin: 0;
@@ -170,6 +172,15 @@ ul li a {
     width: 100%;
     flex: 0;
   }
+  .btnAtributtes {
+    align-items: center;
+  }
+  #caret {
+    width: 2.5%;
+  }
+  .menu {
+    padding-top: 0;
+  }
   .subnav {
     height: 100%;
     width: 85%;
@@ -178,9 +189,16 @@ ul li a {
     text-align: left;
     align-items: center;
     justify-content: space-between;
+    overflow-y: hidden;
+    transition: 0.3s;
+  }
+  .submenu {
+    text-align: start;
+    background-color: #07313F;
   }
   .hamburger {
     display: block;
+    cursor: pointer;
   }
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
@@ -198,26 +216,34 @@ ul li a {
   .menu.active {
     display: block;
     position: fixed;
-    top: 0;
+    top: 90px;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #07313f;
+    background-color: #0D3544;
     margin: auto;
   }
   ul {
-    text-align: center;
+    width: 85%;
+    margin: auto;
+    background-color: #0D3544;
+  }
+  .card {
+    padding: 1rem 0;
   }
   #line {
     display: none;
   }
   #line2 {
-    margin: 0 auto;
+    display: none;
   }
   #line3 {
-    margin: 0 auto;
+    display: none;
   }
   #iframe1 {
     margin-top: 100px;
+  }
+  .icon {
+    z-index: 1;
   }
 }/*# sourceMappingURL=scriptos.css.map */

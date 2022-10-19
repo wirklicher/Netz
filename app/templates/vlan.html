@@ -28,15 +28,13 @@
     <div class="height_spacer"></div>
     <div class="btns_quiz">
         <a class="btnquiz" id="play">Hrat</a>
-        <div class="width_spacer"></div>
-        <a href="vlan" class="btnquiz" id="highscore-btn">Highscores</a>
     </div>
     <div class="quiz" id="quiz">
         
         <div class="question" id="question">
             <div class="headerquest">
                 <h2 id="questionNo">1.</h2>
-                <h2 id="questionText">Zkusebni text</h2>
+                <h2 id="questionText"></h2>
                 <div class="timer" id="timer">
                     <h6>Time Left:&nbsp</h6>
                     
@@ -79,7 +77,9 @@
 
         <div id="answersSection">
             <div class="answers">
-                <div class="bgans"><h3 id="total_correct"></h3></div>
+                <div class="bgans">
+                    <h3 id="total_correct" >0</h3>
+                </div>
                 <div class="bgbtn" id="next_quest">
                     <h3>Next</h3>
                 </div>
@@ -88,8 +88,12 @@
 
         
     </div>
-    <div class="result">
+    <div class="result hidden">
+        <img src="./static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
+        <h2>Vysledky</h2>
         <p id="points"></p>
+        <div class="height_spacer"></div>
+        <a class="playagainbtn" id="playagain">Hrat Znovu</a>
     </div>
     <div class="height_spacer"></div>
 <script src="../static/quiz.js"></script>

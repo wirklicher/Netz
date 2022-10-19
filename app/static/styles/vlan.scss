@@ -1,10 +1,4 @@
-@font-face{
-    font-family: 'ArgentumSans';
-    src: url("./fonts/ArgentumSans-Bold.ttf");
-    font-weight: normal;
-    font-style: normal;
-}
-$mainfont: "ArgentumSans";
+
 $spacer: 15px;
 
 * {
@@ -81,7 +75,6 @@ h3 {
     font-size: 1.2rem;
     padding: 1.2rem 0;
     width: 15rem;
-    text-align: 30rem;
     text-align: center;
     margin-bottom: 1rem;
     text-decoration: none;
@@ -208,6 +201,8 @@ h3 {
 .choice_que:hover {
     transition: all .5s;
     transform: scale(1.025);
+    border-color: #47AF7C;
+    color: #47AF7C;
 }
 
 #answersSection{
@@ -264,6 +259,16 @@ h6 {
     }
 }
 
+.correct {
+    border-color: #47AF7C;
+    color:#47AF7C; 
+}
+
+.wrong {
+    border-color: #722B37;
+    color: #722B37;
+}
+
 .bgbtn {
     padding: .5rem 2rem;
     background-color: #F1F1E6;
@@ -274,6 +279,7 @@ h6 {
 .bgbtn:hover{
     transition: all .5s;
     transform: scale(1.025);
+
 }
 
 .bgans {
@@ -281,4 +287,45 @@ h6 {
     background-color: #F1F1E6;
     color: black;
     border-radius: 1.2rem;
+    
+}
+
+.hidden {
+    display:none;
+}
+
+.result {
+    width: 45%;
+    margin: auto;
+    text-align: center;
+    padding: 2rem;
+    background-color: #07313f;
+    color: #F1F1E6;
+    text-transform: uppercase;
+    letter-spacing: .125em;
+    font-size: 1.5em;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+
+}
+
+.playagainbtn {
+    font-size: 1.2rem;
+    padding: 1.2rem 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 1rem;
+    background-color: #F1F1E6;
+    color:#07313f;
+}
+
+.playagainbtn:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 #5B7F8F;
+    transition: transform 150ms;
+    transform: scale(1.03);
+}
+
+#trophy {
+    filter: invert(71%) sepia(28%) saturate(3105%) hue-rotate(342deg) brightness(87%) contrast(97%);
 }

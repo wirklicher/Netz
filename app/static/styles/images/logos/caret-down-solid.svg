@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   viewBox="0 0 102400 262144"
-   version="1.1"
-   id="svg12"
-   width="102400"
-   height="262144"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs16" />
-  <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-  <path
-     style="fill:#b77924;fill-opacity:1;stroke-width:0.617612"
-     d="m 152.00183,382.59929 c -8.66191,-2.43013 -6.09787,-0.0734 -76.876681,-70.66063 -36.299507,-36.20125 -67.2013419,-67.42553 -68.6707467,-69.3873 -9.1630675,-12.23339 -7.9424736,-29.03773 2.9317262,-40.36208 4.7631165,-4.96029 11.5843355,-8.54293 18.0975865,-9.50522 2.900898,-0.42858 47.502761,-0.58269 135.565745,-0.46839 l 131.24246,0.17034 4.2487,1.65075 c 11.10673,4.3153 18.17601,12.67694 20.56869,24.32888 1.34847,6.56689 0.51546,12.67726 -2.63381,19.31969 -2.20568,4.65223 -3.30076,5.78821 -69.03268,71.61113 -36.73528,36.78615 -68.18106,67.80482 -69.87949,68.93038 -5.08488,3.36977 -9.75074,4.81688 -16.36671,5.07611 -3.99233,0.15642 -6.93065,-0.0684 -9.19479,-0.70366 z"
-     id="path307" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>
