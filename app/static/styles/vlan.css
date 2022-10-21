@@ -99,6 +99,7 @@ h3 {
   background-color: #07313f;
   color: #F1F1E6;
   border-radius: 10px;
+  min-width: 350px;
 }
 
 .question {
@@ -316,4 +317,16 @@ h6 {
 
 #trophy {
   filter: invert(71%) sepia(28%) saturate(3105%) hue-rotate(342deg) brightness(87%) contrast(97%);
+}
+
+.req {
+  list-style: circle;
+  list-style-position: inside;
+}
+
+#bohousovaKonfigurace {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
 }/*# sourceMappingURL=vlan.css.map */
