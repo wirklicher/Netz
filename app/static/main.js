@@ -1,50 +1,37 @@
+
 let scriptos_content = document.querySelector('#main');
-let proc_jsou = document.querySelector('#proc_jsou');
 let vlan = document.querySelector('#vlan');
 let rip = document.querySelector('#rip');
+let sshTelnet = document.querySelector('#sshTelnet');
+
 
 const hamburger = document.querySelector(".hamburger");
 const navmenu = document.querySelector(".menu");
 
+var name_of_page = undefined;
+
+
+$('#main').load('vlan.html');
+name_of_page = 'vlan';
 
 hamburger.addEventListener("click", () => {
     hamburger.classList.toggle("active");
     navmenu.classList.toggle("active");
-})
-
-function mainer(){
-    let iframe = document.querySelector("#iframe1");
-    
-    console.log(iframe.contentWindow.main())
-}
-
-
-
-function height_of_iframe(){
-    let iframe = document.querySelector("#iframe1");
-    iframe.addEventListener('load', function() {
-		iframe.style.height = (iframe.contentDocument.body.scrollHeight) + 'rem';
-        console.log(iframe.style.height);
-
-	});
-}
-
-
-proc_jsou.addEventListener('click', () => {
-    let a = 1;
+    scriptos_content.classList.toggle('hidden');
 })
 
 vlan.addEventListener('click', () => {
-   $('#main').load('vlan');
+   $('#main').load('vlan.html');
+   name_of_page = 'vlan';
+})
 
-   index = 0;
-    
-    //height_of_iframe();	
-    //mainer(); 
+sshTelnet.addEventListener('click', () => {
+    $('main').load('sshTelnet.html');
+    name_of_page = 'sshTelnet';
 })
 
 rip.addEventListener('click', () => {
-    scriptos_content.innerHTML = "<iframe id='iframe1' src='rip' frameborder='0' scrolling='no' style='width: 100%; height: 100%; overflow:hidden;'>";
-    //height_of_iframe();
+    $('main').load('rip.html');
+    name_of_page = 'rip';
 })
 

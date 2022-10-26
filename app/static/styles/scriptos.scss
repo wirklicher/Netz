@@ -67,7 +67,7 @@ body {
     left: 0;
     position: fixed;
     background-color: #07313f;
-    width: 15%;
+    width: 250px;
     height: 100vh;
     flex: 1;
     font-family: monospace;
@@ -163,11 +163,11 @@ ul li a {
 }
 
 .card:target .submenu{
-    max-height: 10em;
+    max-height: 35em;
 }
 
 .card:hover .submenu {
-    max-height: 15em;
+    max-height: 35em;
     
 }
 
@@ -203,7 +203,7 @@ ul li a {
 
     .nav {
         top: 0;
-        height: 10%;
+        height: 90px;
         width: 100%;
         flex: 0;
 
@@ -266,8 +266,13 @@ ul li a {
         text-align: center;
     }
 
+    #main_logo {
+        margin-top: 1.7em;
+        margin-bottom: 1.7em;
+    }
+
     .card:target .submenu {
-        max-height: 15em;
+        max-height: 35em;
     }
 
     .menu.active{

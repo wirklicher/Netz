@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{
-        url_for('static', filename='styles/scriptos.css')
-    }}">
+    <link rel="stylesheet" href="../static/styles/scriptos.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="icon" href="../static/styles/images/logos/icon.svg" type="image/png">
     <title>Scriptos - Netzwe</title>
@@ -16,7 +14,7 @@
     <div class="container">
         <nav class="nav">
             <div class="subnav">
-                <a href="/" class="icon"><picture><source media="(max-width: 600px)" srcset="../static/styles/images/logos/icon.svg"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></picture></a>
+                <a href="index.html" class="icon"><picture><source media="(max-width: 600px)" srcset="../static/styles/images/logos/icon.svg"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></picture></a>
                 <div id="line"></div>
                 <div class="menu">
                     <ul id="Ulscriptos">
@@ -27,11 +25,11 @@
                             </div>
                             <div id="line2"></div>
                             <div class="submenu">
-                                <a href="#" id="proc_jsou" class="sub_btn">Úvod do problematiky</a>
+                                <a href="#uvod" id="proc_jsou" class="sub_btn">Úvod do problematiky</a>
                                 <div id="line3"></div>
-                                <a href="#" id="druhy_vlan" class="sub_btn">Druhy VLAN</a>
+                                <a href="#zakladniKonfiguraceSection" id="zakladniKonfigurace" class="sub_btn">Zakladni konfigurace</a>
                                 <div id="line3"></div>
-                                <a href="#" id="dtp_vtp" class="sub_btn">DTP a VTP protocols</a>
+                                <a href="#trunking" id="Trunking" class="sub_btn">Trunking</a>
                                 <div id="line3"></div>
                                 <div class="arrow"></div>
                             </div>
@@ -43,7 +41,7 @@
                             </div>
                             <div id="line2"></div>
                             <div class="submenu">
-                                <a href="#" id="rip" class="sub_btn">RIP</a>
+                                <a href="#rip" id="rip" class="sub_btn">RIP</a>
                                 <div id="line3"></div>
                                 <a href="#" id="eigrp" class="sub_btn">EIGRP</a>
                                 <div id="line3"></div>
@@ -74,7 +72,7 @@
                         </li>
                         <li class="card" id="ssh-telnet">
                             <div class="btnAtributtes">
-                                <a href="#ssh-telnet" class="btn">SSH & Telnet</a>
+                                <a href="#sshTelnet" id="sshTelnet" class="btn">SSH & Telnet</a>
                                 <img src="../static/styles/images/logos/caret-down-solid.svg" width="5%" id="caret">
                             </div>
                             <div id="line2"></div>

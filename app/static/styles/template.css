@@ -21,14 +21,32 @@ h1 {
   font-size: 64px;
 }
 
-#vlanline {
+h3 {
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+p {
+  padding-bottom: 1rem;
+}
+
+li {
+  padding-bottom: 1rem;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+#templateline {
   margin-top: 15px;
   width: 100%;
   height: 1px;
   border-top: solid 2px #db861f;
 }
 
-#vlanline2 {
+#templateline2 {
   width: 292.9px;
   height: 1px;
   border-top: solid 2px #db861f;
@@ -39,12 +57,6 @@ h1 {
   font-weight: 400;
   margin-top: 15px;
   margin-bottom: 15px;
-}
-
-h3 {
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 10px;
 }
 
 .height_spacer {
@@ -99,7 +111,9 @@ h3 {
   background-color: #07313f;
   color: #F1F1E6;
   border-radius: 10px;
-  min-width: 350px;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
 }
 
 .question {
@@ -113,6 +127,14 @@ h3 {
   border-radius: 1em;
   align-self: center;
   color: black;
+}
+
+.subSection {
+  padding-left: 2rem;
+}
+
+.descriptionPicture {
+  padding-left: 15%;
 }
 
 .headerquest {
@@ -221,10 +243,6 @@ h3 {
   padding-left: 1rem;
 }
 
-h6 {
-  font-size: 16px;
-}
-
 .circleback {
   display: flex;
   justify-content: center;
@@ -297,6 +315,9 @@ h6 {
   font-size: 1.5em;
   border-top-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
 }
 
 .playagainbtn {
@@ -323,6 +344,7 @@ h6 {
 .req {
   list-style: circle;
   list-style-position: inside;
+  padding-left: 1.5rem;
 }
 
 #bohousovaKonfigurace {
@@ -330,4 +352,13 @@ h6 {
   margin-left: auto;
   margin-right: auto;
   width: 75%;
-}/*# sourceMappingURL=vlan.css.map */
+  min-width: 400px;
+}
+
+.configImage {
+  width: auto;
+  min-width: 300px;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}/*# sourceMappingURL=template.css.map */

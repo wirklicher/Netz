@@ -89,6 +89,7 @@ points = document.querySelector("#points")
 
 
 
+
 play.addEventListener('click', ()=>{
     correct = 0;
     btns_quiz.classList.add('hidden');

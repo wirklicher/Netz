@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{
-        url_for('static', filename='styles/vlan.css')
-    }}">
+    <link rel="stylesheet" href="../static/styles/template.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Scriptos - Netzwe</title>
 </head>
 <body>
     <h1>VLAN - Virtual Local Area Network</h1>
-    <div id="vlanline"></div>
+    <div id="templateline"></div>
     <h5 for="" id="znalosti">Předpokládané znalosti: základní konfigurace v Packet Traceru, </h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <div id="vlanline2"></div>
+        <div id="templateline2"></div>
         <div class="height_spacer"></div>
         <p>
         Bohouš je Network Engineer a má za úkol zapojit firmu UwU.
@@ -29,17 +27,131 @@
         </ul>
         <p>Bohouš si zjednodušené schéma sítě nakreslil a prošel si jednotlivé požadavky a vyšlo mu, že nejlepší řešení bude použít VLANy.</p>
         <img id="bohousovaKonfigurace" src="../static/styles/images/VLAN/bohousovaKonfigurace.png">
+        <i class="descriptionPicture">Obr1 - Bohousova konfigurace</i>
+        <section id="vlan" class="subSection">
+            <h3>VLAN</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>VLAN, také Virtual LAN, Virtual Local Area Network je velmi zjednošeně řečeno virtuální rozdělení sítě na L2</p>
+            <p>Pro celkovou definici je třeba si vysvětlit dva pojmy:</p>
+            <ul>
+                <li class="req">LAN - Local Area Network = sit mensiho rozsahu ale pro pochopeni VLAN se uvadi, ze LAN je broadcastova domena</li>
+                <li class="req">Broadcast Domain - Všechna zařízení v síti, která dostanou broadcastový rámec (dest. MAC FFFF.FFFF.FFFF)</li>
+            </ul>
+            <p>Defaultně switch dava všechny své interfacy do jedné a té samé broadcastové domény.
+                Pokud tedy bez žádných dalších extra nastavení budeme chtít mít více broadcastových domén budeme muset koupit další switch.
+                Pokud jsme ale skrblíci a nechceme utrácet můžeme síť rozdělit do dvou VLAN a tím v podstatě docílit toho samého jako kdybychom koupili další switch.
+            </p>
+            <p>Na zjednodušeném schématu sítě od Bohouše najdeme právě jednu broadcastovou doménu</p>
+            <p>Je dulezite take zminit ze switch bezne neposila data z jedne VLANy do druhe.</p>
+        </section>
+        <section id="vyhody" class="subSection">
+            <h3>Vyhody VLAN</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <ul>
+                <li class="req">Sníženi vytíženosti CPU na všech zařízení v síti (Sníží se počet zařízení, které dostanou broadcast)</li>
+                <li class="req">Lepší zabezpečení sítě (Omezíme kdo má přístup a k čemu, VLAN nám umožňuje použít dalsi bezpecnostni nastaveni)</li>
+                <li class="req">Dokáže síť rozdělit například podle různých oddělení bez nutnosti jedné fyzické lokace</li>
+            </ul>
+        </section>
+        <section id="fungovaniVlan" class="subSection">
+            <h3>Fungovani VLAN</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>VLAN funguje tak, že na switchi přidělíme určitému interfacu typ portu (ACCESS/TRUNK)</p>
+            <ul>
+                <li class="req">ACCESS - switchport, který většinou používají koncová zařízení např PC.</li>
+                <li class="req">TRUNK - switchport, přes nějž jde vícero VLAN</li>
+            </ul>
+            <p>Pokud je switchport nastavený na ACCESS tak k němu můžeme přiradit právě jednu VLANu.</p>
+            <p>Do zařízení pak budou moci proudit jen ty rámce, ktere jsou ve stejne VLANE.</p>
+        </section>
     </section>
-    <section id="vlan">
-        <h3>VLAN</h3>
-        <div id="vlanline2"></div>
+    <section id="zakladniKonfiguraceSection">
+        <h3>
+            Zakladni VLAN konfigurace (PT)
+        </h3>
+        <div id="templateline2"></div>
         <div class="height_spacer"></div>
-        <p>VLAN, také Virtual LAN, Virtual Local Area Network</p>
-        <p>Pro pochopení VLAN je třeba znát LAN.</p>
+        <section id="TvorbaVLAN" class="subSection">
+            <h3>Tvorba VLANy</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <img src="../static/styles/images/VLAN/creatingVLAN.png" alt="" class="configImage">
+        </section>
+        <section id="PrideleniAccessPortu" class="subSection">
+            <h3>Prideleni VLANy k access portu</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <img src="../static/styles/images/VLAN/AccessPort.png" alt="" class="configImage">
+            <p><i>pozn. Pokud vlana jeste neni vytvorena, switch ji automaticky vytvori</i></p>
+        </section>
+        <section id="Zobrazeni" class="subSection">
+            <h3>Zobrazeni jiz vytvorenych VLAN</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <img src="../static/styles/images/VLAN/Viewing.png" alt="" class="configImage">
+        </section>
+    </section>
+    <section id="trunking">
+        <h3>Trunking</h3>
+        <div id="templateline2"></div>
+        <div class="height_spacer"></div>
+        <p>Paklize se dostaneme do situace, kdy mame vice switchu, na kterych jsou nastavene VLANy a chceme aby mezi dvema stejnyma VLANama probihala komunikace (viz ukazka)</p>
+        <p>Mohli bychom mezi switchema nastavit tez Access port a pridelit mu VLANu, ale toto reseni neni vubec efektivni, protoze co VLANa to medium a tudiz kdyby tam tech VLAN bylo vic financne by to nemuselo byti vubec pohodlne</p>
+        <p>Efektivni reseni je vytvoreni tzv. Trunk portu, ktery umoznuje prenaset data ruznych vlan po jednom mediu.</p>
+        <section id="TrunkingConcept" class="subSection">
+            <h3>Trunking Concept</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Pakliže tedy posíláme rámce přes trunk, tak se rámec na switchi označí VLAN ID (to číslo, které zadáváme při vytváření VLANy).</p>
+            <p>Když poté za pomocí trunku dorazí rámec na další switch, tak ten switch pak už bude vědět z jaké VLANy rámec pochází a podle toho ho bude moci poslat dál.
+            </p>
+            <p>Na Cisco switchích se můžeme setka s dvěma Trunking protocoly:</p>
+            <ul>
+                <li class="req">ISL - starší Cisco-propietary protocol, dnes se již nepoužívá</li>
+                <li class="req">802.1Q - IEEE protocol, momentálně nejpoužívanější trunking protocol</li>
+            </ul>
+            <p>802.1Q přidává do Ethernetové hlavičky 4bytový VLAN Header (tag), to pak pomáhá switchi určit z které VLANy daný rámec pochází.</p>
+            <p>Ten obsahuje 4 další pole:</p>
+            <ul>
+                <li class="req">Typ</li>
+                <li class="req">Priorita</li>
+                <li class="req">Flag</li>
+                <li class="req">VLAN ID (12 bitů) --> tohle číslo nám udává jaký maximální VLAN ID může být (2**12 = 4096, v praxi kvůli 2 reservovaným hodnotám 4094 viz. VLAN Ranges)</li>
+            </ul>
+        </section>
+        <section id="NativeVLAN" class="subSection">
+            <h3>Native VLAN</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Je typ VLANy, která se při průchodem přes trunk neoznačuje. Když pak switch dostane neoznačený rámec, tak předpokládá, že patří Native VLAN, proto je nutné aby Native VLAN byla na obou koncích trunku stejná.</p>
+            <p>Za normálních okolností je Nativní VLANou VLAN 1, to lze ale změnit.</p>
+        </section>
+        <section id="KonfiguraceTrunk" class="subSection">
+            <h3>Konfigurace Trunku</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+        </section>
+        <section id="ROAS" class="subSection">
+            <h3>ROAS - Inter-VLAN routing</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Chceme-li posílat rámce mezi VLANy, tak jednou z možností je použití ROAS - Router on a stick.</p>
+            <p>ROAS funguje tak, že mezi switchem a routrem se nastaví na interfacu switche trunk.</p>
+            <p>Na interfacu routeru se nakonfigurují subinterfaci.</p>
+            <p>Na těchto subinterfacech je nutné zadat číslo VLANy a IP adresu.</p>
+        </section>
+    </section>
+    <section id="prehledPrikazu">
+        <h3>Přehled příkazů (PT)</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;">Chcete si latku procvicit?</h3>
-    <div id="vlanline2" style='margin: auto;'></div>
+    <div id="templateline2" style='margin: auto;'></div>
     <div class="height_spacer"></div>
     <div class="btns_quiz">
         <a class="btnquiz" id="play">Hrat</a>
@@ -104,7 +216,7 @@
         
     </div>
     <div class="result hidden">
-        <img src="./static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
+        <img src="../static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
         <h2>Vysledky</h2>
         <p id="points"></p>
         <div class="height_spacer"></div>

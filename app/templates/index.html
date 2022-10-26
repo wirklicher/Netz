@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{
-        url_for('static', filename='styles/style.css')
-    }}">
+    <link rel="stylesheet" type="text/css" href="../static/styles/style.css">
     <link rel="icon" href="../static/styles/images/logos/icon.svg" type="image/png">
     <title>Netzwe</title>
 </head>
@@ -20,7 +18,7 @@
                             <div id="nav_prop">
                                 <a href="#"><picture><source media="(max-width: 600px)" srcset="../static/styles/images/logos/icon.svg"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></picture></a>
                                 <ul class="nav-links">
-                                        <li id="scriptos" class="li_btn"><a href="/scriptos" class="btn_menu">Scriptos</a></li>
+                                        <li id="scriptos" class="li_btn"><a href="./scriptos.html" class="btn_menu">Scriptos</a></li>
                                 </ul>
                             </div>
                         </nav>
@@ -31,7 +29,7 @@
                     <div class="maindialog">
                         <p id="mot_text">"So you wanna be <br>a<span class="highlight"> Network Engineer</span> <br>at Google?"</p>
                     </div>
-                    <input type="button" class="button" role="button" onclick="location.href='/scriptos'" value="YES PLS"></input>
+                    <input type="button" class="button" role="button" onclick="location.href='scriptos.html'" value="YES PLS" id="scriptos"></input>
                 </main>
             </div>
             <div class="spacer"></div>
@@ -44,15 +42,10 @@
                         <div class="arti"><p class="describe">Od programování přes konfiguraci serveru po cybersecurity, síťařina ti bude v IT užitečnou znalostí!</p></div>
                         <img src="../static/styles/images/logos/router-wireless.svg", width="150px", height="150px" id="image">
                     </div>
-                    <div class="article_card">
+                    <div class="article_card" style="margin-right: 0">
                         <h4 class="headline4">Nové Příležitosti</h4>
                         <div class="arti"><p class="describe">V dnešní době jsou znalosti síťařiny vysoce ceněné a díky tomu Vám umožní příjemný vstup na pracovní trh!</p></div>
-                        <img src="./static/styles/images/logos/firework.svg", width="150px", height="150px" id="image">
-                    </div>
-                    <div class="article_card" style="margin-right: 0">
-                        <h4 class="headline4">LOREM IPSUM</h4>
-                        <div class="arti"><p class="describe">V dnešní době jsou znalosti síťařiny vysoce ceněné a díky tomu Vám umožní příjemný vstup na pracovní trh!</p></div>
-                        <img src="./static/styles/images/logos/router-wireless.svg", width="150px", height="150px" id="image">
+                        <img src="../static/styles/images/logos/firework.svg", width="150px", height="150px" id="image">
                     </div>
                 </section>
                 <div class="spacer"></div>
