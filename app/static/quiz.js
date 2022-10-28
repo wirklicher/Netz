@@ -186,7 +186,7 @@ next_quest.addEventListener("click", ()=> {
 
         clearInterval(interval);
         quiz.style.display = "none";
-        points.innerHTML = `Dostal si ${correct} z ${MCQS.length} bodu`;
+        points.innerHTML = `Získal/a jste ${correct} z ${MCQS.length} bodu`;
         result.style.display = "block";
 
         

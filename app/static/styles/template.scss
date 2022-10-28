@@ -1,6 +1,8 @@
 
 $spacer: 15px;
 
+//Změny v defaultu HTML
+
 * {
     padding: 0;
     margin: 0;
@@ -16,18 +18,30 @@ body {
     color: black;
     width: 90%;
     margin: auto;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 h1 {
     padding-top: 30px;
     font-weight: 400;
-    font-size: 64px;
+    font-size: 4em;
 
 }
 
 h3 {
-    font-size: 24px;
+    font-size: 2em;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 1.7em;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+h5 {
+    font-size: 1.5em;
     font-weight: 400;
     margin-bottom: 10px;
 }
@@ -44,6 +58,39 @@ h6 {
     font-size: 16px;
 }
 
+p {
+    font-size: 1.2rem;
+}
+
+//Tabulka
+
+table {
+    width: 100%;
+    text-align:left;
+    border-spacing: 0;
+}
+
+th {
+    background-color: #07313f;
+    color:#db861f;
+    text-transform: uppercase;
+    font-size: 1.5em;
+}
+
+td {
+    font-size: 1.2em;
+}
+
+th, td {
+    padding: 5px 12px;
+}
+
+tr:nth-child(odd){
+    background-color: #eeeeee;
+}
+
+//Podtrhávátka
+
 #templateline {
     margin-top: $spacer;
     width: 100%;
@@ -58,6 +105,8 @@ h6 {
     border-top: solid 2px #db861f;
 }
 
+
+
 #znalosti {
     font-size: 18px;
     font-weight: 400;
@@ -65,7 +114,7 @@ h6 {
     margin-bottom: $spacer;
 }
 
-
+//Spacery
 
 .height_spacer {
     height: 1.2rem;
@@ -79,6 +128,7 @@ h6 {
     width: 1.2rem;
 }
 
+//Quiz
 .btns_quiz {
     display: flex;
     flex-direction: row;
@@ -360,20 +410,18 @@ h6 {
     list-style: circle;
     list-style-position: inside;
     padding-left: 1.5rem;
+    font-size: 1.2em;
 }
 
-#bohousovaKonfigurace {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
-    min-width: 400px;
-}
 
 .configImage {
-    width:auto;
+    width:100%;
     min-width: 300px;
     max-width: fit-content;
 }
+
+
+
+
 
 

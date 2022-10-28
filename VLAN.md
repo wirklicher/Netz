@@ -16,8 +16,10 @@ Rozdelili bychom jej totiz na L3, ale broadcasty by dostavala vsechna zarizeni n
 
 VLAN, také Virtual LAN, Virtual Local Area Network je velmi zjednošeně řečeno virtuální rozdělení sítě na L2
 Pro celkovou definici je třeba si vysvětlit dva pojmy:
-- LAN - Local Area Network = sit mensiho rozsahu ale pro pochopeni VLAN se uvadi, ze VLAN je broadcastova domena
+- LAN - Local Area Network = skupina zařízení, které jsou na jednom místě (Třeba v jedné třídě, v kanceláři) a jsou spolu propojené.
 - Broadcast Domain - Všechna zařízení v sítí, která dostanou broadcastový rámec (dest. MAC FFFF.FFFF.FFFF)
+
+VLAN tedy umožňuje vytvořit virtuální skupinu zařízení s tím, že se ta zařízení budou chovat stejně jako kdyby spolu byly v LAN
 
 Defaultně switch dava všechny své interfacy do jedné a té samé broadcastové domény.
 Pokud tedy bez žádných dalších extra nastavení budeme chtít mít více broadcastových domén budeme muset koupit další switch.
@@ -121,7 +123,14 @@ ROAS funguje tak, že mezi switchem a routrem se nastaví na interfacu switche t
 Na interfacu routeru se nakonfigurují subinterfaci.
 Na těchto subinterfacech je nutné zadat číslo VLANy a IP adresu.
 
+Př.
 
+<Ukázka konfigurace s ROAS>
+
+Pakliže PC1 (VLAN 10) bude chtít poslat data PC4 (VLAN 30), tak při odchodu ze switche bude rámec označen.
+Router ví, že rámec s označením 10 je na jeho subinterfacu g0/0.10.
+Router si dále všimne, že jeho dest IP adresa leží na subinterfacu g0/0.30.
+Tudíž router nasměruje daný paket na subinterface g0/0.30 a switch bude daný rámec brát tak, že patří do VLAN 30 a dále ho nasměruje do PC4.
 
 
 
