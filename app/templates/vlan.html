@@ -227,7 +227,7 @@ Switch(config-if)#switchport trunk allowed vlan 15,25 //Na trunk budou smět pou
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>Je forma speciálního útoku na síť, kdy se útočníkovi podaří dostat rámec z jedné VLAN do druhé bez použití Inter-VLAN routingu</p>
-            <p>Funguje tak, že útočník je připojený k zařízení, který je u NATIVE VLAN (1), ten útočník poté vytvoří rámec, který bude dvakrát označený, jednou jeho VLAN (outer tag) a po druhé jeho cílovou VLAN.</p>
+            <p>Funguje tak, že útočník je připojený k zařízení, který je u NATIVE VLAN, ten útočník poté vytvoří rámec, který bude dvakrát označený, jednou jeho VLAN (outer tag) a po druhé jeho cílovou VLAN.</p>
             <p>Switch poté při průchodu na trunk první označení (outer tag) odebere, dalšímu switchi poté zbyde ten uměle vytvořený cílený tag a podle toho rámec pošle dál (do zařízení s cílenou VLAN)</p>
             <p>Útok funguje pouze tehdy, když je útočník připojený na zařízení pod NATIVE VLAN </p>
             <p>Proti útoku se lze bránit tím, že Native VLAN přesuneme na nějakou jinou vlan-id, kterou nebudeme vůbec používat.</p>
