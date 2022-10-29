@@ -21,9 +21,9 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>VLAN, také Virtual LAN, Virtual Local Area Network je velmi zjednošeně řečeno virtuální rozdělení sítě na L2</p>
-            <p>Pro celkovou definici je třeba si vysvětlit dva pojmy:</p>
+            <p>Pro CCNA definici je třeba si vysvětlit dva pojmy:</p>
             <ul>
-                <li class="req"><b>LAN</b> - Local Area Network = síť menšího rozsahu ale pro pochopení VLAN se uvádí, že LAN je broadcastova domena</li>
+                <li class="req"><b>LAN</b> - Local Area Network = síť menšího rozsahu ale pro pochopení VLAN se uvádí, že LAN je broadcast domain</li>
                 <li class="req"><b>Broadcast Domain</b> - Všechna zařízení v síti, která dostanou broadcastový rámec (dest. MAC FFFF.FFFF.FFFF)</li>
             </ul>
             <p>Defaultně switch dává všechny své interfaci do jedné a té samé broadcastové domény.
@@ -32,14 +32,14 @@
             </p>
             <img src="../static/styles/images/VLAN/Broadcast_Domain.png" alt="" class="configImage">
             <p>Na zjednodušeném schématu sítě najdeme právě jednu broadcastovou doménu</p>
-            <p>Je důležite také zmínit že switch běžně neposílá data z jedné VLANy do druhe.</p>
+            <p>Je důležite také zmínit že switch běžně <b>neposílá</b> data z jedné VLANy do druhé.</p>
         </section>
         <section id="vyhody" class="subSection">
             <h4>Výhody VLAN</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <ul>
-                <li class="req">Sníženi vytíženosti CPU na všech zařízení v síti (Sníží se počet zařízení, které dostanou broadcast)</li>
+                <li class="req">Snížení vytíženosti CPU na všech zařízení v síti (Sníží se počet zařízení, které dostanou broadcast)</li>
                 <li class="req">Lepší zabezpečení sítě (Omezíme kdo má přístup a k čemu)</li>
                 <li class="req">Dokáže síť rozdělit například podle různých oddělení bez nutnosti jedné fyzické lokace</li>
                 <li class="req">Zjednodušení spravování sítě</li>
@@ -68,30 +68,88 @@
             <h4>Tvorba VLANy</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <img src="../static/styles/images/VLAN/creatingVLAN.png" alt="" class="configImage">
-            <p><i>Vlan {VLAN_ID}, VLAN_ID jakékoliv číslo od 2-1001 a 1006-4094</i></p>
-            <p><i>pozn. nastavení name není povinné, je ale dobrou praxí ho uvádět</i></p>
+            <pre>Switch(config)#vlan {VLAN_ID} //Vlan {VLAN_ID}, VLAN_ID jakékoliv číslo od 2-1001 a 1006-4094
+Switch(config-vlan)#name {name} //Nastavení jména není povinné, je ale dobré jej uvádět
+</pre>
         </section>
         <section id="PrideleniAccessPortu" class="subSection">
             <h4>Přidělení VLANy k access portu</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <img src="../static/styles/images/VLAN/AccessPort.png" alt="" class="configImage">
-            <p><i>pozn. Pokud VLAN ještě není vytvořená, switch ji automaticky vytvoří</i></p>
+            <pre>Switch(config)#interface {interface}
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20 //pozn. Pokud VLAN ještě není vytvořená, switch ji automaticky vytvoří
+% Access VLAN does not exist. Creating VLAN 20
+</pre>
+
+
         </section>
         <section id="Zobrazeni" class="subSection">
             <h4>Zobrazení již vytvořených VLAN</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <img src="../static/styles/images/VLAN/Viewing.png" alt="" class="configImage">
+            <pre>Switch#show vlan brief</pre>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>VLAN</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Ports</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>default</td>
+                        <td>active</td>
+                        <td>Fa1/1, Fa2/1, Fa3/1, Fa4/1, Fa5/1</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Sales</td>
+                        <td>active</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>VLAN0020</td>
+                        <td>active</td>
+                        <td>Fa0/1</td>
+                    </tr>
+                    <tr>
+                        <td>1002</td>
+                        <td>fddi-default</td>
+                        <td>active</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1003</td>
+                        <td>token-ring-default</td>
+                        <td>active</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1004</td>
+                        <td>fddinet-default</td>
+                        <td>active</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1005</td>
+                        <td>trnet-default</td>
+                        <td>active</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
         </section>
+        <div class="height_spacer"></div>
         <section id="Ranges">
             <h4>VLAN Ranges</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <ul>
                 <li class="req"><b>VLAN 0, 4095</b> - Reserved, nelze vytvořit</li>
-                <li class="req"><b>VLAN 1</b> - Běžně Native VLAN, ke které jsou přidělené za normalních okolností všechny ostatní interfaci, nejde smazat</li>
+                <li class="req"><b>VLAN 1</b> - Běžně Native VLAN, ke které jsou přidělené za normalních okolností všechny ostatní interfaci, nejde smazat, v některých dokumentacích se označuje jako Default VLAN</li>
                 <li class="req"><b>VLAN 2-1001</b> - VLANy které jdou vytvořit, upravit a smazat a jsou dostupné na všech Cisco switchich</li>
                 <li class="req"><b>VLAN 1002-1005</b> - VLANy, které jsou tak trochu připomínkou již zastaralých technologii (FDDI a Token ring)</li>
                 <li class="req"><b>VLAN 1006-4094</b> - Tzv. Extended VLANs jsou VLANy které jdou též vytvořit, upravit a smazat, ale nejsou podporovany na starších Cisco switchich a VTP je nepropaguje.</li>
@@ -129,6 +187,13 @@
                 <li class="req">Flag</li>
                 <li class="req"><b>VLAN ID (12 bitů)</b> --> tohle číslo nám udává jaký maximální VLAN ID může být (2**12 = 4096, v praxi kvůli 2 reservovaným hodnotám 4094 viz. VLAN Ranges)</li>
             </ul>
+            <p>Pro správné fungování trunku je třeba mít na obou koncích stejné:</p>
+            <ul>
+                <li class="req">nastavení rychlosti</li>
+                <li class="req">nastavení duplexu</li>
+                <li class="req">protokol encapsulace</li>
+                <li class="req">ID nativní VLAN</li>
+            </ul>
         </section>
         <section id="NativeVLAN" class="subSection">
             <h4>Native VLAN</h4>
@@ -142,14 +207,18 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <h5>Přepnutí interfacu do trunk modu</h5>
-            <img src="../static/styles/images/VLAN/Trunking-setupmode.png" alt="" class="configImage">
+            <pre>Switch(config-if)#interface {interface}
+Switch(config-if)#switchport mode trunk
+</pre>
             <h5>Zobrazení všech Trunku a jejich nastavení</h5>
-            <img src="../static/styles/images/VLAN/Trunking-show.png" alt="" class="configImage">
+            <pre>Switch#show interface trunk</pre>
             <p><i>Velmi doporučuji si tenhle příkaz zapamatovat, hodí se při troubleshootingu</i></p>
             <h5>Povolení či odstranění VLAN z trunku</h5>
-            <img src="../static/styles/images/VLAN/Trunking-allowed.png" alt="" class="configImage">
+            <pre>Switch(config-if)#switchport trunk allowed vlan {VLAN_IDs | add | all | except | none | remove} 
+Switch(config-if)#switchport trunk allowed vlan 15,25 //Na trunk budou smět pouze VLAN 15 a 25
+</pre>
             <h5>Nastavení Native VLAN</h5>
-            <img src="../static/styles/images/VLAN/Trunking-NATIVEVLAN.png" alt="" class="configImage">
+            <pre>Switch(config-if)#switchport trunk native vlan {VLAN_ID}</pre>
             <p><b>Je nutné, aby veškerá nastavení byla na obou koncích trunku stejná!</b></p>
             <p>Lab zaměřený na základní konfiguraci společně s nastavením trunku můžete stáhnout <a href="../Labs/VLAN/Lab1 - Konfigurace VLAN.pka" download>zde</a></p>
         </section>
@@ -158,9 +227,10 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>Je forma speciálního útoku na síť, kdy se útočníkovi podaří dostat rámec z jedné VLAN do druhé bez použití Inter-VLAN routingu</p>
-            <p>Funguje tak, že útočník je připojený k zařízení, který je u NATIVE VLAN (1), ten útočník poté vytvoří rámec kde už předem bude mít dané do jaké VLAN se chce dostat (třeba 20) a pošle rámec na cílové zařízení s daným VLAN ID. </p>
-            <p>Switch poté při průchodu na trunk rámec označí a tím vytvoří double Tag, další switch jej pak odznačí a zbyde mu ten uměle vytvořený tag, ten switch poté pošle až do cíle</p>
+            <p>Funguje tak, že útočník je připojený k zařízení, který je u NATIVE VLAN (1), ten útočník poté vytvoří rámec, který bude dvakrát označený, jednou jeho VLAN (outer tag) a po druhé jeho cílovou VLAN.</p>
+            <p>Switch poté při průchodu na trunk první označení (outer tag) odebere, dalšímu switchi poté zbyde ten uměle vytvořený cílený tag a podle toho rámec pošle dál (do zařízení s cílenou VLAN)</p>
             <p>Útok funguje pouze tehdy, když je útočník připojený na zařízení pod NATIVE VLAN </p>
+            <p>Proti útoku se lze bránit tím, že Native VLAN přesuneme na nějakou jinou vlan-id, kterou nebudeme vůbec používat.</p>
         </section>
         <section id="ROAS" class="subSection">
             <h3>ROAS - Inter-VLAN routing</h3>
@@ -179,84 +249,186 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <h5>Konfigurace ROAS na Switchi</h5>
-            <img src="../static/styles/images/VLAN/ROAS-Switch.png" alt="" class="configImage">
+            <pre>Switch(config)#int fa2/1
+Switch(config-if)#switchport mode trunk
+Switch(config-if)#switchport trunk allowed vlan {VLANs_ID}
+</pre>
             <h5>Konfigurace ROAS na Routeru - nastavení subinterfacu</h5>
             <img src="../static/styles/images/VLAN/ROAS-Router1.png" alt="" class="configImage">
-            <p><i>Nesmíme zapomenou zapnout nejdříve celý interface</i></p>
+            <pre>Router(config)#interface {interface}
+Router(config-if)#no shutdown //Nesmíme zapomenou zapnout nejdříve celý interface
+Router(config-if)#int {interface.X} //X je číslo sub interfacu,pro přehlednost doporučuju používat VLAN_ID 
+</pre>
             <h5>Konfigurace ROAS na Routeru - Nastavení subinterfacu pro specifickou VLAN</h5>
             <img src="../static/styles/images/VLAN/ROAS-Router2.png" alt="" class="configImage">
-            <p><i>Příkazem říkáme, že rámce s VLAN 10 budou na tomhle subinterfacu a také specifikujeme trunking protokol a dále tomuto interfacu přiřazujeme IP adresu</i></p>
-            <img src="../static/styles/images/VLAN/ROAS-Router3.png" alt="" class="configImage">
-            <p><i>Celý tento postup zopakujeme i pro další VLAN</i></p>
+            <pre>Router(config-subif)#encapsulation dot1q {VLAN_ID}
+Router(config-subif)#ip address A.B.C.D E.F.G.H  
+</pre>
+            <p><i>Příkazem říkáme, že rámce s daným VLAN_ID budou na tomhle subinterfacu a také specifikujeme trunking protokol a dále tomuto sub interfacu přiřazujeme IP adresu</i></p>
+            
             <p>Lab na procvičení ROAS můžete stáhnout <a href="../Labs/VLAN/Lab2 - ROAS.pka" download>zde</a></p></p>
         </section>
     </section>
+    <section id="DTPVTP">
+        <h3>DTP & VTP</h3>
+        <div id="templateline2"></div>
+        <div class="height_spacer"></div>
+        <p>Často se při práci s VLAN můžete setkat s pojmy DTP a VTP. Tyto protokoly mají vždy něco automatizovat.</p>
+        <section id="VTP" class="subSection">
+            <h4>VTP - VLAN Trunking Protokol</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>VTP je Cisco-propietary protokol, který propaguje nastavení VLAN, aby ostatní switche v síti přijaly existenci VLAN konfigurací</p>
+            <p>Jak je psáno výše VTP nepropaguje za normálních okolností Extended VLANs (VLANs s id 1006-4094)</p>
+            <p>VTP protokol není v CCNA a v CCNP zkoušce a zas tolik se už nepoužívá. VTP má ale dopad na síť, takže by se o těchto dopadech mělo aspoň trochu vědět</p>
+            <p>VTP je možno vypnout dle věku daného switche.</p>
+            <p>U starších zařízení se používá:</p>
+            <pre>SW(config)#vtp mode transparent</pre>
+            <p>U novějších zařízení se používá:</p>
+            <pre>SW(config)#vtp mode off</pre>
+            <p>Rozdíl mezi těmito příkazy je takový, že vtp mode transparent VTP zcela nevypne, kdežto vtp mode off jej zcela vypne.</p>
+            <p>Obě možnosti ale znemožní VTP detekci a propagování VLAN </p>
+            <p>Pokud někdy budete mít s VLAN konfigurací problém doporučuji zkontrolovat VTP status pomocí příkazu</p>
+            <pre>SW#show vtp status</pre>
+        </section>
+        <section id="DTP" class="subSection">
+            <h4>DTP - Dynamic Trunking Protokol</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>DTP, jak už z názvu vyplývá, je protokol, který bude mít co dočinění s dynamickým nastavením Trunku</p>
+            <p>DTP automaticky vyjedná, jaký trunking protokol se bude používat a taky jestli je daný port trunk</p>
+            <p>Z bezpečnostního hlediska není doporučené DTP používat.</p>
+            <p>DTP se nastavuje na každém portu zvlášť</p>
+            <p>Pakliže je port v access módu, tak DTP jej nemůže nějak změnit.</p>
+            <p>Pakliže je port v trunk módu, tak jej též DTP nezmění, ale může pomoct změnit jej i na druhé straně trunku.</p>
+            <pre>switch(config-if)#switchport mode dynamic auto <span>// přepne se do trunku, pokud dostane žádost</span>
+switch(config-if)#switchport mode dynamic desirable <span>// posílá žádost o přesun do trunk modu</span>
+</pre>
+            <p>Jestliže chceme používat trunk bez toho, aby se používalo DTP, lze jej zakázat pomocí příkazu:</p>
+            <pre>switch(config-if)#switchport nonegotiate</pre>
+            <h4>Tabulka switchport modu</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Nastavený mód</th>
+                        <th>Access</th>
+                        <th>Dynamic auto</th>
+                        <th>Dynamic desirable</th>
+                        <th>Trunk</th>
+                    </tr>
+                    <tr>
+                        <td>access</td>
+                        <td>access</td>
+                        <td>access</td>
+                        <td>nepoužívat</td>
+                        <td>access</td>
+                    </tr>
+                    <tr>
+                        <td>dynamic auto</td>
+                        <td>access</td>
+                        <td>access</td>
+                        <td>trunk</td>
+                        <td>trunk</td>
+                    </tr>
+                    <tr>
+                        <td>trunk</td>
+                        <td>nepoužívat</td>
+                        <td>trunk</td>
+                        <td>trunk</td>
+                        <td>trunk</td>
+                    </tr>
+                    <tr>
+                        <td>dynamic desirable</td>
+                        <td>access</td>
+                        <td>trunk</td>
+                        <td>trunk</td>
+                        <td>trunk</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </section>
+    <div class="height_spacer"></div>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <table>
-                <tr>
-                    <th>Příkazy</th>
-                    <th>Popis</th>
-                    <th>Mód</th>
-                </tr>
-                <tr>
-                    <td>vlan {vlan-id}</th>
-                    <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                    <td>Global Config</td>
-                </tr>
-                <tr>
-                    <td>name {vlan-name}</td>
-                    <td>Pojmenuje VLAN</td>
-                    <td>VLAN interface</td>
-                </tr>
-                <tr>
-                    <td>switchport mode {access | trunk}</th>
-                    <td>Přepne interface do modu</td>
-                    <td>Interface</td>
-                </tr>
-                <tr>
-                    <td>switchport access vlan {vlan-id}</td>
-                    <td>Přiřadí VLANu k danému interfacu</td>
-                    <td>Interface</td>
-                </tr>
-                <tr>
-                    <td>switchport trunk encapsulation {protocol}</th>
-                    <td>Nastaví trunking protokol na switchi</td>
-                    <td>Global Config</td>
-                </tr>
-                <tr>
-                    <td>switchport trunk native vlan {vlan-id}</th>
-                    <td>Nastaví Native VLAN</td>
-                    <td>Interface</td>
-                </tr>
-                <tr>
-                    <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                    <td>Nastaví povolené VLANy na trunku</th>
-                    <td>Interface</th>
-                </tr>
-                <tr>
-                    <td>encapsulation dot1q {VLAN_ID}</th>
-                    <td>Nastaví sub interface pro danou VLAN</th>
-                    <td>router - sub interface</th>
-                </tr>
-                <tr>
-                    <td>show interfaces switchport</td>
-                    <td>Zobrazí informace o interfaci</td>
-                    <td>EXEC</td>
-                </tr>
-                <tr>
-                    <td>show interfaces {interface-id} trunk</td>
-                    <td>Zobrazí informace o truncích</td>
-                    <td>EXEC</td>
-                </tr>
-                <tr>
-                    <td>show vlan brief</td>
-                    <td>Zobrazí informace o VLAN</td>
-                    <td>EXEC</td>
-                </tr>
-            </table>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Příkazy</th>
+                        <th>Popis</th>
+                        <th>Mód</th>
+                    </tr>
+                    <tr>
+                        <td>vlan {vlan-id}</th>
+                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>name {vlan-name}</td>
+                        <td>Pojmenuje VLAN</td>
+                        <td>VLAN interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
+                        <td>Přepne interface do modu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport nonegotiate</th>
+                        <td>Vypne DTP na interfacu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport access vlan {vlan-id}</td>
+                        <td>Přiřadí VLANu k danému interfacu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk encapsulation {protocol}</th>
+                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk native vlan {vlan-id}</th>
+                        <td>Nastaví Native VLAN</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
+                        <td>Nastaví povolené VLANy na trunku</th>
+                        <td>Interface</th>
+                    </tr>
+                    <tr>
+                        <td>encapsulation dot1q {VLAN_ID}</th>
+                        <td>Nastaví sub interface pro danou VLAN</th>
+                        <td>router - sub interface</th>
+                    </tr>
+                    <tr>
+                        <td>show interfaces switchport</td>
+                        <td>Zobrazí informace o interfaci</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show interfaces {interface-id} trunk</td>
+                        <td>Zobrazí informace o truncích</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vlan brief</td>
+                        <td>Zobrazí informace o VLAN</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vtp status</td>
+                        <td>Zobrazí informace o VTP</td>
+                        <td>EXEC</td>
+                    </tr>
+                </table>
+            </div>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;">Chcete si latku procvičit?</h3>

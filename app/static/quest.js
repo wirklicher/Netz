@@ -30,16 +30,24 @@ if (name_of_page == 'vlan'){
         choice3: "K zobrazení všech VLAN na switchi",
         choice4: "K průchodu VLAN po trunku bez označení",
         answer: 1, 
+    },
+    {
+        question: "Je rámec pocházejicí z Native VLAN označen při příchodu na trunk?",
+        choice1: "Ne",
+        choice2: "Jen pokud je Native VLAN 1",
+        choice3: "Ovšem",
+        choice4: "Rámce se nikdy neoznačují při příchodu na trunk",
+        answer: 0, 
     }
 ]
 }
 if (name_of_page == 'sshTelnet'){
     MCQS = [{
-        question: "Je Connor super hot?",
+        question: "Je tohle pog?",
         choice1: "Ano",
         choice2: "Jasnacka",
         choice3: "Ovšem",
-        choice4: "Connor jo?",
+        choice4: "Velmi",
         answer: 1,
     },
     {

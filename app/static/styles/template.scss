@@ -68,6 +68,7 @@ table {
     width: 100%;
     text-align:left;
     border-spacing: 0;
+    overflow-x: auto;
 }
 
 th {
@@ -87,6 +88,18 @@ th, td {
 
 tr:nth-child(odd){
     background-color: #eeeeee;
+}
+
+//pre and code
+
+pre {
+    width:100%;
+    border-left: 4px solid #07313f;
+    margin: 10px 0;
+    padding: 5px 12px;
+    background-color: #eee;
+    white-space: pre-wrap;
+    font-size: 1.2em;
 }
 
 //Podtrhávátka
@@ -418,6 +431,10 @@ tr:nth-child(odd){
     width:100%;
     min-width: 300px;
     max-width: fit-content;
+}
+
+.overflowTable {
+    overflow-x: auto;
 }
 
 

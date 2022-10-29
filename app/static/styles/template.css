@@ -59,6 +59,7 @@ table {
   width: 100%;
   text-align: left;
   border-spacing: 0;
+  overflow-x: auto;
 }
 
 th {
@@ -78,6 +79,16 @@ th, td {
 
 tr:nth-child(odd) {
   background-color: #eeeeee;
+}
+
+pre {
+  width: 100%;
+  border-left: 4px solid #07313f;
+  margin: 10px 0;
+  padding: 5px 12px;
+  background-color: #eee;
+  white-space: pre-wrap;
+  font-size: 1.2em;
 }
 
 #templateline {
@@ -395,4 +406,8 @@ tr:nth-child(odd) {
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
+}
+
+.overflowTable {
+  overflow-x: auto;
 }/*# sourceMappingURL=template.css.map */
