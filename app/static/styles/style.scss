@@ -192,6 +192,8 @@ main {
     border-radius: 25px;
     width: 32em;
     margin-right: 3em;
+    width: auto;
+    
 
 }
 .article_card, .article_card:after, .article_card:before {
@@ -294,6 +296,7 @@ main {
     .article_card {
         margin-top: 3em;
         margin-right: 0;
+        width: auto;
 
         h4{
             font-size: 2.7em;
