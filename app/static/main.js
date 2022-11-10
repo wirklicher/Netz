@@ -10,11 +10,10 @@ let switcher2 = document.getElementById('switcher2');
 const hamburger = document.querySelector(".hamburger");
 const navmenu = document.querySelector(".menu");
 
-var name_of_page = undefined;
-
+let name_of_page = undefined;
 
 $('#main').load('vlan.html');
-name_of_page = 'vlan';
+
 
 hamburger.addEventListener("click", () => {
     hamburger.classList.toggle("active");
@@ -40,6 +39,13 @@ stp.addEventListener('click', () => {
     $('main').load('stp.html');
     name_of_page = 'stp';
 })
+
+window.onload = function() {
+    var a = $(location).attr('hash');
+    a = a.replace('#', '');
+    console.log(a);
+    $('main').load(`${a}.html`);
+}
 
 
 
