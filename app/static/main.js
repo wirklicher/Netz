@@ -3,6 +3,8 @@ let scriptos_content = document.querySelector('#main');
 let vlan = document.querySelector('#vlan');
 let rip = document.querySelector('#rip');
 let sshTelnet = document.querySelector('#sshTelnet');
+let switcher = document.getElementById('switcher');
+let switcher2 = document.getElementById('switcher2');
 
 
 const hamburger = document.querySelector(".hamburger");
@@ -33,5 +35,39 @@ sshTelnet.addEventListener('click', () => {
 rip.addEventListener('click', () => {
     $('main').load('rip.html');
     name_of_page = 'rip';
+})
+stp.addEventListener('click', () => {
+    $('main').load('stp.html');
+    name_of_page = 'stp';
+})
+
+
+
+function dark_mode() {
+    document.documentElement.classList.toggle('dark_mode')
+
+    document.querySelectorAll('.inverted').forEach((result) => {
+        result.classList.toggle('invert');
+    })
+}
+
+switcher.addEventListener('click', () => {
+    dark_mode();
+    switcher2.checked = switcher.checked;
+    console.log(document.body.clientWidth);
+})
+switcher2.addEventListener('click', () => {
+    dark_mode();
+    switcher.checked = switcher2.checked;
+    console.log(document.body.clientWidth);
+})
+
+
+$(window).resize(function(){
+    if ($(window).width() >= 600) {
+        hamburger.classList.remove("active");
+        navmenu.classList.remove("active");
+        scriptos_content.classList.remove('hidden');
+    }
 })
 

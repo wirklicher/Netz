@@ -12,7 +12,7 @@
 <body>
     
     <div class="container">
-        <nav class="nav">
+        <nav class="nav inverted">
             <div class="subnav">
                 <a href="index.html" class="icon"><picture><source media="(max-width: 600px)" srcset="../static/styles/images/logos/icon.svg"><img src="../static/styles/images/logos/logo.png" alt="Main_logo" id="main_logo"></picture></a>
                 <div id="line"></div>
@@ -36,6 +36,15 @@
                                 <div class="arrow"></div>
                             </div>
                         </li>
+                        <li class="card" id="stp">
+                            <div class="btnAtributtes">
+                             <a href="#stp" class="btn">STP</a>
+                             <img src="../static/styles/images/logos/caret-down-solid.svg" width="5%" id="caret">
+                         </div>
+                             <div id="line2"></div>
+                             <div class="submenu">
+                             </div>
+                         </li>
                         <li class="card" id="routing_protocols">
                             <div class="btnAtributtes">
                                 <a href="#routing_protocols" class="btn" >Routing Protocols</a>
@@ -54,15 +63,7 @@
                                 <div class="arrow"></div>
                             </div>
                         </li>
-                        <li class="card" id="stp">
-                           <div class="btnAtributtes">
-                            <a href="#stp" class="btn">STP</a>
-                            <img src="../static/styles/images/logos/caret-down-solid.svg" width="5%" id="caret">
-                        </div>
-                            <div id="line2"></div>
-                            <div class="submenu">
-                            </div>
-                        </li>
+
                         <li class="card" id="ipv6">
                             <div class="btnAtributtes">
                                 <a href="#ipv6" class="btn">IPv6</a>
@@ -82,12 +83,19 @@
                             </div>
                         </li>
                     </ul>
+                    <div class="switch">
+                        <input type="checkbox" name="switchik" id="switcher2">
+                    </div>
             </div>
             <div class="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
+            
+            </div>
+            <div class="switch">
+                <input type="checkbox" name="switchik" id="switcher">
             </div>
         </nav>
         <main id="main"></main>
