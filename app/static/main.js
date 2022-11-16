@@ -45,13 +45,19 @@ window.onload = function() {
     a = a.replace('#', '');
     console.log(a);
     $('main').load(`${a}.html`);
+    if (localStorage.getItem('mode')){
+        document.documentElement.classList.add('dark_mode');
+    } else {
+        document.documentElement.classList.remove('dark_mode');
+    }
 }
 
 
 
 function dark_mode() {
     document.documentElement.classList.toggle('dark_mode')
-
+    localStorage.setItem('mode', document.documentElement.classList.contains('dark_mode'));
+    console.log(localStorage.getItem('mode'));
     document.querySelectorAll('.inverted').forEach((result) => {
         result.classList.toggle('invert');
     })

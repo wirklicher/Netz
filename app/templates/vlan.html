@@ -254,13 +254,12 @@ Switch(config-if)#switchport mode trunk
 Switch(config-if)#switchport trunk allowed vlan {VLANs_ID}
 </pre>
             <h5>Konfigurace ROAS na Routeru - nastavení subinterfacu</h5>
-            <img src="../static/styles/images/VLAN/ROAS-Router1.png" alt="" class="configImage">
+
             <pre>Router(config)#interface {interface}
 Router(config-if)#no shutdown //Nesmíme zapomenou zapnout nejdříve celý interface.
 Router(config-if)#int {interface.X} //X je číslo sub interfacu,pro přehlednost doporučuju používat VLAN_ID. 
 </pre>
             <h5>Konfigurace ROAS na Routeru - Nastavení subinterfacu pro specifickou VLAN</h5>
-            <img src="../static/styles/images/VLAN/ROAS-Router2.png" alt="" class="configImage">
             <pre>Router(config-subif)#encapsulation dot1q {VLAN_ID}
 Router(config-subif)#ip address A.B.C.D E.F.G.H  
 </pre>

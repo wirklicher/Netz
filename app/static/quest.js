@@ -59,3 +59,21 @@ if (name_of_page == 'sshTelnet'){
         answer: 3, 
     }]
 }
+if (name_of_page == 'stp'){
+    MCQS = [{
+        question: "Je tohle pog?",
+        choice1: "Ano",
+        choice2: "Jasnacka",
+        choice3: "Ovšem",
+        choice4: "Velmi",
+        answer: 1,
+    },
+    {
+        question: "Mas rad UwU?",
+        choice1: "Ano",
+        choice2: "Jasnacka",
+        choice3: "Ovšem",
+        choice4: "UwU!!!",
+        answer: 3, 
+    }]
+}
