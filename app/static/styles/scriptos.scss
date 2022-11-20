@@ -3,6 +3,10 @@ $secondarycolor: #B77924;
 $spacer: 15px;
 
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -330,7 +334,7 @@ input:checked:after {
     #Ulscriptos {
         background-color: #0D3544;
         padding-top: 0;
-        
+
     }
     .btn {
         width:75%;

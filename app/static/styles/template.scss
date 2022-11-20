@@ -90,6 +90,10 @@ p {
     font-size: 1.2rem;
 }
 
+a, a:visited, a:focus {
+    color: var(--secondary-color);
+}
+
 //Tabulka
 
 table {
@@ -117,7 +121,7 @@ tr:nth-child(odd){
     background-color: #eeeeee;
 }
 
-//pre and code
+//pre
 
 pre {
     width:100%;
@@ -129,7 +133,7 @@ pre {
     font-size: 1.2em;
 }
 
-//Podtrhávátka
+//Podtržítka
 
 #templateline {
     margin-top: $spacer;

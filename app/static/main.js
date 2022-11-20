@@ -43,35 +43,38 @@ stp.addEventListener('click', () => {
 window.onload = function() {
     var a = $(location).attr('hash');
     a = a.replace('#', '');
-    console.log(a);
     $('main').load(`${a}.html`);
-    if (localStorage.getItem('mode')){
+    console.log(localStorage.getItem('mode'));
+    if (localStorage.getItem('mode') === 'true'){
+        console.log('ola');
         document.documentElement.classList.add('dark_mode');
+        switcher.checked = true;
+        switcher2.checked = switcher.checked;
+        
+
     } else {
+        console.log('ula');
         document.documentElement.classList.remove('dark_mode');
+        switcher.checked = false;
+        switcher.checked = switcher2.checked;
     }
 }
 
 
 
 function dark_mode() {
-    document.documentElement.classList.toggle('dark_mode')
+    document.documentElement.classList.toggle('dark_mode');
     localStorage.setItem('mode', document.documentElement.classList.contains('dark_mode'));
     console.log(localStorage.getItem('mode'));
-    document.querySelectorAll('.inverted').forEach((result) => {
-        result.classList.toggle('invert');
-    })
 }
 
 switcher.addEventListener('click', () => {
     dark_mode();
     switcher2.checked = switcher.checked;
-    console.log(document.body.clientWidth);
 })
 switcher2.addEventListener('click', () => {
     dark_mode();
     switcher.checked = switcher2.checked;
-    console.log(document.body.clientWidth);
 })
 
 

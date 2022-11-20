@@ -36,69 +36,389 @@
             <h4>Úvod do STP</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <section id="TypyPortu" class="subSection">
-                <h4>Typy portu u STP</h4>
-                <div id="templateline2"></div>
-                <div class="height_spacer"></div>
-                <ul>
-                    <li class="req">Root Port</li>
-                    <li class="req">Designated Port</li>
-                    <li class="req">Non-Designated Port</li>
-                </ul>
-            </section>
+            <p>STP, Spanning Tree Protocol, IEEE 802.1D je protokol, který je defaultně nastavený na switchi, aby rozpoznal redundatní síť a znemožnil stvoření broadcast storm.</p>
+            <p>Jestliže STP určí, že síť je redundatní, zablokuje určitý port, aby v síti nevznikla broadcast storm.</p>
+            <p>Jak celý ten proces vybírání, který port bude zablokovaný probíhá?</p>
+            <p>Nejvíce zjednošeně probíhá tak, že switche si mezisebou zvolí <b>Root switch</b>, switch který bude celou STP operaci řídit, dále ostatní switche spočítají Root cost, číslo, které nám udává jak dobře se rámce po tom médiu dostanou k root switchi.</p>
+            <ul>
+                <li class="req">Výběr Root Bridge (Switche) - Switche, který bude celou operaci STP řídit, všechny porty na Root Bridgi normálně fungují. </li>
+                <li class="req">Určení Root portů - Root port se nastaví na ostatních switchich a je to nejefektivnější cesta k Root bridgi.</li>
+                <li class="req">Určení Non-designated portů - na všech zbývajících lincích se nastaví buď designated port (umožňuje normální komunikaci) nebo non-designated port (blokuje veškerou komunikaci kromě BPDU).</li>                
+            </ul>
         </section>
-        
-
-        <p>STP je jedním z protokolů, který aktivně ovlivňují chod sítě.</p>
-        <img src="../static/styles/images/STP/STP.png" alt="" class="configImage">
-        <p>Na obrázku si můžete všimnout, že všechny porty až na jeden svítí zeleně.</p>
-        <p>Proč ale ten port Fa0/1 je oranžový?</p>
-        <p>Protože na switchích běží jeden z STP protokolů.</p>
-        <p>STP, Spanning Tree Protocol, je protokol, který zlepšuje chod sítě, tím, že blokuje jednotlivé porty.</p>
-        <p>Proč je ale potřeba blokovat jednotlivé porty?</p>
-        <p>Kdyby na této síti nebylo implementováno STP, vznikla by <b>Broadcast Storm</b>.</p>
-        <p><b>Broadcast storm</b> je stav, kdy je za krátkou dobu v síti neuvěřitelně moc broadcast paketů (TTL tomu nezabrání, protože to operuje na L3) --> to poté může zapříčinit přetížení switchů a dalších zařízení v síti.</p>
-        <p>Broadcast storm mají tendenci vznikat ve "spolehlivých sítí", kde je každý network device propojený s každým.</p>
-        <p>Vezmeme si příklad z obrázku (při předpokladu, že v síti není STP/RSTP, čili všechny porty jsou zelené).</p>
-        <p>PC0 chce poslat broadcast, pošle jej tedy SW2.</p>
-        <p>SW2 jej tedy pošle na všechny porty kromě toho, ze kterého broadcast přišel (Fa0/3).</p>
-        <p>Takto se zachová každý switch. Problémem je, že SW1 teď dostane 2 stejný broadcasty od SW3 a SW0, čili je zase přepošle. Broadcast z SW3 na SW0 a ze SW0 na SW3, oba broadcasty také pošle na PC2. SW2 se tak vratí hned 2 broadcasty. To má za následek kromě možného přetížení také vyvolání nestability MAC tabulky.</p>
-        <p><b>Nestabilita MAC tabulky</b> je stav, při kterém se neustále aktualizují záznamy, protože rámce se stejnou počáteční MAC adresou dorazí pod jiným interfacem.</p>
-        <p>Dalším problémem, který nastane je to, že hosti dostanou daný rámec vícekrát, s čímž mohou mít poté problém některé aplikace, nebo můžou hosta uplně zahltit.</p>
-        <p>Abych to celé shrnul, STP je protokol, který je defaultně nastavený na L2 switchích a jehož jedním z hlavních cílů je zamezit tvoření Broadcast storm, tím, že dočasně zablokuje určité porty (Pakliže jiné médium vypadne, provoz na portu bude obnoven).</p>
     </section>
     <section id="STA">
         <h3 id="problematika">STA - Spanning Tree Algorithm</h3>
         <div id="templateline2"></div>
         <div class="height_spacer"></div>
-        <p>Jak celý ten proces vybírání, který port bude zablokovaný probíhá?</p>
-        <p>Nejvíce zjednošeně probíhá tak, že switche si mezisebou zvolí <b>Root switch</b>, switch který bude celou STP operaci řídit, dále ostatní switche spočítají Root cost, číslo, které nám udává jak dobře se rámce po tom médiu dostanou k root switchi.</p>
+        <section id="TypyPortu" class="subSection">
+            <h4>Typy portu u STP</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <ul>
+                <li class="req">Root Port</li>
+                <li class="req">Designated Port</li>
+                <li class="req">Non-Designated Port</li>
+            </ul>
+        </section>
+        <section id="Typystavu" class="subSection">
+            <h4>Typy stavu u STP</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <ul>
+                <li class="req">Forwarding</li>
+                <li class="req">Blocking</li>
+                <li class="req">Listening</li>
+                <li class="req">Learning</li>
+                <li class="req">Disabled</li>
+            </ul>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Stav</th>
+                        <th>normální komunikace</th>
+                        <th>přeposílá/dostává BPDU</th>
+                        <th>MAC tabulka</th>
+                        <th>Typ stavu</th>
+                    </tr>
+                    <tr>
+                        <td>Forwarding</th>
+                        <td>Ano</td>
+                        <td>Ano/Ano</td>
+                        <td>Ano</td>
+                        <td>Stable</td>
+                    </tr>
+                    <tr>
+                        <td>Blocking</th>
+                        <td>Ne</td>
+                        <td>Ne/Ano</td>
+                        <td>Ne</td>
+                        <td>Stable</td>
+                    </tr>
+                    <tr>
+                        <td>Listening</th>
+                        <td>Ne</td>
+                        <td>Ano/Ano</td>
+                        <td>Ne</td>
+                        <td>Přechodný</td>
+                    </tr>
+                    <tr>
+                        <td>Learning</th>
+                        <td>Ne</td>
+                        <td>Ano/Ano</td>
+                        <td>Ano</td>
+                        <td>Přechodný</td>
+                    </tr>
+                    <tr>
+                        <td>Disabled</th>
+                        <td>Ne</td>
+                        <td>Ne/Ne</td>
+                        <td>Ne</td>
+                        <td>Stable</td>
+                    </tr>
+                   
+                </table>
+            </div>
+        </section>
+        <div class="height_spacer"></div>
+        <section id="RootBridge" class="subSection">
+            <h4>Výběr Root Bridge</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Když poprvé spustíme switche všechny se považují za Root Bridge.</p>
+            <p>Poté co si mezi sebou switche vymění tzv. BPDU (Bridge Protocol Data Unit) se z jednoho z nich stane Root Bridge, což z něho dělá switch, který může vytvářet BPDU.</p>
+            <p>BPDU obsahuje Bridge ID, číslo, podle něho se určuje Root Bridge.</p>
+            <p>Aby toho nebylo málo tak Bridge ID se skládá v 802.1D z <b>Bridge Priority</b> a <b>MAC Adresy</b>.</p>
+            <p>Bridge Priority je číslo, jehož defaultní hodnota je 32768. Čím nižší toto číslo je tím vyšší pravděpodobnost, že se switch stane root bridge.</p>
+            <p>Pakliže je ale Bridge Priority defaultně na všech switchích 32768 a my neuděláme žádnou změnu v BP., dalším rozhodujicím prvkem je MAC adresa, přičemž zas platí stejné pravidlo, čím nižší je MAC adresa, tím vyšší pravděpodobnost, že se switch stane root bridge.</p>
+            <p>Všechny porty na root bridge jsou v designated stavu.</p>
+            <section id="ex" class="subSection">
+                <h5>Příklad 1</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <h5>Který switch se stane Root Bridgem?</h5>
+                <img src="../static/styles/images/STP/Ex2_RootBridge.png" alt="Ex1" class="configImage">
+                <p><i>Pro ulehčení jsou MAC Adresy zkrácené.</i></p>
+                <p><i>Řešení: <b>Switch 3</b></i></p>
+                <p><i>V tomto případě je řešení velmi prosté, chceme nejnižší BP, to má již na první pohled switch 3, který se stává root bridgem.</i></p>
+                <h5>Příklad 2</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <h5>Který switch se stane Root Bridgem?</h5>
+                <img src="../static/styles/images/STP/Ex1_RootBridge.png" alt="Ex2" class="configImage">
+                <p><i>Pro ulehčení jsou MAC Adresy zkrácené.</i></p>
+                <p><i>Řešení: <b>Switch 2</b></i></p>
+                <p><i>Vždycky je nejlepší si prvně porovnat BP --> chceme <b>nejnižší</b> smysluplné číslo --> to nám vyřadí Switch 1.</i></p>
+                <p><i>Jestliže jsou na 2 switchích BP stejné, rozhoduje o tom nejnižší MAC Adresa, tu v tomto případě má Switch 2.</i></p>
+            </section>
+        </section>
+        <section id="RootPort" class="subSection">
+            <h4>Určení Root Port</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Teď když už máme určený root bridge, je třeba určit root porty.</p>
+            <p>Root porty se určují pomocí <b>root cost</b>, číslo, které udává efektivitu cesty k root bridgi.</p>
+            <p>Root cost se určuje pomocí bandwidth, čím vyšší bandwidth tím nižší číslo, tím vyšší šance, že se port stane RP.</p>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>bandwidth</th>
+                        <th>Root cost</th>
+                    </tr>
+                    <tr>
+                        <td>10Mbit</th>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>100Mbit</th>
+                        <td>19</td>
+                    </tr>
+                    <tr>
+                        <td>1000Mbit</th>
+                        <td>4</td>
+                    </tr>
+                   
+                </table>
+            </div>
+            <div class="height_spacer"></div>
+            <p>Jestliže root cost je stejná, switch použije tyto 3 pravidla (dle pořadí), aby určil root port.</p>
+            <ul>
+                <li class="req">Výběr pomocí Bridge ID - tj. BP, *Extended VLAN System, MAC Adresa</li>
+                <li class="req">Výběr pomocí nejnižší <b>port priority</b> sousedícího switche - číslo, které najdeme použitím příkazu "show spanning-tree", většinou koukáme na to, co se nachází za tečkou.</li>
+                <li class="req">Výběr pomocí nejnižšího port ID sousedícího switche, tj. G0/0, G1/0 atd.</li>
+            </ul>
+        </section>
+        <section id="NonDesignatedPort" class="subSection">
+            <h4>Určení Non-Designated Portu</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Je pravidlem, že na každém linku (collision domain) je jeden port Designated a ten druhý Non-Designated.</p>
+            <p>Designated portem se stane ten port, jehož root cost je nižší než port toho druhého switche.</p>
+            <p>Když root cost bude na obou switchích v rámci jednoho linku stejný designated portem se stane ten port, který bude mít nejnižší Bridge ID.</p>
+            <section id="ex" class="subSection">
+                <h5>Příklad 1</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <h5>Urči typ všech portů</h5>
+                <img src="../static/styles/images/STP/Ex1_Ports.png" alt="Ex1" class="configImage">
+                <p><i>Pro ulehčení jsou MAC Adresy zkrácené.</i></p>
+                <p><i>Řešení:</i></p>
+                <img src="../static/styles/images/STP/Ex1_Ports_Sol.png" alt="Ex1Sol" class="configImage">
+                <p><i>Prvně si určíme RB, tím se v tomto případě stává SW7, díky jeho MAC adrese. Všechny jeho porty jsou <b>designated</b>.</i></p>
+                <p><i>G0/1 na SW6 se stává RP. (RC. je 4).</i></p>
+                <p><i>Situace na SW5 je poněkud komplikovanější, protože link vedoucí přímo k RB. je Fast Ethernet, který má RC 19, což je víc než kdyby jeho rámce šly přes SW6 (RC. je 8), takže RP je stává G0/1 na SW5.</i></p>
+                <p><i>To nám nechává poslední port, kterým je Fa0/1 na SW5, ten se stává <b>non-designated</b>.</i></p>
+                <h5>Příklad 2</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <h5>Urči typ všech portů</h5>
+                <img src="../static/styles/images/STP/Ex2_Ports.png" alt="Ex2" class="configImage">
+                <p><i>Pro ulehčení jsou MAC Adresy zkrácené.</i></p>
+                <p><i>Řešení:</i></p>
+                <img src="../static/styles/images/STP/Ex2_Ports_Sol.png" alt="Ex2Sol" class="configImage">
+                <p><i>Nejdřív si určíme RB, tím se kvůli BP stává <b>Switch 3.</b></i></p>
+                <p><i>Všechny jeho porty jsou <b>Designated</b>.</i></p>
+                <p>Root porty jsou už obtížnější, co se týče vztahu SW3-SW1 tam je jasné, že RP se stane G0/1 na SW1 (Root cost je 4).</p>
+                <p>U vztahu SW3-SW1 je nutné si dát pozor na bandwidth linků, protože G0/2 má RC. 4 a Fa0/1 má RC. 19, protože je Fast Ethernet (100mbit).</p>
+                <p>U Switche 0 se stane díky RC. Root portem G0/1, to z G0/1 na SW2 dělá designated port.</p>
+                <p>Co se týče posledního vztahu mezi SW0 a SW1, tak RC přes Fa0/1 a Fa0/24 na SW0 je 23, RC na SW1 je 4, proto jsou jako <b>designated porty</b> vybrány Fa0/1 a Fa0/23 na SW1 a Fa0/1 s Fa0/24 jsou <b>Non-Designated</b>.</p>
+            </section>
+        </section>
+        <section id="Timers" class="subSection">
+            <h3 id="problematika">STP Timers</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Název</th>
+                        <th>Popis</th>
+                        <th>Čas [s]</th>
+                    </tr>
+                    <tr>
+                        <td>Hello</th>
+                        <td>Jak často posílá RB. hello BPDU zprávy</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Forwarding delay</th>
+                        <td>Délka jednoho přechodného vztahu</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>Max age</th>
+                        <td>Za jak dlouho se v síti změní STP, pokud do té doby nepřijde hello BPDU</td>
+                        <td>20</td>
+                    </tr>
+                   
+                </table>
+            </div>
+        </section>
+        <div class="height_spacer"></div>
+    </section>
+    <section id="Toolkit">
+        <h3 id="problematika">STP Toolkits</h3>
+        <div id="templateline2"></div>
+        <div class="height_spacer"></div>
+        <p>STP Toolkits jsou další STP nastavení, které umožňují efektivnější chod STP protokolu.</p>
+        <section id="portfast" class="subSection">
+            <h4>PortFast</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>PortFast nám slouží k přeskočení přechodných stavů na portech, kde jednoduše víme, že to nebude potřeba.</p>
+            <p>U PortFastu je ale třeba být obezřetný, protože ve chvíli, kdy se k danému portu připojí switch, nám hrozí broadcast storm.</p>
+            <p>*U PVST protokolů se nastavuje u všech <b>Access</b> portů.</p>
+        </section>
+        <section id="bpduguard" class="subSection">
+            <h4>BPDU Guard</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>BPDU Guard nám jednoduše umožňuje na portu nastavit "pojistku", která port při přijmutí BPDU od neznámého switche vypne, aby předešla vzniku broadcast storm.</p>
+            <p>BPDU Guard se dokonale doplňuje s PortFastem.</p>
+        </section>
+        <section id="rootguard" class="subSection">
+            <h4>Root Guard</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Root Guard zablokuje port při přijmutí superior BPDU rámce --> pojistka, že tato stávající RB. zůstane root bridgem.</p>
+        </section>
+        <section id="uplinkfast" class="subSection">
+            <h4>UplinkFast</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p></p>
+        </section>
+        <section id="backbonefast" class="subSection">
+            <h4>Backbonefast</h4>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p></p>
+        </section>
     </section>
     <section id="Další_STP_protokoly">
         <h3 id="problematika">Další STP protokoly</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
         <section id="pvst" class="subSection">
-            <h3 id="problematika">PVST</h3>
+            <h4 id="problematika">PVST & PVST+</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>PVST & PVST+ jsou Cisco-propietary protokoly které do STP přidávají VLANy - každá VLAN může mít svoji vlastní STP topologii, tzn. že v jedné VLAN může port fungovat a v druhé nemusí.</p>
+            <p>S PVST, (Per-VLAN Spanning Tree) se dnes již málo kdy setkáte, podporuje jen ISL trunking formát.</p>
+            <p>PVST+ již podporuje užívaný dot1q trunking formát</p>
+            <p>S VLANy nám přibyl do BPDU další důležitý faktor - <b>Extended System ID</b>, ten tvoří výslednou Bridge Priority, která je součtem klasicky nastavné BP. a VLAN ID - tj. při užití VLAN 1 je výslednou BP. 32769. </p>
         </section>
-        <section id="pvst+" class="subSection">
-            <h3 id="problematika">PVST+</h3>
+        <section id="mstp" class="subSection">
+            <h4 id="problematika">MSTP - 802.1s</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>MSTP - 802.1s, Multiple Spanning Tree Protocol je protokol, který nám umožňuje vytvářet tzv "instance" - seskupení určitých VLAN STP topologií. </p>
+            <p>Ve větší síti je lepší pro rychlejší konfiguraci používat MSTP než RPVST+ protokol.</p>
+            <p>Je to jeden z pokročilejších protokolů, pro CCNA není vyžadován.</p>
         </section>
         <section id="rstp" class="subSection">
-            <h3 id="problematika">RSTP</h3>
+            <h4 id="problematika">RSTP - 802.1w</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>RSTP protokoly jsou vylepšenou verzí 802.1D. Cílem RSTP je zeefektivnit (např. zrychlit přesun zablokovaného portu do forwarding stavu, který v 802.D trvá 30s.) a přiblížit STP protokol moderní době (802.1D se používalo v 90 letech 20.st.)</p>
+            <p>Co se týče hlavních principů tak ty zůstaly nezměněny - určuje se Root Bridge, Root Port a Designated port.</p>
+            <p>Změna je u root cost, která je byla upravená, což přineslo lepší zapamatovatelnost a přizpůsobitelnost novějším technologiím.</p>
+            <section id="rootcost" class="subSection">
+                <h5 id="problematika">Porovnání 802.1D a 802.1w verze Root cost</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <div class="overflowTable">
+                    <table>
+                        <tr>
+                            <th>bandwidth</th>
+                            <th>STP (802.1D)</th>
+                            <th>RSTP (802.1w)</th>
+                        </tr>
+                        <tr>
+                            <td>10 Mbit/s</th>
+                            <td>100</td>
+                            <td>2000000</td>
+                        </tr>
+                        <tr>
+                            <td>100 Mbit/s</th>
+                            <td>19</td>
+                            <td>200000</td>
+                        </tr>
+                        <tr>
+                            <td>1 Gbit/s</th>
+                            <td>4</td>
+                            <td>20000</td>
+                        </tr>
+                        <tr>
+                            <td>10 Gbit/s</th>
+                            <td>2</td>
+                            <td>2000</td>
+                        </tr>
+                        <tr>
+                            <td>100 Gbit/s</th>
+                            <td>N/A</td>
+                            <td>200</td>
+                        </tr>
+                        <tr>
+                            <td>1 Tbit/s</th>
+                            <td>N/A</td>
+                            <td>20</td>
+                        </tr>
+                       
+                    </table>
+                </div>
+            </section>
+            <div class="height_spacer"></div>
+            <section id="Stavportu">
+                <h5 id="problematika">Změna stavů portů</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <p>Změnu najdeme také u stavů portů, kde nám mizí <b>learning, disabled a blocking</b> stavy a jsou přesunuty pod 1 společný - Discarding port.</p>
+                <p>Ten má stejnou funkcionalitu jako blocking stav u STP.</p>
+            </section>
+            <p>Další změnou je rozložení Non-designated portu na 2:</p>
+            <section id="Alternateport" class="subSection">
+                <h5 id="problematika">Alternate port</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+            </section>
+            <section id="Backupport" class="subSection">
+                <h5 id="problematika">Backup port</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div> 
+            </section>
         </section>
         
+    </section>
+    <section id="STP_Conf">
+        <h3 id="problematika">Konfigurace STP</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+    </section>
+    <section id="STP_Vuln">
+        <h3 id="problematika">STP zranitelnosti</h3>
+        <div id="templateline2"></div>
+        <div class="height_spacer"></div>
     </section>
     <section id="Etherchannel">
         <h3 id="problematika">Etherchannel</h3>
         <div id="templateline2"></div>
         <div class="height_spacer"></div>
+        <section id="PaGP" class="subSection">
+            <h3 id="problematika">PaGP</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+        </section>
+        <section id="LACP" class="subSection">
+            <h3 id="problematika">LACP</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+        </section>
+        <section id="Static" class="subSection">
+            <h3 id="problematika">Static</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
