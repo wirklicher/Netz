@@ -282,18 +282,6 @@
             <div class="height_spacer"></div>
             <p>Root Guard zablokuje port při přijmutí superior BPDU rámce --> pojistka, že tato stávající RB. zůstane root bridgem.</p>
         </section>
-        <section id="uplinkfast" class="subSection">
-            <h4>UplinkFast</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
-            <p></p>
-        </section>
-        <section id="backbonefast" class="subSection">
-            <h4>Backbonefast</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
-            <p></p>
-        </section>
     </section>
     <section id="Další_STP_protokoly">
         <h3 id="problematika">Další STP protokoly</h3>
@@ -391,13 +379,24 @@
                 <div class="height_spacer"></div>
                 <p>Záložní port, pakliže se něco stane s designated portem.</p>
                 <p>Backup port vzniká pakliže chceme udělat propojení switch-hub-switch.</p>
-                <p>Funguje v half-duplex módu</p>
+                <p>Funguje v half-duplex módu.</p>
                 <p>S backup portem se dnes již moc nesetkáte.</p>
             </section>
             <section id="rstptimer" class="subSection">
                 <h5 id="problematika">RSTP timers</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
+                <p>RSTP posílá každé 2s Hello BPDU.</p>
+                <p>V čem je ale rozdíl oproti klasickému STP je to, že je zde výrazně snížen Max Age timer, který je nově pouze 6s.</p>
+            </section>
+            <section id="linktypes" class="subSection">
+                <h5 id="problematika">Link Types</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <p>RSTP nově představuje Link Types - <b>Edge</b>, <b>Point-to-point</b> a <b>shared</b>.</p>
+                <p>Edge - jsou všechny porty které propojují switch a end host zařízení. Mají stejnou funkcionalitu jako portfast - link je bez žádného dalšího protahování ve forwarding stavu. Pro nastavení tohoto link typu stačí nastavit na daném portu portfast.</p>
+                <p>Point-to-point - klasický SW-SW link type.</p>
+                <p>Shared - SW-Hub-SW link type, fungují v half-duplex módu.</p>
             </section>
         </section>
         
@@ -406,8 +405,11 @@
         <h3 id="problematika">Konfigurace STP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <h4>Nastavení STP protokolu</h4>
             <pre>Switch(config)#spanning-tree mode {pvst, rapid-pvst, mstp}</pre>
+            <h4>Nastavení BPDU priority</h4>
             <pre>Switch(config)#spanning-tree vlan {vlan-id} priority {priority}</pre>
+            <h4>Nastavení root bridge</h4>
             <pre>Switch(config)#spanning-tree vlan {vlan-id} root {primary, secondary}</pre>
     </section>
     <section id="STP_Vuln">
@@ -419,20 +421,70 @@
         <h3 id="problematika">Etherchannel</h3>
         <div id="templateline2"></div>
         <div class="height_spacer"></div>
+        <p>Etherchannel, port-channel a také channel-group je funkcionalita, která nám spojí vícero linků (až 8) do 1 virtuálního.</p>
+        <p>To se používá právě kvůli tomu, že v síti defaultně běží STP protokol, který by nechal v provozu pouze 1 link.</p>
+        <p>Vícero linků mezi dvěma zařízeníma má za následek zvětšení bandwidthu.</p>
+        <p>Etherchannel se v síti značí takto:</p>
+        <img src="../static/styles/images/STP/Etherchannel.png" alt="Ex2Sol" class="configImage">
+        <section id="podminky" class="subSection">
+            <h3 id="problematika">Podmínky vzniku Etherchannelu</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Pro vznik a správné fungování Etherchannelu je nutné dodržet následující body - </p>
+            <ul>
+                <li class="req">Stejný typ interfacu (FastEthernet, GigabitEthernet)</li>
+                <li class="req">Stejný duplex mód</li>
+                <li class="req">Linky jsou ve stejné VLAN</li>
+                <li class="req">Etherchannel konfigurace musí být shodná na obou zařízeních</li>
+                <li class="req">Linky musí mít shodnou nastevenou rychlost</li>
+            </ul>
+        </section>
         <section id="PaGP" class="subSection">
             <h3 id="problematika">PaGP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>PaGP, Port Aggregation Protocol, je Cisco-propietary protokol, který dynamicky vytváří a spravuje Etherchannel.</p>
+            <section id="konfiguracePaGP" class="subSection">
+                <h3 id="problematika">Konfigurace PaGP</h3>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <p>PaGP se nastavuje pomocí 2 módů - </p>
+                <ul>
+                    <li class="req"><b>auto</b> - mód, který vytváří PaGP Etherchannel, pouze pokud dostane PaGP rámec.</li>
+                    <li class="req"><b>desirable</b> - mód, který vytváří PaGP Etherchannel bez jakékoliv další podmínky.</li>
+                </ul>
+                <pre>switch(config-if-range)#channel-group {1-6} mode {auto|desirable}</pre>
+                <p><i>pozn. číslo channel-group musí být na obou stranách stejné!</i></p>
+            </section>
         </section>
         <section id="LACP" class="subSection">
             <h3 id="problematika">LACP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>LACP, Link Aggregation Control Protocol je IEEE 802.1AX (dříve IEEE 802.3ad) protokol, který stejně jako PaGP dynamicky vytváří a spravuje Etherchannel.</p>
+            <section id="konfiguraceLACP" class="subSection">
+                <h3 id="problematika">Konfigurace LACP</h3>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
+                <p>LACP se stejně jako PaGP nastavuje pomocí 2 módů - </p>
+                <ul>
+                    <li class="req"><b>active</b> - mód, který vytváří LACP bezpodmínečně</li>
+                    <li class="req"><b>passive</b> - mód, který vytváří LACP, pouze pokud dostane LACP rámec</li>
+                </ul>
+                <pre>switch(config-if-range)#channel-group {1-6} mode {active|passive}</pre>
+                <p><i>pozn. číslo channel-group musí být na obou stranách stejné!</i></p>
+            </section>
         </section>
         <section id="Static" class="subSection">
             <h3 id="problematika">Static</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <p>Poslední možností nastavení Ethechannelu je statické.</p>
+            <p>Toto se nedoporučuje.</p>
+            <p>Nastavuje se pomocí slovíčk <b>on</b>.</p>
+            <pre>switch(config-if-range)#channel-group {1-6} mode on</pre>
+            <p>Stejně je nutné vybrat si jeden z protokolů, který bude spravovat daný etherchannel</p>
+            <pre>switch(config-if-range)</pre>
         </section>
     </section>
     <section id="prehledPrikazu">
