@@ -369,7 +369,7 @@
                 </div>
             </section>
             <div class="height_spacer"></div>
-            <section id="Stavportu">
+            <section id="Stavportu" class="subSection">
                 <h5 id="problematika">Změna stavů portů</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
@@ -381,11 +381,23 @@
                 <h5 id="problematika">Alternate port</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
+                <p>Standardně je Alternate port v discarding stavu.</p>
+                <p>Je brán ale jako náhradník, pokud by se s forwarding portem něco stalo.</p>
+                <p>Funguje backbonefast.</p>
             </section>
             <section id="Backupport" class="subSection">
                 <h5 id="problematika">Backup port</h5>
                 <div id="templateline2"></div>
-                <div class="height_spacer"></div> 
+                <div class="height_spacer"></div>
+                <p>Záložní port, pakliže se něco stane s designated portem.</p>
+                <p>Backup port vzniká pakliže chceme udělat propojení switch-hub-switch.</p>
+                <p>Funguje v half-duplex módu</p>
+                <p>S backup portem se dnes již moc nesetkáte.</p>
+            </section>
+            <section id="rstptimer" class="subSection">
+                <h5 id="problematika">RSTP timers</h5>
+                <div id="templateline2"></div>
+                <div class="height_spacer"></div>
             </section>
         </section>
         
@@ -394,6 +406,9 @@
         <h3 id="problematika">Konfigurace STP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
+            <pre>Switch(config)#spanning-tree mode {pvst, rapid-pvst, mstp}</pre>
+            <pre>Switch(config)#spanning-tree vlan {vlan-id} priority {priority}</pre>
+            <pre>Switch(config)#spanning-tree vlan {vlan-id} root {primary, secondary}</pre>
     </section>
     <section id="STP_Vuln">
         <h3 id="problematika">STP zranitelnosti</h3>
