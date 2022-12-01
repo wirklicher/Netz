@@ -39,7 +39,7 @@
             <p>STP, Spanning Tree Protocol, IEEE 802.1D je protokol, který je defaultně nastavený na switchi, aby rozpoznal redundatní síť a znemožnil stvoření broadcast storm.</p>
             <p>Jestliže STP určí, že síť je redundatní, zablokuje určitý port, aby v síti nevznikla broadcast storm.</p>
             <p>Jak celý ten proces vybírání, který port bude zablokovaný probíhá?</p>
-            <p>Nejvíce zjednošeně probíhá tak, že switche si mezisebou zvolí <b>Root switch</b>, switch který bude celou STP operaci řídit, dále ostatní switche spočítají Root cost, číslo, které nám udává jak dobře se rámce po tom médiu dostanou k root switchi.</p>
+            <p>Nejvíce zjednošeně probíhá tak, že switche si mezisebou zvolí <b>Root switch</b>, switch který bude celou STP operaci řídit, dále ostatní switche spočítají Root cost, číslo, které nám udává jak dobře se rámce po tom médiu dostanou k root switchi, to určí nejefektivnější cestu k root bridge (volba root portu) a úplně nakonci proběhne volba designated a non-designated (zablokovanych) portů.</p>
             <ul>
                 <li class="req">Výběr Root Bridge (Switche) - Switche, který bude celou operaci STP řídit, všechny porty na Root Bridgi normálně fungují. </li>
                 <li class="req">Určení Root portů - Root port se nastaví na ostatních switchich a je to nejefektivnější cesta k Root bridgi.</li>
@@ -187,6 +187,7 @@
                 <li class="req">Výběr pomocí nejnižší <b>port priority</b> sousedícího switche - číslo, které najdeme použitím příkazu "show spanning-tree", většinou koukáme na to, co se nachází za tečkou.</li>
                 <li class="req">Výběr pomocí nejnižšího port ID sousedícího switche, tj. G0/0, G1/0 atd.</li>
             </ul>
+            <p><i>* Využívájí jej PVST protokoly</i></p>
         </section>
         <section id="NonDesignatedPort" class="subSection">
             <h4>Určení Non-Designated Portu</h4>
@@ -268,6 +269,10 @@
             <p>PortFast nám slouží k přeskočení přechodných stavů na portech, kde jednoduše víme, že to nebude potřeba.</p>
             <p>U PortFastu je ale třeba být obezřetný, protože ve chvíli, kdy se k danému portu připojí switch, nám hrozí broadcast storm.</p>
             <p>*U PVST protokolů se nastavuje u všech <b>Access</b> portů.</p>
+            <h5>Nastavení Portfast globálně</h5>
+            <pre>switch(config)#spanning-tree portfast default</pre>
+            <h5>Nastavení Portfast na interfaci</h5>
+            <pre>switch(config-if)#spanning-tree portfast</pre>
         </section>
         <section id="bpduguard" class="subSection">
             <h4>BPDU Guard</h4>
@@ -275,12 +280,18 @@
             <div class="height_spacer"></div>
             <p>BPDU Guard nám jednoduše umožňuje na portu nastavit "pojistku", která port při přijmutí BPDU od neznámého switche vypne, aby předešla vzniku broadcast storm.</p>
             <p>BPDU Guard se dokonale doplňuje s PortFastem.</p>
+            <h5>Nastavení BPDU Guard globálně</h5>
+            <pre>switch(config)#spanning-tree portfast bpduguard default</pre>
+            <h5>Nastavení BPDU Guard na interfaci</h5>
+            <pre>switch(config-if)#spanning-tree bpduguard {enable|disable}</pre>
         </section>
         <section id="rootguard" class="subSection">
             <h4>Root Guard</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>Root Guard zablokuje port při přijmutí superior BPDU rámce --> pojistka, že tato stávající RB. zůstane root bridgem.</p>
+            <h5>Nastavení Root Guard na interfaci</h5>
+            <pre>switch(config-if)#spanning-tree guard root</pre>
         </section>
     </section>
     <section id="Další_STP_protokoly">
@@ -405,17 +416,21 @@
         <h3 id="problematika">Konfigurace STP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <h4>Nastavení STP protokolu</h4>
-            <pre>Switch(config)#spanning-tree mode {pvst, rapid-pvst, mstp}</pre>
-            <h4>Nastavení BPDU priority</h4>
-            <pre>Switch(config)#spanning-tree vlan {vlan-id} priority {priority}</pre>
-            <h4>Nastavení root bridge</h4>
-            <pre>Switch(config)#spanning-tree vlan {vlan-id} root {primary, secondary}</pre>
-    </section>
-    <section id="STP_Vuln">
-        <h3 id="problematika">STP zranitelnosti</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
+            <div class="subSection">
+                <h4>Nastavení STP protokolu</h4>
+                <pre>Switch(config)#spanning-tree mode {pvst, rapid-pvst, mstp}</pre>
+                <h4>Nastavení BPDU priority</h4>
+                <pre>Switch(config)#spanning-tree vlan {vlan-id} priority {priority}</pre>
+                <h4>Nastavení root bridge</h4>
+                <pre>Switch(config)#spanning-tree vlan {vlan-id} root {primary, secondary}</pre>
+                <h4>Nastavení STP cost</h4>
+                <pre>Switch(config)#spanning-tree vlan {vlan-id} cost {cost}</pre>
+                <h4>Nastavení port priority</h4>
+                <pre>Switch(config)#spanning-tree vlan {vlan-id} port-priority {priority}</pre>
+                <h4>Zobrazení nastavení STP</h4>
+                <pre>Switch#show spanning-tree</pre>
+            </div>
+            <div class="height_spacer"></div>
     </section>
     <section id="Etherchannel">
         <h3 id="problematika">Etherchannel</h3>
@@ -424,8 +439,34 @@
         <p>Etherchannel, port-channel a také channel-group je funkcionalita, která nám spojí vícero linků (až 8) do 1 virtuálního.</p>
         <p>To se používá právě kvůli tomu, že v síti defaultně běží STP protokol, který by nechal v provozu pouze 1 link.</p>
         <p>Vícero linků mezi dvěma zařízeníma má za následek zvětšení bandwidthu.</p>
+        <p>Na switchi lze nastavit až 6 Etherchannelů.</p>
         <p>Etherchannel se v síti značí takto:</p>
         <img src="../static/styles/images/STP/Etherchannel.png" alt="Ex2Sol" class="configImage">
+        <section id="loadbalance" class="subSection">
+            <h3 id="problematika">Etherchannel a load balancing</h3>
+            <div id="templateline2"></div>
+            <div class="height_spacer"></div>
+            <p>Pokud switch využívá Etherchannel, rozhoduje se, kterým skutečným portem specifický rámec vyšle.</p>
+            <p>Toto switch řeší pomocí metod, které určují podle jakého faktoru se switch rozhoduje.</p>
+            <p>Všechny tyto metody mají za následek to, že všechny zprávy pocházející ze stejné aplikace budou přenášeny přes jeden skutečný port --> to má za následek to, že switch nepřehází pořadí jednolivých zpráv.</p>
+            <p>Seznam metod:</p>
+            <ul>
+                <li class="req">src-mac</li>
+                <li class="req">dst-mac</li>
+                <li class="req">src-dst-mac --> dělá se XOR src a dst mac</li>
+                <li class="req">src-ip</li>
+                <li class="req">dst-ip</li>
+                <li class="req">src-dst-ip --> dělá se XOR src a dst mac</li>
+                <li class="req">src-port</li>
+                <li class="req">dst-port</li>
+                <li class="req">src-dst-port --> dělá se XOR src a dst portu</li>
+            </ul>
+            <p><i>poslední 3 metody nejsou dostupné v PT.</i></p>
+            <h4>Nastavení load-balancingu</h4>
+            <pre>Switch(config)#port-channel load-balance {metoda}</pre>
+            <h4>Přehled load-balancingu</h4>
+            <pre>Switch#show etherchannel load-balance</pre>
+        </section>
         <section id="podminky" class="subSection">
             <h3 id="problematika">Podmínky vzniku Etherchannelu</h3>
             <div id="templateline2"></div>
@@ -439,40 +480,38 @@
                 <li class="req">Linky musí mít shodnou nastevenou rychlost</li>
             </ul>
         </section>
-        <section id="PaGP" class="subSection">
-            <h3 id="problematika">PaGP</h3>
+        <section id="PAgP" class="subSection">
+            <h3 id="problematika">PAgP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>PaGP, Port Aggregation Protocol, je Cisco-propietary protokol, který dynamicky vytváří a spravuje Etherchannel.</p>
-            <section id="konfiguracePaGP" class="subSection">
-                <h3 id="problematika">Konfigurace PaGP</h3>
+            <p>PAgP, Port Aggregation Protocol, je Cisco-propietary protokol, který dynamicky vytváří a spravuje Etherchannel.</p>
+            <section id="konfiguracePAgP" class="subSection">
+                <h3 id="problematika">Konfigurace PAgP</h3>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
-                <p>PaGP se nastavuje pomocí 2 módů - </p>
+                <p>PAgP se nastavuje pomocí 2 módů - </p>
                 <ul>
-                    <li class="req"><b>auto</b> - mód, který vytváří PaGP Etherchannel, pouze pokud dostane PaGP rámec.</li>
-                    <li class="req"><b>desirable</b> - mód, který vytváří PaGP Etherchannel bez jakékoliv další podmínky.</li>
+                    <li class="req"><b>auto</b> - mód, který vytváří PAgP Etherchannel, pouze pokud dostane PAgP rámec.</li>
+                    <li class="req"><b>desirable</b> - mód, který vytváří PAgP Etherchannel bez jakékoliv další podmínky.</li>
                 </ul>
                 <pre>switch(config-if-range)#channel-group {1-6} mode {auto|desirable}</pre>
-                <p><i>pozn. číslo channel-group musí být na obou stranách stejné!</i></p>
             </section>
         </section>
         <section id="LACP" class="subSection">
             <h3 id="problematika">LACP</h3>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>LACP, Link Aggregation Control Protocol je IEEE 802.1AX (dříve IEEE 802.3ad) protokol, který stejně jako PaGP dynamicky vytváří a spravuje Etherchannel.</p>
+            <p>LACP, Link Aggregation Control Protocol je IEEE 802.1AX (dříve IEEE 802.3ad) protokol, který stejně jako PAgP dynamicky vytváří a spravuje Etherchannel.</p>
             <section id="konfiguraceLACP" class="subSection">
                 <h3 id="problematika">Konfigurace LACP</h3>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
-                <p>LACP se stejně jako PaGP nastavuje pomocí 2 módů - </p>
+                <p>LACP se stejně jako PAgP nastavuje pomocí 2 módů - </p>
                 <ul>
                     <li class="req"><b>active</b> - mód, který vytváří LACP bezpodmínečně</li>
                     <li class="req"><b>passive</b> - mód, který vytváří LACP, pouze pokud dostane LACP rámec</li>
                 </ul>
                 <pre>switch(config-if-range)#channel-group {1-6} mode {active|passive}</pre>
-                <p><i>pozn. číslo channel-group musí být na obou stranách stejné!</i></p>
             </section>
         </section>
         <section id="Static" class="subSection">
@@ -503,6 +542,56 @@
                         <td>zobrazí informace o STP</td>
                         <td>EXEC</td>
                     </tr>
+                    <tr>
+                        <td>spanning-tree mode {pvst, rapid-pvst, mstp}</th>
+                        <td>nastaví specifický stp protokol</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>Switch(config)#spanning-tree vlan {vlan-id} priority {priority}</th>
+                        <td>nastaví specifickou prioritu (násobky 4096 a 0)</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree vlan {vlan-id} root {primary, secondary}</th>
+                        <td>nastaví prioritu takovou, aby se switch stal RB. nebo jeho náhradníkem</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree vlan {vlan-id} cost {cost}</th>
+                        <td>nastaví STP cost</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree vlan {vlan-id} port-priority {priority}</th>
+                        <td>nastaví port priority</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree portfast default</th>
+                        <td>nastaví na portu portfast, v případě rstp-based protokolů nastavení edge link-type</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree portfast</th>
+                        <td>nastaví na portu portfast, v případě rstp-based protokolů nastavení edge link-type</td>
+                        <td>interface</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree portfast bpduguard default</th>
+                        <td>nastaví globálně na všech access portech bpduguard</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree bpduguard {enable|disable}</th>
+                        <td>nastaví/vypne na portu bpduguard</td>
+                        <td>interface</td>
+                    </tr>
+                    <tr>
+                        <td>spanning-tree portfast</th>
+                        <td>nastaví na portu portfast</td>
+                        <td>interface</td>
+                    </tr>
                    
                 </table>
             </div>
@@ -512,6 +601,12 @@
         <h3>Závěr</h3>
         <div id="templateline2"></div>
         <div class="height_spacer"></div>
+        <p>STP protokoly chrání síť před vznikem broadcast storms, které síť mohou velmi poškodit.</p>
+        <p>STP ochraňuje síť tak, že blokuje určité porty, které určí pomocí STA.</p>
+        <p>Průběh STA: zvolí se root bridge (switch), následně proběhne volba root portů a poté se určí designated a non-designated (blokovaných) portů.</p>
+        <p>V současnosti se používají rapid-pvst a mstp, které dokáží oproti standardní verzi operovat s VLAN a zkracují čas potřebný k přepnutí discarding linku na forwarding.</p>
+        <p>Etherchannel pak odpovídá na problematiku STP, který v případě vícero linků mezi 2 switchi nechá fungovat pouze jeden, tím, že až z 8 linků vytvoří jeden virtuální.</p>
+        <p>Etherchannel lze nastavit a spravovat buď staticky a nebo pomocí dynamických protokolů - PAgP a LACP.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;">Chcete si latku procvičit?</h3>
