@@ -44,6 +44,7 @@ window.onload = function() {
     var a = $(location).attr('hash');
     a = a.replace('#', '');
     $('main').load(`${a}.html`);
+    name_of_page = a;
     console.log(localStorage.getItem('mode'));
     if (localStorage.getItem('mode') === 'true'){
         console.log('ola');
