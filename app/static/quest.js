@@ -93,7 +93,7 @@ if (name_of_page == 'stp'){
         answer: 3, 
     },
     {
-        question: "Jaký je hlavní rozdíl mezi RSTP a IEE 802.1d?",
+        question: "Jaký je hlavní rozdíl mezi RSTP a IEEE 802.1d?",
         choice1: "RSTP se snaží co nejvíce zkrátit proces přepnutí z discarding stavu do forwarding stavu.",
         choice2: "RSTP umožňuje každé VLAN udělat svoji STP topologii.",
         choice3: "IEE 802.1d nazývá věci jinak než RSTP.",
@@ -110,7 +110,7 @@ if (name_of_page == 'stp'){
     },
     {
         question: "Jaký etherchannel protokol nenajdete na Juniper switchi?",
-        choice1: "arp",
+        choice1: "ARP",
         choice2: "PAgP",
         choice3: "LACP",
         choice4: "static",

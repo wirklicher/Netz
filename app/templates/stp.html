@@ -22,14 +22,14 @@
             <div class="height_spacer"></div>
             <p>Předtím než si vysvětlíme STP a jeho funkci, je třeba si vysvětlit pojem "Broadcast storm".</p>
             <p>Broadcast storm je stav, kdy je za krátkou dobu v síti přítomno neuvěřitelně moc broadcast paketů.</p>
-            <p>Nejlepé si vznik této situace vysvětlíme na ilustraci.</p>
+            <p>Nejlépe si vznik této situace vysvětlíme na ilustraci.</p>
             <img src="../static/styles/images/STP/Broadcast_storm.png" alt="BroadcastStorm" class="configImage">
             <p>Při tvorbě sítě bychom měli respektovat určitá nepsaná pravidla, jedno z nich je, aby síť byla <a href="https://www.sprava-site.eu/redundance/">redundatní</a>.</p>
             <p>Lze jasně vidět, že síť v obrázku toto nepsané pravidlo splňuje, jinými slovy, pokud selže Fa0/2 (SW1), rámec od PC1 k PC0 se dostane i tak.</p>
-            <p>V této síti a každé jiné, která respektuje toto pravidlo, nastává ale velký problém, který souvisí se zpracováním broadcastu na switchi</p>
+            <p>V této síti a každé jiné, která respektuje toto pravidlo, nastává ale velký problém, který souvisí se zpracováním broadcastu na switchi.</p>
             <p><i>Co se stane pokud PC1 pošle do sítě broadcast?</i></p>
             <p>1) SW1 jej pošle na všechny ostatní média kromě tohož, ze kterého broadcast vyšel.</p>
-            <p>2) Tento postup opakují i ostatní switche, výsledkem bude to, že PC0 a PC1 obdrží opakovaně, switche budou mít bordel v MAC tabulce a broadcasty budou v síti proudit dokud je něco nezastaví.</p>
+            <p>2) Tento postup opakují i ostatní switche, výsledkem bude to, že PC0 a PC1 obdrží broadcast opakovaně, switche budou mít bordel v MAC tabulce a broadcasty budou v síti proudit dokud je něco nezastaví.</p>
             <p>Tuto problematiku právě řeší Spanning Tree Protocol.</p>
         </section>
         <section id="UvodSTP" class="subSection">
@@ -56,22 +56,15 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <ul>
-                <li class="req">Root Port</li>
-                <li class="req">Designated Port</li>
-                <li class="req">Non-Designated Port</li>
+                <li class="req">Root Port - port, který určuje nejefektivnější cestu k root bridge(switch), ve forwarding stavu.</li>
+                <li class="req">Designated Port - port ve forwarding stavu.</li>
+                <li class="req">Non-Designated Port - port v blocking/discarding stavu.</li>
             </ul>
         </section>
         <section id="Typystavu" class="subSection">
             <h4>Typy stavu u STP</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <ul>
-                <li class="req">Forwarding</li>
-                <li class="req">Blocking</li>
-                <li class="req">Listening</li>
-                <li class="req">Learning</li>
-                <li class="req">Disabled</li>
-            </ul>
             <div class="overflowTable">
                 <table>
                     <tr>
@@ -122,10 +115,10 @@
         </section>
         <div class="height_spacer"></div>
         <section id="RootBridge" class="subSection">
-            <h4>Výběr Root Bridge</h4>
+            <h4>Výběr Root Bridge/Switch</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>Když poprvé spustíme switche všechny se považují za Root Bridge.</p>
+            <p>Když poprvé spustíme switche všechny se považují za Root Bridge (Root Bridge a Root Switch jsou v tomto případě použity jako synonyma).</p>
             <p>Poté co si mezi sebou switche vymění tzv. BPDU (Bridge Protocol Data Unit) se z jednoho z nich stane Root Bridge, což z něho dělá switch, který může vytvářet BPDU.</p>
             <p>BPDU obsahuje Bridge ID, číslo, podle něho se určuje Root Bridge.</p>
             <p>Aby toho nebylo málo tak Bridge ID se skládá v 802.1D z <b>Bridge Priority</b> a <b>MAC Adresy</b>.</p>
@@ -157,7 +150,7 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>Teď když už máme určený root bridge, je třeba určit root porty.</p>
-            <p>Root porty se určují pomocí <b>root cost</b>, číslo, které udává efektivitu cesty k root bridgi.</p>
+            <p>Root porty se určují pomocí <b>root cost</b>, číslo, které udává efektivitu cesty k root bridge (switch).</p>
             <p>Root cost se určuje pomocí bandwidth, čím vyšší bandwidth tím nižší číslo, tím vyšší šance, že se port stane RP.</p>
             <div class="overflowTable">
                 <table>
@@ -193,8 +186,8 @@
             <h4>Určení Non-Designated Portu</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>Je pravidlem, že na každém linku (collision domain) je jeden port Designated a ten druhý Non-Designated.</p>
-            <p>Designated portem se stane ten port, jehož root cost je nižší než port toho druhého switche.</p>
+            <p>Je pravidlem, že v každé zbývající collision domain je jeden port Designated a ten druhý Non-Designated.</p>
+            <p>Designated portem se stane ten port, jehož switch má menší root cost.</p>
             <p>Když root cost bude na obou switchích v rámci jednoho linku stejný designated portem se stane ten port, který bude mít nejnižší Bridge ID.</p>
             <section id="ex" class="subSection">
                 <h5>Příklad 1</h5>
@@ -222,7 +215,7 @@
                 <p>Root porty jsou už obtížnější, co se týče vztahu SW3-SW1 tam je jasné, že RP se stane G0/1 na SW1 (Root cost je 4).</p>
                 <p>U vztahu SW3-SW1 je nutné si dát pozor na bandwidth linků, protože G0/2 má RC. 4 a Fa0/1 má RC. 19, protože je Fast Ethernet (100mbit).</p>
                 <p>U Switche 0 se stane díky RC. Root portem G0/1, to z G0/1 na SW2 dělá designated port.</p>
-                <p>Co se týče posledního vztahu mezi SW0 a SW1, tak RC přes Fa0/1 a Fa0/24 na SW0 je 23, RC na SW1 je 4, proto jsou jako <b>designated porty</b> vybrány Fa0/1 a Fa0/23 na SW1 a Fa0/1 s Fa0/24 jsou <b>Non-Designated</b>.</p>
+                <p>Co se týče posledního vztahu mezi SW0 a SW1, tak celková RC na SW0 je 8(4 za G0/1 a 4 za G0/2), RC na SW1 je 4, proto jsou jako <b>designated porty</b> vybrány Fa0/1 a Fa0/23 na SW1 a Fa0/1 s Fa0/24 jsou <b>Non-Designated</b>.</p>
             </section>
         </section>
         <section id="Timers" class="subSection">
@@ -302,9 +295,9 @@
             <h4 id="problematika">PVST & PVST+</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>PVST & PVST+ jsou Cisco-propietary protokoly které do STP přidávají VLANy - každá VLAN může mít svoji vlastní STP topologii, tzn. že v jedné VLAN může port fungovat a v druhé nemusí.</p>
+            <p>PVST & PVST+ jsou Cisco-proprietary protokoly, které do STP přidávají VLANy - každá VLAN může mít svoji vlastní STP topologii, tzn. že v jedné VLAN může port fungovat a v druhé nemusí.</p>
             <p>S PVST, (Per-VLAN Spanning Tree) se dnes již málo kdy setkáte, podporuje jen ISL trunking formát.</p>
-            <p>PVST+ již podporuje užívaný dot1q trunking formát</p>
+            <p>PVST+ již podporuje užívaný dot1q trunking formát.</p>
             <p>S VLANy nám přibyl do BPDU další důležitý faktor - <b>Extended System ID</b>, ten tvoří výslednou Bridge Priority, která je součtem klasicky nastavné BP. a VLAN ID - tj. při užití VLAN 1 je výslednou BP. 32769. </p>
         </section>
         <section id="mstp" class="subSection">
@@ -319,7 +312,7 @@
             <h4 id="problematika">RSTP - 802.1w</h4>
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
-            <p>RSTP protokoly jsou vylepšenou verzí 802.1D. Cílem RSTP je zeefektivnit (např. zrychlit přesun zablokovaného portu do forwarding stavu, který v 802.D trvá 30s.) a přiblížit STP protokol moderní době (802.1D se používalo v 90 letech 20.st.)</p>
+            <p>RSTP protokoly jsou vylepšenou verzí 802.1D. Cílem RSTP je zeefektivnit (např. zrychlit přesun zablokovaného portu do forwarding stavu, který v 802.D trvá 30s.) a přiblížit STP protokol moderní době (802.1D se používalo v 90 letech 20.st.).</p>
             <p>Co se týče hlavních principů tak ty zůstaly nezměněny - určuje se Root Bridge, Root Port a Designated port.</p>
             <p>Změna je u root cost, která je byla upravená, což přineslo lepší zapamatovatelnost a přizpůsobitelnost novějším technologiím.</p>
             <section id="rootcost" class="subSection">
@@ -372,7 +365,7 @@
                 <h5 id="problematika">Změna stavů portů</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
-                <p>Změnu najdeme také u stavů portů, kde nám mizí <b>learning, disabled a blocking</b> stavy a jsou přesunuty pod 1 společný - Discarding port.</p>
+                <p>Změnu najdeme také u stavů portů, kde nám mizí <b>listening, disabled a blocking</b> stavy a jsou přesunuty pod 1 společný - Discarding port.</p>
                 <p>Ten má stejnou funkcionalitu jako blocking stav u STP.</p>
             </section>
             <p>Další změnou je rozložení Non-designated portu na 2:</p>
@@ -382,14 +375,13 @@
                 <div class="height_spacer"></div>
                 <p>Standardně je Alternate port v discarding stavu.</p>
                 <p>Je brán ale jako náhradník, pokud by se s forwarding portem něco stalo.</p>
-                <p>Funguje backbonefast.</p>
             </section>
             <section id="Backupport" class="subSection">
                 <h5 id="problematika">Backup port</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
-                <p>Záložní port, pakliže se něco stane s designated portem.</p>
-                <p>Backup port vzniká pakliže chceme udělat propojení switch-hub-switch.</p>
+                <p>Záložní port, když se něco stane s designated portem.</p>
+                <p>Backup port vzniká, pakliže chceme udělat propojení switch-hub-switch.</p>
                 <p>Funguje v half-duplex módu.</p>
                 <p>S backup portem se dnes již moc nesetkáte.</p>
             </section>
@@ -448,12 +440,12 @@
             <div class="height_spacer"></div>
             <p>Pokud switch využívá Etherchannel, rozhoduje se, kterým skutečným portem specifický rámec vyšle.</p>
             <p>Toto switch řeší pomocí metod, které určují podle jakého faktoru se switch rozhoduje.</p>
-            <p>Všechny tyto metody mají za následek to, že všechny zprávy pocházející ze stejné aplikace budou přenášeny přes jeden skutečný port --> to má za následek to, že switch nepřehází pořadí jednolivých zpráv.</p>
+            <p>Všechny tyto metody mají za následek to, že všechny zprávy pocházející ze stejné aplikace budou přenášeny přes jeden skutečný port --> výsledkem je to, že dalšímu zařízení nepřijdou data nesezařená.</p>
             <p>Seznam metod:</p>
             <ul>
-                <li class="req">src-mac</li>
+                <li class="req">src-mac --> všechny rámce z daného zařízení budou přenášeny přes jeden a ten samý fyzický link.</li>
                 <li class="req">dst-mac</li>
-                <li class="req">src-dst-mac --> dělá se XOR src a dst mac</li>
+                <li class="req">src-dst-mac --> dělá se XOR src a dst mac, všechny rámce z daného zařízení do určitého cíle budou přenášeny přes jeden a ten samý fyzický link.</li>
                 <li class="req">src-ip</li>
                 <li class="req">dst-ip</li>
                 <li class="req">src-dst-ip --> dělá se XOR src a dst mac</li>
@@ -477,7 +469,7 @@
                 <li class="req">Stejný duplex mód</li>
                 <li class="req">Linky jsou ve stejné VLAN</li>
                 <li class="req">Etherchannel konfigurace musí být shodná na obou zařízeních</li>
-                <li class="req">Linky musí mít shodnou nastevenou rychlost</li>
+                <li class="req">Linky musí mít shodnou nastevenou bandwidth</li>
             </ul>
         </section>
         <section id="PAgP" class="subSection">
@@ -508,8 +500,8 @@
                 <div class="height_spacer"></div>
                 <p>LACP se stejně jako PAgP nastavuje pomocí 2 módů - </p>
                 <ul>
-                    <li class="req"><b>active</b> - mód, který vytváří LACP bezpodmínečně</li>
-                    <li class="req"><b>passive</b> - mód, který vytváří LACP, pouze pokud dostane LACP rámec</li>
+                    <li class="req"><b>active</b> - mód, který vytváří LACP bezpodmínečně.</li>
+                    <li class="req"><b>passive</b> - mód, který vytváří LACP, pouze pokud dostane LACP rámec.</li>
                 </ul>
                 <pre>switch(config-if-range)#channel-group {1-6} mode {active|passive}</pre>
             </section>
@@ -520,7 +512,7 @@
             <div class="height_spacer"></div>
             <p>Poslední možností nastavení Ethechannelu je statické.</p>
             <p>Toto se nedoporučuje.</p>
-            <p>Nastavuje se pomocí slovíčk <b>on</b>.</p>
+            <p>Nastavuje se pomocí slovíčka <b>on</b>.</p>
             <pre>switch(config-if-range)#channel-group {1-6} mode on</pre>
         </section>
         <p>K procvičení etherchannelu je k dispozici <a href="../Labs/STP/Etherchannel.pka">lab</a>.</p>
@@ -594,6 +586,7 @@
                    
                 </table>
             </div>
+            <p>Konfiguraci si můžeš procvičit <a href="../Labs/STP/STP.pka">zde</a>.</p>
     </section>
     <div class="height_spacer"></div>
     <section id="zaver">
@@ -601,11 +594,10 @@
         <div id="templateline2"></div>
         <div class="height_spacer"></div>
         <p>STP protokoly chrání síť před vznikem broadcast storms, které síť mohou velmi poškodit.</p>
-        <p>STP ochraňuje síť tak, že blokuje určité porty, které určí pomocí STA.</p>
+        <p>Přičemž ochraňuje síť tak, že blokuje určité porty, které určí pomocí <a href="#STA">STA</a>.</p>
         <p>Průběh STA: zvolí se root bridge (switch), následně proběhne volba root portů a poté se určí designated a non-designated (blokovaných) portů.</p>
         <p>V současnosti se používají rapid-pvst a mstp, které dokáží oproti standardní verzi operovat s VLAN a zkracují čas potřebný k přepnutí discarding linku na forwarding.</p>
-        <p>Etherchannel pak odpovídá na problematiku STP, který v případě vícero linků mezi 2 switchi nechá fungovat pouze jeden, tím, že až z 8 linků vytvoří jeden virtuální.</p>
-        <p>Etherchannel lze nastavit a spravovat buď staticky a nebo pomocí dynamických protokolů - PAgP a LACP.</p>
+        <p>Etherchannel pak odpovídá na problematiku STP, který v případě vícero linků mezi 2 switchi nechá fungovat pouze jeden, tím, že až z 8 linků vytvoří jeden virtuální, přičemž se vytváří staticky nebo pomocí dynamických protokolů - LACP a PAgP.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;">Chcete si latku procvičit?</h3>

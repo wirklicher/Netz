@@ -250,7 +250,7 @@ pre {
 }
 
 #questionText {
-    font-weight: 300;
+    font-weight: 700;
 }
 
 #questionNo {
@@ -470,7 +470,31 @@ pre {
 }
 
 
-
+@media only screen and (max-width: 1150px) {
+    #questionText {
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .choice_que {
+        font-size: 1rem;
+    }
+    
+    .answers {
+        font-size: 1rem;
+    }
+}
+@media only screen and (max-width: 750px) {
+    #questionText {
+        font-size: .9rem;
+        font-weight: 700;
+    }
+    .choice_que {
+        font-size: .75rem;
+    }
+    .answers {
+        font-size: .75rem;
+    }
+}
 
 
 
