@@ -423,6 +423,7 @@
                 <pre>Switch#show spanning-tree</pre>
             </div>
             <div class="height_spacer"></div>
+            <p>Konfiguraci si můžeš procvičit <a href="../Labs/STP/STP.pka">zde</a>.</p>
     </section>
     <section id="Etherchannel">
         <h3 id="problematika">Etherchannel</h3>
@@ -511,7 +512,7 @@
             <div id="templateline2"></div>
             <div class="height_spacer"></div>
             <p>Poslední možností nastavení Ethechannelu je statické.</p>
-            <p>Toto se nedoporučuje.</p>
+            <p>Rozdíl mezi statickým a protokolovým nastavením je takový, že statické posílá speciální rámec, který zjištuje, jestli je daná linka dostupná, případně správně nakonfigurovaná.</p>
             <p>Nastavuje se pomocí slovíčka <b>on</b>.</p>
             <pre>switch(config-if-range)#channel-group {1-6} mode on</pre>
         </section>
@@ -583,10 +584,31 @@
                         <td>nastaví na portu portfast</td>
                         <td>interface</td>
                     </tr>
+                    <tr>
+                        <td>port-channel load-balance {metoda}</th>
+                        <td>nastaví na portu portfast</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>show etherchannel load-balance</th>
+                        <td>zobrazí metodu load-balancingu</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show etherchannel summary</th>
+                        <td>zobrazí informaci o nastavení etherchannelu na switchi</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>channel-group {1-6} mode {on | active | passive | auto | desirable}</th>
+                        <td>nastaví etherchannel</td>
+                        <td>interface</td>
+                    </tr>
+
                    
                 </table>
             </div>
-            <p>Konfiguraci si můžeš procvičit <a href="../Labs/STP/STP.pka">zde</a>.</p>
+
     </section>
     <div class="height_spacer"></div>
     <section id="zaver">

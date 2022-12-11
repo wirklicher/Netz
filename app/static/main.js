@@ -53,9 +53,10 @@ stpArray.forEach(function(stp){
 window.onload = function() {
     var a = $(location).attr('hash');
     a = a.replace('#', '');
-    if (a == "stp_uvod" || "stp_sta" || "stp_rstp" || "stp_etherchannel") {
+    if (a == "stp_uvod" || a == "STA" || a == "rstp" || a == "Etherchannel") {
         a = "stp";
-    } else if  (a == "proc_jsou" || "zakladniKonfigurace" || "Trunking" || "dtpvtp"){
+    }
+    if  (a == "vlan_uvod" || a == "zakladniKonfiguraceSection" || a == "trunking" || a == "DTPVTP"){
         a = "vlan";
     }
     $('main').load(`${a}.html`);
