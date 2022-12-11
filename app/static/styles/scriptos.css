@@ -50,7 +50,6 @@ body {
   width: 75%;
   margin: auto;
   padding-top: 32px;
-  overflow-y: auto;
 }
 
 .nav {
@@ -67,10 +66,14 @@ body {
   overflow: auto;
   text-align: center;
   min-width: 250px;
-  overflow-y: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
 }
 
 nav a picture {
