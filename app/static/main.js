@@ -40,9 +40,24 @@ stp.addEventListener('click', () => {
     name_of_page = 'stp';
 })
 
+let stpArray = document.querySelectorAll(".stp");
+
+
+
+stpArray.forEach(function(stp){
+    stp.addEventListener('click', () => {
+        $('main').load('stp.html');
+        name_of_page = 'stp';
+    })
+})
 window.onload = function() {
     var a = $(location).attr('hash');
     a = a.replace('#', '');
+    if (a == "stp_uvod" || "stp_sta" || "stp_rstp" || "stp_etherchannel") {
+        a = "stp";
+    } else if  (a == "proc_jsou" || "zakladniKonfigurace" || "Trunking" || "dtpvtp"){
+        a = "vlan";
+    }
     $('main').load(`${a}.html`);
     name_of_page = a;
     console.log(localStorage.getItem('mode'));
