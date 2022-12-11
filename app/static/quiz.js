@@ -100,7 +100,7 @@ play.addEventListener('click', ()=>{
     interval = setInterval(countDown, 1000);
     //console.log(index);
     loadData();
-    total_correct.innerHTML = `${correct} z ${MCQS.length} otazek`;
+    total_correct.innerHTML = `${correct} z ${MCQS.length}`;
 })
 
      countDown = ()=>{
@@ -174,7 +174,7 @@ next_quest.addEventListener("click", ()=> {
 
         loadData();
 
-        total_correct.innerHTML = `${correct} z ${MCQS.length} otazek`;
+        total_correct.innerHTML = `${correct} z ${MCQS.length}`;
         clearInterval(interval);
         interval = setInterval(countDown, 1000);
         

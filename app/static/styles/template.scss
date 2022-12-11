@@ -374,6 +374,7 @@ pre {
     h3 {
         padding: 0;
         margin: 0;
+        font-size: 1.5rem;
     }
 }
 
@@ -469,7 +470,6 @@ pre {
     overflow-x: auto;
 }
 
-
 @media only screen and (max-width: 1150px) {
     #questionText {
         font-size: 1.1rem;
@@ -494,6 +494,8 @@ pre {
     .answers {
         font-size: .75rem;
     }
+
+    
 }
 
 
