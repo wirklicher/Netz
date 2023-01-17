@@ -11,15 +11,11 @@
 <body>
     <h1>STP - Spanning Tree Protocol</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti"><b>Předpokládané znalosti</b>: základy VLAN, základní konfigurace v PT</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základy VLAN, základní konfigurace v PT</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
         <section id="broadcastStorm" class="subSection">
             <h4>Broadcast Storm</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Předtím než si vysvětlíme STP a jeho funkci, je třeba si vysvětlit pojem "Broadcast storm".</p>
             <p>Broadcast storm je stav, kdy je za krátkou dobu v síti přítomno neuvěřitelně moc broadcast paketů.</p>
             <p>Nejlépe si vznik této situace vysvětlíme na ilustraci.</p>
@@ -34,8 +30,6 @@
         </section>
         <section id="UvodSTP" class="subSection">
             <h4>Úvod do STP</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>STP, Spanning Tree Protocol, IEEE 802.1D je protokol, který je defaultně nastavený na switchi, aby rozpoznal redundatní síť a znemožnil stvoření broadcast storm.</p>
             <p>Jestliže STP určí, že síť je redundatní, zablokuje určitý port, aby v síti nevznikla broadcast storm.</p>
             <p>Jak celý ten proces vybírání, který port bude zablokovaný probíhá?</p>
@@ -49,12 +43,8 @@
     </section>
     <section id="STA">
         <h3 id="problematika">STA - Spanning Tree Algorithm</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
         <section id="TypyPortu" class="subSection">
             <h4>Typy portu u STP</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <ul>
                 <li class="req">Root Port - port, který určuje nejefektivnější cestu k root bridge(switch), ve forwarding stavu.</li>
                 <li class="req">Designated Port - port ve forwarding stavu.</li>
@@ -63,8 +53,6 @@
         </section>
         <section id="Typystavu" class="subSection">
             <h4>Typy stavu u STP</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <div class="overflowTable">
                 <table>
                     <tr>
@@ -116,8 +104,6 @@
         <div class="height_spacer"></div>
         <section id="RootBridge" class="subSection">
             <h4>Výběr Root Bridge/Switch</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Když poprvé spustíme switche všechny se považují za Root Bridge (Root Bridge a Root Switch jsou v tomto případě použity jako synonyma).</p>
             <p>Poté co si mezi sebou switche vymění tzv. BPDU (Bridge Protocol Data Unit) se z jednoho z nich stane Root Bridge, což z něho dělá switch, který může vytvářet BPDU.</p>
             <p>BPDU obsahuje Bridge ID, číslo, podle něho se určuje Root Bridge.</p>
@@ -147,8 +133,6 @@
         </section>
         <section id="RootPort" class="subSection">
             <h4>Určení Root Port</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Teď když už máme určený root bridge, je třeba určit root porty.</p>
             <p>Root porty se určují pomocí <b>root cost</b>, číslo, které udává efektivitu cesty k root bridge (switch).</p>
             <p>Root cost se určuje pomocí bandwidth, čím vyšší bandwidth tím nižší číslo, tím vyšší šance, že se port stane RP.</p>
@@ -184,8 +168,6 @@
         </section>
         <section id="NonDesignatedPort" class="subSection">
             <h4>Určení Non-Designated Portu</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Je pravidlem, že v každé zbývající collision domain je jeden port Designated a ten druhý Non-Designated.</p>
             <p>Designated portem se stane ten port, jehož switch má menší root cost.</p>
             <p>Když root cost bude na obou switchích v rámci jednoho linku stejný designated portem se stane ten port, který bude mít nejnižší Bridge ID.</p>
@@ -220,8 +202,6 @@
         </section>
         <section id="Timers" class="subSection">
             <h3 id="problematika">STP Timers</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <div class="overflowTable">
                 <table>
                     <tr>
@@ -252,13 +232,9 @@
     </section>
     <section id="Toolkit">
         <h3 id="problematika">STP Toolkits</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
         <p>STP Toolkits jsou další STP nastavení, které umožňují efektivnější chod STP protokolu.</p>
         <section id="portfast" class="subSection">
             <h4>PortFast</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>PortFast nám slouží k přeskočení přechodných stavů na portech, kde jednoduše víme, že to nebude potřeba.</p>
             <p>U PortFastu je ale třeba být obezřetný, protože ve chvíli, kdy se k danému portu připojí switch, nám hrozí broadcast storm.</p>
             <p>*U PVST protokolů se nastavuje u všech <b>Access</b> portů.</p>
@@ -269,8 +245,6 @@
         </section>
         <section id="bpduguard" class="subSection">
             <h4>BPDU Guard</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>BPDU Guard nám jednoduše umožňuje na portu nastavit "pojistku", která port při přijmutí BPDU od neznámého switche vypne, aby předešla vzniku broadcast storm.</p>
             <p>BPDU Guard se dokonale doplňuje s PortFastem.</p>
             <h5>Nastavení BPDU Guard globálně</h5>
@@ -280,8 +254,6 @@
         </section>
         <section id="rootguard" class="subSection">
             <h4>Root Guard</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Root Guard zablokuje port při přijmutí superior BPDU rámce --> pojistka, že tato stávající RB. zůstane root bridgem.</p>
             <h5>Nastavení Root Guard na interfaci</h5>
             <pre>switch(config-if)#spanning-tree guard root</pre>
@@ -289,12 +261,8 @@
     </section>
     <section id="Další_STP_protokoly">
         <h3 id="problematika">Další STP protokoly</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
         <section id="pvst" class="subSection">
             <h4 id="problematika">PVST & PVST+</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>PVST & PVST+ jsou Cisco-proprietary protokoly, které do STP přidávají VLANy - každá VLAN může mít svoji vlastní STP topologii, tzn. že v jedné VLAN může port fungovat a v druhé nemusí.</p>
             <p>S PVST, (Per-VLAN Spanning Tree) se dnes již málo kdy setkáte, podporuje jen ISL trunking formát.</p>
             <p>PVST+ již podporuje užívaný dot1q trunking formát.</p>
@@ -302,16 +270,12 @@
         </section>
         <section id="mstp" class="subSection">
             <h4 id="problematika">MSTP - 802.1s</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>MSTP - 802.1s, Multiple Spanning Tree Protocol je protokol, který nám umožňuje vytvářet tzv "instance" - seskupení určitých VLAN STP topologií. </p>
             <p>Ve větší síti je lepší pro rychlejší konfiguraci používat MSTP než RPVST+ protokol.</p>
             <p>Je to jeden z pokročilejších protokolů, pro CCNA není vyžadován.</p>
         </section>
         <section id="rstp" class="subSection">
             <h4 id="problematika">RSTP - 802.1w</h4>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>RSTP protokoly jsou vylepšenou verzí 802.1D. Cílem RSTP je zeefektivnit (např. zrychlit přesun zablokovaného portu do forwarding stavu, který v 802.D trvá 30s.) a přiblížit STP protokol moderní době (802.1D se používalo v 90 letech 20.st.).</p>
             <p>Co se týče hlavních principů tak ty zůstaly nezměněny - určuje se Root Bridge, Root Port a Designated port.</p>
             <p>Změna je u root cost, která je byla upravená, což přineslo lepší zapamatovatelnost a přizpůsobitelnost novějším technologiím.</p>
@@ -370,7 +334,7 @@
             </section>
             <p>Další změnou je rozložení Non-designated portu na 2:</p>
             <section id="Alternateport" class="subSection">
-                <h5 id="problematika">Alternate port</h5>
+                <h5 id="problematika" class="noBorder">Alternate port</h5>
                 <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>Standardně je Alternate port v discarding stavu.</p>
@@ -406,8 +370,6 @@
     </section>
     <section id="STP_Conf">
         <h3 id="problematika">Konfigurace STP</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <div class="subSection">
                 <h4>Nastavení STP protokolu</h4>
                 <pre>Switch(config)#spanning-tree mode {pvst, rapid-pvst, mstp}</pre>
@@ -427,8 +389,6 @@
     </section>
     <section id="Etherchannel">
         <h3 id="problematika">Etherchannel</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
         <p>Etherchannel, port-channel a také channel-group je funkcionalita, která nám spojí vícero linků (až 8) do 1 virtuálního.</p>
         <p>To se používá právě kvůli tomu, že v síti defaultně běží STP protokol, který by nechal v provozu pouze 1 link.</p>
         <p>Vícero linků mezi dvěma zařízeníma má za následek zvětšení bandwidthu.</p>
@@ -437,8 +397,6 @@
         <img src="../static/styles/images/STP/Etherchannel.png" alt="Ex2Sol" class="configImage">
         <section id="loadbalance" class="subSection">
             <h3 id="problematika">Etherchannel a load balancing</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Pokud switch využívá Etherchannel, rozhoduje se, kterým skutečným portem specifický rámec vyšle.</p>
             <p>Toto switch řeší pomocí metod, které určují podle jakého faktoru se switch rozhoduje.</p>
             <p>Všechny tyto metody mají za následek to, že všechny zprávy pocházející ze stejné aplikace budou přenášeny přes jeden skutečný port --> výsledkem je to, že dalšímu zařízení nepřijdou data nesezařená.</p>
@@ -462,8 +420,6 @@
         </section>
         <section id="podminky" class="subSection">
             <h3 id="problematika">Podmínky vzniku Etherchannelu</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Pro vznik a správné fungování Etherchannelu je nutné dodržet následující body - </p>
             <ul>
                 <li class="req">Stejný typ interfacu (FastEthernet, GigabitEthernet)</li>
@@ -475,13 +431,9 @@
         </section>
         <section id="PAgP" class="subSection">
             <h3 id="problematika">PAgP</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>PAgP, Port Aggregation Protocol, je Cisco-propietary protokol, který dynamicky vytváří a spravuje Etherchannel.</p>
             <section id="konfiguracePAgP" class="subSection">
                 <h3 id="problematika">Konfigurace PAgP</h3>
-                <div id="templateline2"></div>
-                <div class="height_spacer"></div>
                 <p>PAgP se nastavuje pomocí 2 módů - </p>
                 <ul>
                     <li class="req"><b>auto</b> - mód, který vytváří PAgP Etherchannel, pouze pokud dostane PAgP rámec.</li>
@@ -492,13 +444,9 @@
         </section>
         <section id="LACP" class="subSection">
             <h3 id="problematika">LACP</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>LACP, Link Aggregation Control Protocol je IEEE 802.1AX (dříve IEEE 802.3ad) protokol, který stejně jako PAgP dynamicky vytváří a spravuje Etherchannel.</p>
             <section id="konfiguraceLACP" class="subSection">
                 <h3 id="problematika">Konfigurace LACP</h3>
-                <div id="templateline2"></div>
-                <div class="height_spacer"></div>
                 <p>LACP se stejně jako PAgP nastavuje pomocí 2 módů - </p>
                 <ul>
                     <li class="req"><b>active</b> - mód, který vytváří LACP bezpodmínečně.</li>
@@ -509,8 +457,6 @@
         </section>
         <section id="Static" class="subSection">
             <h3 id="problematika">Static</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <p>Poslední možností nastavení Ethechannelu je statické.</p>
             <p>Rozdíl mezi statickým a protokolovým nastavením je takový, že statické posílá speciální rámec, který zjištuje, jestli je daná linka dostupná, případně správně nakonfigurovaná.</p>
             <p>Nastavuje se pomocí slovíčka <b>on</b>.</p>
@@ -520,8 +466,6 @@
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
-            <div id="templateline2"></div>
-            <div class="height_spacer"></div>
             <div class="overflowTable">
                 <table>
                     <tr>
@@ -613,8 +557,6 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
-        <div id="templateline2"></div>
-        <div class="height_spacer"></div>
         <p>STP protokoly chrání síť před vznikem broadcast storms, které síť mohou velmi poškodit.</p>
         <p>Přičemž ochraňuje síť tak, že blokuje určité porty, které určí pomocí <a href="#STA">STA</a>.</p>
         <p>Průběh STA: zvolí se root bridge (switch), následně proběhne volba root portů a poté se určí designated a non-designated (blokovaných) portů.</p>
@@ -622,14 +564,13 @@
         <p>Etherchannel pak odpovídá na problematiku STP, který v případě vícero linků mezi 2 switchi nechá fungovat pouze jeden, tím, že až z 8 linků vytvoří jeden virtuální, přičemž se vytváří staticky nebo pomocí dynamických protokolů - LACP a PAgP.</p>
     </section>
     <div class="height_spacer"></div>
-    <h3 style="text-align: center;">Chcete si latku procvičit?</h3>
+    <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
     <div id="templateline2" style='margin: auto;'></div>
     <div class="height_spacer"></div>
     <div class="btns_quiz">
         <a class="btnquiz" id="play">Hrát</a>
     </div>
     <div class="quiz" id="quiz">
-        
         <div class="question" id="question">
             <div class="headerquest">
                 <h2 id="questionNo">1.</h2>
@@ -662,13 +603,13 @@
                 
                 <div class="line"></div>
                 <div id="optionList">
-                    <h4 class='choice_que' id="opt1"></h4>
+                    <h4 class='choice_que noBorder' id="opt1"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt2"></h4>
+                    <h4 class='choice_que noBorder' id="opt2"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt3"></h4>
+                    <h4 class='choice_que noBorder' id="opt3"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt4"></h4>
+                    <h4 class='choice_que noBorder' id="opt4"></h4>
                     <div class="height_spacer"></div>
                 </div>
             </div>
@@ -677,10 +618,10 @@
         <div id="answersSection">
             <div class="answers">
                 <div class="bgans">
-                    <h3 id="total_correct" >0</h3>
+                    <h3 id="total_correct" class="noBorder">0</h3>
                 </div>
                 <div class="bgbtn" id="next_quest">
-                    <h3>Další</h3>
+                    <h3 class="noBorder">Další</h3>
                 </div>
             </div>
         </div>

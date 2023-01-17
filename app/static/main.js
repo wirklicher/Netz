@@ -2,10 +2,14 @@
 let scriptos_content = document.querySelector('#main');
 let vlan = document.querySelector('#vlan');
 let rip = document.querySelector('#rip');
+let uvodRouting = document.querySelector('#uvodRouting');
+let eigrp = document.querySelector('#eigrp');
+let ospf = document.querySelector('#ospf');
+let bgp = document.querySelector('#bgp');
 let sshTelnet = document.querySelector('#sshTelnet');
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
-
+let adress = "";
 
 const hamburger = document.querySelector(".hamburger");
 const navmenu = document.querySelector(".menu");
@@ -40,6 +44,27 @@ stp.addEventListener('click', () => {
     name_of_page = 'stp';
 })
 
+uvodRouting.addEventListener('click', () => {
+    $('main').load('uvodRouting.html');
+    name_of_page = 'uvodRouting';
+})
+rip.addEventListener('click', () => {
+    $('main').load('/app/templates/RoutingProtocols/rip.html');
+    name_of_page = 'rip';
+})
+eigrp.addEventListener('click', () => {
+    $('main').load('/app/templates/RoutingProtocols/eigrp.html');
+    name_of_page = 'eigrp';
+})
+ospf.addEventListener('click', () => {
+    $('main').load('/app/templates/RoutingProtocols/ospf.html');
+    name_of_page = 'ospf';
+})
+bgp.addEventListener('click', () => {
+    $('main').load('/app/templates/RoutingProtocols/bgp.html');
+    name_of_page = 'bgp';
+})
+
 let stpArray = document.querySelectorAll(".stp");
 
 
@@ -59,7 +84,23 @@ window.onload = function() {
     if  (a == "vlan_uvod" || a == "zakladniKonfiguraceSection" || a == "trunking" || a == "DTPVTP"){
         a = "vlan";
     }
-    $('main').load(`${a}.html`);
+    if  (a == "rip"){
+        adress = "/app/templates/RoutingProtocols/";
+        a = "rip";
+    }
+    if  (a == "eigrp"){
+        adress = "/app/templates/RoutingProtocols/";
+        a = "eigrp";
+    }
+    if  (a == "ospf"){
+        adress = "/app/templates/RoutingProtocols/";
+        a = "ospf";
+    }
+    if  (a == "bgp"){
+        adress = "/app/templates/RoutingProtocols/";
+        a = "bgp";
+    }
+    $('main').load(`${adress}${a}.html`);
     name_of_page = a;
     console.log(localStorage.getItem('mode'));
     if (localStorage.getItem('mode') === 'true'){
@@ -94,6 +135,9 @@ switcher2.addEventListener('click', () => {
     switcher.checked = switcher2.checked;
 })
 
+if (!document.documentElement.classList.contains('dark_mode')){
+    console.log("True rlly is");
+}
 
 $(window).resize(function(){
     if ($(window).width() >= 600) {

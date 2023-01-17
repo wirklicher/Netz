@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/template.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Scriptos - Netzwe</title>
+</head>
+<body>
+    <h1>EIGRP</h1>
+    <div id="templateline"></div>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: znalost fungování distance-vector protokolů, IPv4 subnetting</h5>
+    <section id="uvod">
+        <h3 id="problematika">Úvod do problematiky</h3>
+        <p>EIGRP, Enhanced Interior Gateway Protocol, je hybrid distance-vector protokol od vyvinutý společností CISCO, který vychází z jeho předchůdce IGRP.</p>
+        <p>EIGRP je oproti RIP rychlejší, nemá 15 hop-count limit a je jediný IGP protokol, který umí provést unequal-cost load-balancing.</p>
+        <p>Administrative Distance má v případě EIGRP 2 hodnoty, pro internal (normální EIGRP) 90, pro external (cesty pryč z EIGRP) 170.</p>
+        <p>Využívá multicast adresu <b>224.0.0.10</b>.</p>
+        <section id="routerid" class="subSection">
+            <h4>Router ID & WILDCARD Mask</h4>
+            <p>Router ID slouží jako identifikátor routeru, kterýho se využívá v některých dynamických routing protokolech (EIGRP ale i OSPF).</p>
+            <p>Zapisuje se v IPv4 formátu.</p>
+            <h5>Určení Router ID</h5>
+            <ul>
+                <li class="req">Manuálně</li>
+                <li class="req">Pomocí nejvyšší IP adresy na loopback interface</li>
+                <li class="req">Pomocí nejvyšší IP adresy na fyzickém interface</li>
+            </ul>
+            <p>WILDCARD Mask je invertovaná subnet mask, která určuje rozsah IP adresy a běžně se používá v routing protokolech (EIGRP a OSPF).</p>
+            <p>0 nám ve WILDCARD Mask nám říká, že korespondující bity se musí shodovat.</p>
+            <p>Příkladem nám může být:</p>
+            <h1>DOPLN Priklad!!!</h1>
+        </section>
+        <section id="DalsiTermEIGRP">
+            <h3>EIGRP termíny</h3>
+            <ul>
+                <li class="req">Feasible Distance - metrika od routeru až do cíle</li>
+                <li class="req">Reported Distance/Advertised Distance - metrika souseda až do cíle</li>
+                <li class="req">Successor - cesta s nejnižší metrikou do cíle (nejlepší cesta)</li>
+                <li class="req">Feasible Successor - náhradní cesta do cíle, pokud je splněná podmínka, že reported distane je nižší než successor feasible distance.</li>
+            </ul>
+        </section>
+    </section>
+    <section id="konfiguraceEIGRP">
+        <h3>EIGRP Konfigurace</h3>
+        <h4 class="noBorder">Přechod do EIGRP configu</h4>
+        <pre>Router(config)#router eigrp {ASN}</pre>
+        <h4 class="noBorder">Vypnutí autosumerizace</h4>
+        <pre>Router(config-router)#no auto-summary</pre>
+        <h4 class="noBorder">Nastavení propagace v rámci EIGRP</h4>
+        <pre>Router(config-router)#network {NET_ID} {*WILDCARD_MASK} //pokud neuvedeme MASK, je automaticky použit classful systém.</pre>
+        <h4 class="noBorder">Zastavení zasílání EIGRP paketů na daný interface</h4>
+        <pre>Router(config-router)#passive-interface {int}</pre>
+        <h4 class="noBorder">Manuální nastavení router-id</h4>
+        <pre>Router(config-router)#eigrp router-id {A.B.C.D}</pre>
+        <p>Konfiguraci EIGRP si můžeš procvičit v labu, který můžeš stáhnout <a href="../Labs/Routing/EIGRP_lab.pka">zde</a>.</p>
+    </section>
+    <section id="EIGRPproces">
+        <h3>EIGRP proces</h3>
+        <section id="BecomingNeighbors" class="subSection">
+            <h4>Becoming Neighbors</h4>
+            <p>EIGRP při hledaní nových sousedů a v pozdější fázi při udržování těchto vztahů posílá <b>hello zprávy</b>.</p>
+            <p>Hello zprávy se posílají každých 5 s na lepších lincích a 60 s na horších lincích.</p>
+            <p>K tomu aby se směrovače staly EIGRP sousedy je potřeba:</p>
+            <ul>
+                <li class="req">Aby byly přímo připojeni k sobě</li>
+                <li class="req">Aby byly ve stejné autonomous system</li>
+                <li class="req">Aby měly společnou subnet</li>
+                <li class="req">Aby měly společné K-values, dle kterých se počítá metrika</li>
+                <li class="req">Aby měly v případě zapnuté autentizace společné nastavení</li>
+            </ul>
+            <p>Jestliže tyto požadavky byly naplněny nový potenciální eigrp soused odpoví pomocí své Hello zprávy a plnohodnotný sousedský vztah je zahájen.</p>
+        </section>
+        <section id="ExRoutingInfoEIGRP" class="subSection">
+            <h4>Výměna informací</h4>
+            <p>V této fázi si EIGRP sousedé vyměnují informace o svých dostupných sítích.</p>
+            <p>K tomu EIGRP využívá UPDATE zprávu, která obsahuje veškeré informace o sítích, které má daný směrovač k dispozici.</p>
+            <p>Po obdržení této zprávy druhý směrovač potvrdí zprávou ACK, že informace obdržel.</p>
+            <p>Když nastane v síti výpadek některé z cest (je v tzv. Active stavu) snaží se získat alternativní cestu, tam kam cesta vedla.</p>
+            <p>Tuto alternativní cestu se snaží získat pomocí <b>Query</b> zprávy, odpovědí poté bývá ACK REPLY s tím, že buď tato cesta je nebo není.</p>
+            <p>Pakliže tato cesta neexistuje směrovače ji odstraní ze své směrovací tabulky.</p>
+        </section>
+        <section id="SelBestRouteEIGRP" class="subSection">
+            <h4>Určení nejlepší cesty</h4>
+            <p>EIGRP určuje nejlepší cestu pomocí metriky</p>
+            <p>Pro výpočet se používá vzorec:</p>
+            <pre>Metric = ([(K1 * bandwidth) + [(K2 * bandwidth) / (256 - load) + (K3 * delay)] * [K5 / reliability + K4)]) * 256</pre>
+            <p>Při ponechání defaultně nastavených K-hodnot se vzoreček zjednoduší na:</p>
+            <pre>Metric = 256 * [(10**7 / Min. Bandwidth) + (Celková delay / 10)]</pre>
+            <p>Po tom co se spočítá metrika je za <b>Succesora</b> označená cesta s nejnižší možnou metrikou a za <b>Feasible Successora</b> je označená ta cesta, která má reported distance nižší než feasible distance succesora.</p>
+        </section>
+    </section>
+    <section id="prehledPrikazu">
+        <h3>Přehled příkazů (PT)</h3>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Příkazy</th>
+                        <th>Popis</th>
+                        <th>Mód</th>
+                    </tr>
+                    <tr>
+                        <td>show ip eigrp topology</th>
+                        <td>Zobrazí informace o eigrp činnosti v síti</td>
+                        <td>EXEC</td>
+                    </tr>
+                </table>
+            </div>
+    </section>
+    <div class="height_spacer"></div>
+    <section id="zaver">
+        <h3>Závěr</h3>
+    </section>
+    <div class="height_spacer"></div>
+    <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
+    <div id="templateline2" style='margin: auto;'></div>
+    <div class="height_spacer"></div>
+    <div class="btns_quiz">
+        <a class="btnquiz" id="play">Hrát</a>
+    </div>
+    <div class="quiz" id="quiz">
+        
+        <div class="question" id="question">
+            <div class="headerquest">
+                <h2 id="questionNo">1.</h2>
+                <h2 id="questionText"></h2>
+                <div class="timer" id="timer">
+                    <h6>čas:&nbsp</h6>
+                    
+                    <div class="timenum">
+                        <div class="line2"></div>
+                        <div class="circleback">
+                            <h6 id="time">00</h6>
+                        </div>
+                        <div class="line2"></div>
+                    </div>
+            </div>
+            </div>
+        </div>
+        <div class="mainer">
+            <div class="height_spacer"></div>
+            <div class="cont">
+                <div class="abc">
+                    <p class="letter">A</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">B</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">C</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">D</p>
+                </div>
+                
+                <div class="line"></div>
+                <div id="optionList">
+                    <h4 class='choice_que noBorder' id="opt1"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt2"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt3"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt4"></h4>
+                    <div class="height_spacer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="answersSection">
+            <div class="answers">
+                <div class="bgans">
+                    <h3 id="total_correct" class="noBorder">0</h3>
+                </div>
+                <div class="bgbtn" id="next_quest">
+                    <h3 class="noBorder">Další</h3>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="result hidden">
+        <img src="../static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
+        <h2>Výsledky</h2>
+        <p id="points"></p>
+        <div class="height_spacer"></div>
+        <a class="playagainbtn" id="playagain">Hrát znovu</a>
+    </div>
+    <div class="height_spacer"></div>
+<script src="../static/quiz.js"></script>
+<script src="../static/quest.js"></script>
+</body>
+</html>

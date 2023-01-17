@@ -60,18 +60,56 @@ h3 {
     font-size: 2em;
     font-weight: 400;
     margin-bottom: 10px;
+    position: relative;
+    padding-bottom: 1rem;
+    
+}
+
+h3:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(32px + .5rem);
+    height: 1px;
+    width: 292.9px;
+    border-bottom: solid 2px var(--secondary-color);
+    box-shadow: 0 0 3px .5px --secondary-color;
 }
 
 h4 {
     font-size: 1.7em;
     font-weight: 400;
     margin-bottom: 10px;
+    position: relative;
+}
+
+h4:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(32px + .25rem);
+    height: 1px;
+    width: 300px;
+    border-bottom: solid 2px var(--secondary-color);
+    box-shadow: 0 0 3px .5px --secondary-color;
 }
 
 h5 {
     font-size: 1.5em;
     font-weight: 400;
     margin-bottom: 10px;
+    position: relative;
+}
+
+h5:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc(24px + .25rem);
+    height: 1px;
+    width: 300px;
+    border-bottom: solid 2px var(--secondary-color);
+    box-shadow: 0 0 3px .5px --secondary-color;
 }
 
 p {
@@ -92,6 +130,10 @@ p {
 
 a, a:visited, a:focus {
     color: var(--secondary-color);
+}
+
+img {
+    padding-bottom: 1rem;
 }
 
 //Tabulka
@@ -171,6 +213,13 @@ pre {
 
 .width_spacer {
     width: 1.2rem;
+}
+
+.noBorder {
+    padding-bottom:0;
+}
+.noBorder:before {
+    border-bottom: none;
 }
 
 //Quiz
