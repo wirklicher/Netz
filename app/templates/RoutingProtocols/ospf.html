@@ -11,7 +11,7 @@
 <body>
     <h1>OSPF - Open Shortest Path First Protocol</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Úvod do směrování, základy IPv4</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -88,7 +88,22 @@
         </section>
         <section id="AddingTheBestRoute" class="subSection">
             <h4>Přidání nejlepší cesty</h4>
-            <p></p>
+            <p>V tuto chvíli se router nachází ve <b>Full</b> state, což znamená, že všechny routery v jedné OSPF area mají stejnou LSDB.</p>
+            <p>Ikdyž mají identické LSDB stále si posílají Hello pakety, přičemž pokaždé, když tuto zprávu obdrží, vyresetuje se dead timer (40s default).</p>
+            <p>Jakmile je tento dead timer na 0, sousedský vztah je anulován.</p>
+            <p>V případě změny v síti si zašlou LSU, aby měli stejnou LSDB.</p>
+            <section id="OSPFCost" class="subSection">
+                <h5>OSPF Cost</h5>
+                <p>V tuto chvíli když má router všechna dostupná data si spočíta OSPF cost a určí nejlepší cestu do dostupných subnet.</p>
+                <p>OSPF Cost se určuje dle bandwidth</p>
+                <p>Celkový vzoreček je: </p>
+                <pre>COST = reference_bandwidth / interface_bandwidth </pre>
+                <p><b>Reference bandwidth</b> je defaultně 100mbps, ale lze přenastavit.</p>
+                <pre>router(config-router)#auto-cost reference-bandwidth {*mbps}</pre>
+                <p>*Pro co největší efektivitu by tato hodnota měla být vyšší než bandwidth nejrychlejšího linku.</p>
+                <p>OSPF Cost lze nastavit i manuálně pomocí příkazu: </p>
+                <pre>router(config-router)#ip ospf cost {cost}</pre>
+            </section>
         </section>
     </section>
     <section id="prehledPrikazu">
