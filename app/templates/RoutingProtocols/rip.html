@@ -11,7 +11,7 @@
 <body>
     <h1>RIP - Routing Information Protocol</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Úvod do Routing Protocols,alespoň IPv4 subnetting</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Úvod do směrování, základy IPv4</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>RIP, Routing Information Protcol je jeden ze starších routing protokolů, které jsou tu s námi již od 80let 20 století.</p>
@@ -47,10 +47,30 @@
     </section>
     <section id="konfiguraceRIP">
         <h3>Konfigurace RIP</h3>
+        <h5>Přepnutí do router rip módu: </h5>
         <pre>R1(config)#router rip //Dostane nás do config-rip módu</pre>
+        <h5>Výběr verze RIP: </h5>
         <pre>R1(config-rip)#version {1,2}</pre>
+        <h5>Vypnutí auto-summary: </h5>
         <pre>R1(config-rip)#no auto-summary //Vypne automatický převod IP do classful metody</pre>
+        <h5>Zapnutí propagace sítě: </h5>
         <pre>R1(config-rip)#network {NETWORK ID}</pre>
+        <p>Základní konfiguraci RIP si můžete vyzkoušet <a href="../Labs/Routing/RIP_lab.pka">zde</a>.</p>
+        <section id="RIPauth" class="subSection">
+            <h4>RIP autentizace</h4>
+            <p>Aby router nemohl dostávat jen tak nedůvěryhodné zprávy od jakéholiv routeru, který bude mít RIP, nastavuje se autentizace.</p>
+            <p>RIPv2 podporuje plain a MD5 autentizaci.</p>
+            <section id="RIPKeyset" class="subSection">
+                <h5>Nastavení klíče: </h5>
+                <pre>R1(config)#key chain {název}</pre>
+                <pre>R1(config-keyset)#key {num} //Zde nastavuji key ID, toto číslo musí být na všech routerech s autentizaci stejné!</pre>
+                <pre>R1(config-keyset)#key string {string}</pre>
+            </section>
+            <h5>Zapnutí RIP autentizace: </h5>
+            <pre>R1(config-if)#ip rip authentication key-chain {název_key_chain}</pre>
+            <h5>Výběr MD5 zašifrování: </h5>
+            <pre>R1(config-if)#ip rip authentication mode md5</pre>
+        </section>
     </section>
     <section id="konfiguraceRIPng">
         <h3>Konfigurace RIPng</h3>
@@ -107,9 +127,34 @@
                         <td>Config-Router</td>
                     </tr>
                     <tr>
-                        <td>ipv6 add {ipv6}</th>
-                        <td></td>
+                        <td>passive-interface</th>
+                        <td>vypne zprávy rip na daném interface</td>
+                        <td>Config-Router</td>
+                    </tr>
+                    <tr>
+                        <td>default-information originate</th>
+                        <td>zacne propagovat default-route na vsechny ostatni rip routery</td>
+                        <td>Config-Router</td>
+                    </tr>
+                    <tr>
+                        <td>ip rip authentication key-chain keyset</th>
+                        <td>Zapne RIP autentikaci</td>
                         <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>ip rip authentication mode {plain | md5}</th>
+                        <td>Výběr šifrování</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>show ip[v6] rip database</th>
+                        <td>Zobrazí RIP databázi</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show ip[v6] route rip</th>
+                        <td>zobrazí RIP routes</td>
+                        <td>EXEC</td>
                     </tr>
                     <tr>
                         <td>ipv6 RIP {int} enable</th>
@@ -168,13 +213,13 @@
                 
                 <div class="line"></div>
                 <div id="optionList">
-                    <h4 class='choice_que' id="opt1"></h4>
+                    <h4 class='choice_que noBorder' id="opt1"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt2"></h4>
+                    <h4 class='choice_que noBorder' id="opt2"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt3"></h4>
+                    <h4 class='choice_que noBorder' id="opt3"></h4>
                     <div class="height_spacer"></div>
-                    <h4 class='choice_que' id="opt4"></h4>
+                    <h4 class='choice_que noBorder' id="opt4"></h4>
                     <div class="height_spacer"></div>
                 </div>
             </div>

@@ -11,28 +11,14 @@
 <body>
     <h1>EIGRP</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: znalost fungování distance-vector protokolů, IPv4 subnetting</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Úvod do směrování, základy IPv4</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>EIGRP, Enhanced Interior Gateway Protocol, je hybrid distance-vector protokol od vyvinutý společností CISCO, který vychází z jeho předchůdce IGRP.</p>
         <p>EIGRP je oproti RIP rychlejší, nemá 15 hop-count limit a je jediný IGP protokol, který umí provést unequal-cost load-balancing.</p>
         <p>Administrative Distance má v případě EIGRP 2 hodnoty, pro internal (normální EIGRP) 90, pro external (cesty pryč z EIGRP) 170.</p>
         <p>Využívá multicast adresu <b>224.0.0.10</b>.</p>
-        <section id="routerid" class="subSection">
-            <h4>Router ID & WILDCARD Mask</h4>
-            <p>Router ID slouží jako identifikátor routeru, kterýho se využívá v některých dynamických routing protokolech (EIGRP ale i OSPF).</p>
-            <p>Zapisuje se v IPv4 formátu.</p>
-            <h5>Určení Router ID</h5>
-            <ul>
-                <li class="req">Manuálně</li>
-                <li class="req">Pomocí nejvyšší IP adresy na loopback interface</li>
-                <li class="req">Pomocí nejvyšší IP adresy na fyzickém interface</li>
-            </ul>
-            <p>WILDCARD Mask je invertovaná subnet mask, která určuje rozsah IP adresy a běžně se používá v routing protokolech (EIGRP a OSPF).</p>
-            <p>0 nám ve WILDCARD Mask nám říká, že korespondující bity se musí shodovat.</p>
-            <p>Příkladem nám může být:</p>
-            <h1>DOPLN Priklad!!!</h1>
-        </section>
+        
         <section id="DalsiTermEIGRP">
             <h3>EIGRP termíny</h3>
             <ul>
@@ -41,6 +27,19 @@
                 <li class="req">Successor - cesta s nejnižší metrikou do cíle (nejlepší cesta)</li>
                 <li class="req">Feasible Successor - náhradní cesta do cíle, pokud je splněná podmínka, že reported distane je nižší než successor feasible distance.</li>
             </ul>
+
+        </section>
+        <section id="EIGRPAuth">
+            <h3>EIGRP Autentizace</h3>
+            <p>Podobně jako RIP, EIGRP umí znemožnit jen tak jakémukoliv routeru připojit se do procesu a propagovat svoje routes.</p>
+            <p>EIGRP v tomto ohledu podporuje SHA a MD5 autentizaci.</p>
+            <h5>Nastavení key chain: </h5>
+            <pre>Router(config)#key chain {název}</pre>
+            <pre>Router(config-keychain)#key 1 //Zde nastavuji key ID, toto číslo musí být na všech routerech s autentizaci stejné!</pre>
+            <pre>Router(config-keychain-key)#key-string {string}</pre>
+            <h5>Povolení autentizace: </h5>
+            <pre>Router(config-if)#ip authentication mode eigrp {ASN} {md5 | sha} //Výběr hashe</pre>
+            <pre>Router(config-if)#ip authentication key-chain eigrp {ASN} {název_key_chain} //Zapnutí samotné autentizace</pre>
         </section>
     </section>
     <section id="konfiguraceEIGRP">
@@ -105,6 +104,41 @@
                         <td>show ip eigrp topology</th>
                         <td>Zobrazí informace o eigrp činnosti v síti</td>
                         <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>router eigrp {ASN}</th>
+                        <td>zapne a přejde do EIGRP konfigurace</td>
+                        <td>config</td>
+                    </tr>
+                    <tr>
+                        <td>network {IP} {wildcard_mask}</th>
+                        <td>zapne propagaci dané subnety</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>no auto-summary</th>
+                        <td>vypne automatickou sumerizaci</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>passive-interface {interface}</th>
+                        <td>vypne posílání eigrp zpráv na daném interfacu</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>eigrp router-id {A.B.C.D}</th>
+                        <td>nastaví router-id</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>ip authentication mode eigrp {ASN} {md5 | sha}</th>
+                        <td>určí hash autentizace</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>ip authentication key-chain eigrp {ASN} {key-chain}</th>
+                        <td>zapne autentizaci</td>
+                        <td>eigrp mode</td>
                     </tr>
                 </table>
             </div>
