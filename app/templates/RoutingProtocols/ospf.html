@@ -248,7 +248,7 @@
         </section>
         <section id="OSPFAreaTerminology" class="subSection">
             <h4>Základní OSPF Area Terminologie</h4>
-            <img src="../static/styles/images/Routing/OSPFAREA.png" alt="OSPFarea">
+            <img src="../static/styles/images/Routing/OSPFAREA.png" alt="OSPFarea" class="configImage">
             <ul>
                 <li class="req">Area Border Router (ABR) - Router, jehož jeden interface je připojený k backbone area a druhý k nonbackbone area</li>
                 <li class="req">Backbone router - router, který je připojený v backbone area (sem se počítají i ABR)</li>
@@ -303,49 +303,64 @@
         </section>
     </section>
     <section id="OSPFConfiguration">
-        <h3>OSPF konfigurace</h3>
-        <section class="subSection">
-            <h5>Přechod do OSPF módu: </h5>
-            <pre>Router(config)#router ospf {*process_ID} //*Nemusí být shodné napříč routery</pre>
-            <h5>Propagace subnet: </h5>
-            <pre>Router(config-router)#network {IPv4} {Wildcard_Mask} area {area}</pre>
-            <h5>Vypnutí OSPF Messages na daný interface: </h5>
-            <pre>Router(config-router)#passive-interface {interface}</pre>
-            <h5>Zapnutí propagace default route: </h5>
-            <pre>Router(config-router)#default-information originate</pre>
-            <h5>Změna administrative distance: </h5>
-            <pre>Router(config-router)#distance {1-255}</pre>
-            <h5>Změna reference bandwidth: </h5>
-            <pre>Router(config-router)#auto-cost reference-bandwidth {1-4294967*} //*v mbps</pre>
-            <h5>Manuální nastavení router-id: </h5>
-            <pre>Router(config-router)#router-id {A.B.C.D}</pre>
-            <h5>Manuální nastavení cost na daném interface: </h5>
-            <pre>Router(config-if)ip ospf cost {1-65535}</pre>
-            <h5>Nastavení ospf priority na daném interface: </h5>
-            <pre>Router(config-if)ip ospf priority {0-255}</pre>
-            <h5>Nastavení ospf hello interval na daném interface: </h5>
-            <pre>Router(config-if)ip ospf hello-interval {1-65535*} //*v sekundách</pre>
-            <h5>Nastavení ospf dead interval na daném interface: </h5>
-            <pre>Router(config-if)ip ospf dead-interval {1-65535*}  //*v sekundách</pre>
-            <h5>Zapnutí autentizace: </h5>
-            <pre>Router(config-if)ip ospf authentication</pre>
-            <h5>Nastavení klíče k autentizaci: </h5>
-            <pre>Router(config-if)ip ospf authentication-key {slovo*} //maximálně 8 znaků</pre>
-            <h5>Nastavení message-digest-key (MD5): </h5>
-            <pre>Router(config-if)ip ospf message-digest-key {1-255} md5 {slovo*} //maximálně 16 znaků</pre>
-            <h5>Použití message digest key jako klíče k autentizaci: </h5>
-            <pre>Router(config-if)ip ospf authentication message-digest</pre>
-            <h5>Nastavení network typu - point-to-point - na daném interface: </h5>
-            <pre>Router(config-if)ip ospf network point-to-point</pre>
-            <h5>Zobrazení LSDB: </h5>
-            <pre>Router#show ip ospf database</pre>
-            <h5>Zobrazení ospf na daném interface: </h5>
-            <pre>Router#show ip ospf interface {interface}</pre>
-            <h5>Zobrazení ospf neighbors: </h5>
-            <pre>Router#show ip ospf neighbor</pre>
-            <h5>Troubleshooting příkaz: </h5>
-            <pre>Router#debug ip ospf {adj | events}</pre>
-        </section>
+        <h3>Základní OSPF konfigurace</h3>
+        <p>Úkol: Nastav alespoň co se týče základních věcí ospf v této síti: </p>
+        <img src="../static/styles/images/Routing/OSPFKonfigurace.png" alt="OSPF Konfigurace" class="configImage">
+        <p>Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
+        <pre>
+R1(config)#interface fa0/1
+R1(config-if)#ip address 15.4.2.1 255.255.255.0
+R1(config-if)#no shutdown
+R1(config-if)#interface g0/0
+R1(config-if)#ip address 192.168.1.1 255.255.255.252 
+R1(config-if)#no shutdown</pre>
+        <p>To samé uděláme i na R2</p>
+        <pre>
+R2(config)#interface fa0/1
+R2(config-if)#ip address 15.4.3.1 255.255.255.0
+R2(config-if)#no shutdown
+R2(config-if)#interface g0/0
+R2(config-if)#ip address 192.168.1.2 255.255.255.252
+R2(config-if)#no shutdown</pre>
+<p>Nyní je třeba nastavit samotné ospf.</p>
+<p>To se dělá pomocí network/ip ospf příkazu, který routeru říká, který interface bude zahrnut v rámci ospf procesu a která area bude jemu přiřazená.</p>
+<p>Příkaz se zadává v ospf módu a ip ospf na interface.</p>
+<p>Network příkaz v ospf módu:</p>
+<pre>
+R1(config)#router ospf 1
+R1(config-router)#network 192.168.1.0 0.0.0.3 area 0
+R1(config-router)#network 15.4.2.0 0.0.0.255 area 0
+</pre>
+<p>IP OSPF příkaz na interface: </p>
+<pre>
+R2(config)#interface g0/0
+R2(config-if)#ip ospf 1 area 0
+R2(config)#interface fa0/1
+R2(config-if)#ip ospf 1 area 0
+</pre>
+<p>Dobrou praxí je také nastavit na interfacích fa0/1 na obou routerech pasivní interface - zastavení ospf procesu na těchto interfacích.</p>
+<p>Tento příkaz se zadává v ospf módu</p>
+<pre>
+R1(config-router)#passive-interface fa0/1
+</pre>
+<pre>
+R2(config-router)#passive-interface fa0/1
+</pre>
+<p>Dále můžeme nastavit například autentizaci, ta slouží k tomu, aby daný router neudělal sousedský vztah s kýmkoliv s kým bude tvořit podmínky.</p>
+<p>Tato autentizace může být buď v plaintextu nebo v md5.</p>
+<p>Obecně doporučuji používat spíš tu md5.</p>
+<p>Nastavení autentizace na R1:</p>
+<pre>
+R1(config)#interface g0/0
+R1(config-if)#ip ospf message-digest-key 1 md5 heslo
+R1(config-if)#ip ospf authentication message-digest
+</pre>
+<p>Nastavení autentizace na R2:</p>
+<pre>
+R2(config)#interface g0/0
+R2(config-if)#ip ospf message-digest-key 1 md5 heslo
+R2(config-if)#ip ospf authentication message-digest
+</pre>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -417,12 +432,12 @@
                         <td>interface</td>
                     </tr>
                     <tr>
-                        <td>ip ospf authentication-key {slovo*}</th>
+                        <td>ip ospf authentication-key {slovo}</th>
                         <td>Nastaví plaintext autentizační key</td>
                         <td>interface</td>
                     </tr>
                     <tr>
-                        <td>ip ospf message-digest-key {1-255} md5 {slovo*}</th>
+                        <td>ip ospf message-digest-key {1-255} md5 {slovo}</th>
                         <td>Nastaví md5 autentizační key</td>
                         <td>interface</td>
                     </tr>
@@ -434,6 +449,11 @@
                     <tr>
                         <td>ip ospf network point-to-point</th>
                         <td>Nastaví point-to-point network typ</td>
+                        <td>interface</td>
+                    </tr>
+                    <tr>
+                        <td>ip ospf {process_id} area {area}</th>
+                        <td>Aktivuje ospf na daném interface</td>
                         <td>interface</td>
                     </tr>
                     <tr>
