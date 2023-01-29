@@ -305,7 +305,7 @@
     <section id="OSPFConfiguration">
         <h3>Základní OSPF konfigurace</h3>
         <p>Úkol: Nastav alespoň co se týče základních věcí ospf v této síti: </p>
-        <img src="../static/styles/images/Routing/OSPFKonfigurace.png" alt="OSPF Konfigurace" class="configImage">
+        <img src="../static/styles/images/Routing/ZakladniKonfigurace.png" alt="OSPF Konfigurace" class="configImage">
         <p>Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
         <pre>
 R1(config)#interface fa0/1
@@ -361,6 +361,7 @@ R2(config)#interface g0/0
 R2(config-if)#ip ospf message-digest-key 1 md5 heslo
 R2(config-if)#ip ospf authentication message-digest
 </pre>
+<p>Procvičit si základy OSPF konfigurace můžeš <a href="../Labs/Routing/OSPF_Zaklady_lab.pka">zde</a>.</p>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>

@@ -27,9 +27,56 @@
                 <li class="req">Successor - cesta s nejnižší metrikou do cíle (nejlepší cesta)</li>
                 <li class="req">Feasible Successor - náhradní cesta do cíle, pokud je splněná podmínka, že reported distane je nižší než successor feasible distance.</li>
             </ul>
-
+            <p>Příklad: </p>
+            <p>Urči z pohledu R1 do R5 succesora a feasible succesora.</p>
+            <img src="../static/styles/images/Routing/eigrpterms.png" alt="EIGRPTerms" class="configImage">
+            <p>Z pohledu R1 vede succesor přes R2 a R3, protože jejich feasible distance je 768.</p>
+            <p>Feasible succesor je ta cesta, jejíž reported distance je nižší než succesor feasible distance.</p>
+            <p>Reported distance přes R4 do R5 je 256.</p>
+            <p>Feasible distance je 768.</p>
+            <p>Proto je za feasible succesor považovaná cesta, která vede přes R4.</p>
         </section>
-        <section id="EIGRPAuth">
+    </section>
+    <section id="konfiguraceEIGRP">
+        <p>Úkol: Nastav alespoň co se týče základních věcí eigrp v této síti: </p>
+        <img src="../static/styles/images/Routing/ZakladniKonfigurace.png" alt="EIGRPkonfigurace" class="configImage">
+        <p>Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
+        <pre>
+R1(config)#interface fa0/1
+R1(config-if)#ip address 15.4.2.1 255.255.255.0
+R1(config-if)#no shutdown
+R1(config-if)#interface g0/0
+R1(config-if)#ip address 192.168.1.1 255.255.255.252 
+R1(config-if)#no shutdown</pre>
+                    <p>To samé uděláme i na R2</p>
+                    <pre>
+R2(config)#interface fa0/1
+R2(config-if)#ip address 15.4.3.1 255.255.255.0
+R2(config-if)#no shutdown
+R2(config-if)#interface g0/0
+R2(config-if)#ip address 192.168.1.2 255.255.255.252
+R2(config-if)#no shutdown</pre>
+            <p>Nyní je třeba nastavit samotné EIGRP.</p>
+        <pre>
+R1(config)#router eigrp 1* //*1 je ASN číslo, toto číslo musí být na všech routerech stejné!
+R1(config-router)#network 192.168.1.0* 0.0.0.3** //*NET_ID, **Wildcard mask
+R1(config-router)#network 15.4.2.0 0.0.0.255</pre>
+            <p>Je také dobrou praxí vypínat autosumarizaci, která danou NET_ID převede na classful.</p>
+<pre>
+R1(config-router)#no auto-summary
+</pre>
+            <p>To samé provedeme i na R2</p>
+<pre>
+R2(config)#router eigrp 1 
+R2(config-router)#network 192.168.1.0 0.0.0.3
+R2(config-router)#network 15.4.3.0 0.0.0.255
+R2(config-router)#no auto-summary
+</pre>
+        <p>Dále můžeme nastavit pasivní interface, tam kam nepotřebujeme posílat eigrp zprávy.</p>
+<pre>R1(config-router)#passive-interface fa0/1</pre>
+<pre>R2(config-router)#passive-interface fa0/1</pre>
+        <p>Konfiguraci EIGRP si můžeš procvičit v labu, který můžeš stáhnout <a href="../Labs/Routing/EIGRP_lab.pka">zde</a>.</p>
+        <section id="EIGRPAuth" class="subSection">
             <h3>EIGRP Autentizace</h3>
             <p>Podobně jako RIP, EIGRP umí znemožnit jen tak jakémukoliv routeru připojit se do procesu a propagovat svoje routes.</p>
             <p>EIGRP v tomto ohledu podporuje SHA a MD5 autentizaci.</p>
@@ -41,20 +88,17 @@
             <pre>Router(config-if)#ip authentication mode eigrp {ASN} {md5 | sha} //Výběr hashe</pre>
             <pre>Router(config-if)#ip authentication key-chain eigrp {ASN} {název_key_chain} //Zapnutí samotné autentizace</pre>
         </section>
-    </section>
-    <section id="konfiguraceEIGRP">
-        <h3>EIGRP Konfigurace</h3>
-        <h4 class="noBorder">Přechod do EIGRP configu</h4>
-        <pre>Router(config)#router eigrp {ASN}</pre>
-        <h4 class="noBorder">Vypnutí autosumerizace</h4>
-        <pre>Router(config-router)#no auto-summary</pre>
-        <h4 class="noBorder">Nastavení propagace v rámci EIGRP</h4>
-        <pre>Router(config-router)#network {NET_ID} {*WILDCARD_MASK} //pokud neuvedeme MASK, je automaticky použit classful systém.</pre>
-        <h4 class="noBorder">Zastavení zasílání EIGRP paketů na daný interface</h4>
-        <pre>Router(config-router)#passive-interface {int}</pre>
-        <h4 class="noBorder">Manuální nastavení router-id</h4>
-        <pre>Router(config-router)#eigrp router-id {A.B.C.D}</pre>
-        <p>Konfiguraci EIGRP si můžeš procvičit v labu, který můžeš stáhnout <a href="../Labs/Routing/EIGRP_lab.pka">zde</a>.</p>
+        <section id="UnequalLoadbalance" class="subSection"></section>
+        <h3>Unequal Load-balance</h3>
+        <p>Pakliže má eigrp topologie succesor a feasible succesor může dělat unequal load-balacing.</p>
+        <p>Toho docílí tak, že použije příkaz variance. Tento příkaz má parametr multiplier.</p>
+        <p>Správná hodnota tohoto parlamentu lze vypočítat tak, že vydělíme větší feasible distance menším feasible distnace.</p>
+        <p>Příklad: </p>
+        <p>1.Feasible distance je 26112</p>
+        <p>2.Feasible distance je 3072</p>
+        <pre>Multiplier = 26112 / 3072</pre>
+        <p>Protože nám multiplier vyšel 8.5, tuto hodnotu zaokrouhlíme na 9 a nastavíme unequal load-balacing.</p>
+        <pre>Router(config-router)#variance 9</pre>
     </section>
     <section id="EIGRPproces">
         <h3>EIGRP proces</h3>
@@ -117,7 +161,7 @@
                     </tr>
                     <tr>
                         <td>no auto-summary</th>
-                        <td>vypne automatickou sumerizaci</td>
+                        <td>vypne automatickou sumarizaci</td>
                         <td>eigrp mode</td>
                     </tr>
                     <tr>
@@ -128,6 +172,11 @@
                     <tr>
                         <td>eigrp router-id {A.B.C.D}</th>
                         <td>nastaví router-id</td>
+                        <td>eigrp mode</td>
+                    </tr>
+                    <tr>
+                        <td>variance {multiplier}</th>
+                        <td>při správném multiplieru nastaví unequal load-balacing</td>
                         <td>eigrp mode</td>
                     </tr>
                     <tr>
