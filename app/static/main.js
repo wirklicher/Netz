@@ -35,14 +35,12 @@ sshTelnet.addEventListener('click', () => {
     name_of_page = 'sshTelnet';
 })
 
-rip.addEventListener('click', () => {
-    $('main').load('rip.html');
-    name_of_page = 'rip';
-})
 stp.addEventListener('click', () => {
     $('main').load('stp.html');
     name_of_page = 'stp';
 })
+
+
 
 uvodRouting.addEventListener('click', () => {
     $('main').load('uvodRouting.html');

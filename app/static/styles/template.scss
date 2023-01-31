@@ -62,7 +62,7 @@ h3 {
     margin-bottom: 10px;
     position: relative;
     padding-bottom: 1rem;
-    
+    z-index: -99;
 }
 
 h3:before {
@@ -74,6 +74,7 @@ h3:before {
     width: 292.9px;
     border-bottom: solid 2px var(--secondary-color);
     box-shadow: 0 0 3px .5px --secondary-color;
+    z-index: -99;
 }
 
 h4 {
@@ -81,6 +82,7 @@ h4 {
     font-weight: 400;
     margin-bottom: 10px;
     position: relative;
+    z-index: -99;
 }
 
 h4:before {
@@ -92,6 +94,7 @@ h4:before {
     width: 300px;
     border-bottom: solid 2px var(--secondary-color);
     box-shadow: 0 0 3px .5px --secondary-color;
+    z-index: -99;
 }
 
 h5 {
@@ -99,6 +102,7 @@ h5 {
     font-weight: 400;
     margin-bottom: 10px;
     position: relative;
+    z-index: -99;
 }
 
 h5:before {
@@ -110,6 +114,7 @@ h5:before {
     width: 300px;
     border-bottom: solid 2px var(--secondary-color);
     box-shadow: 0 0 3px .5px --secondary-color;
+    z-index: -99;
 }
 
 p {

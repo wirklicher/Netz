@@ -12,6 +12,13 @@
     <h1>VLAN - Virtual Local Area Network</h1>
     <div id="templateline"></div>
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní konfigurace v Packet Traceru, fungovaní L2 </h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět nakonfigurovat VLAN (access port, default VLAN)</li>
+            <li class="req">Umět umožnit komunikaci mezi VLAN (trunking, native VLAN, 802.1Q)</li>
+        </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <section id="vlan" class="subSection">
@@ -268,7 +275,7 @@ switch(config-if)#switchport mode dynamic desirable <span>// posílá žádost o
 </pre>
             <p>Jestliže chceme používat trunk bez toho, aby se používalo DTP, lze jej zakázat pomocí příkazu:</p>
             <pre>switch(config-if)#switchport nonegotiate</pre>
-            <h4>Tabulka switchport modu</h4>>
+            <h4>Tabulka switchport modu</h4>
             <div class="overflowTable">
                 <table>
                     <tr>

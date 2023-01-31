@@ -15,8 +15,8 @@
     <section id="uvod">
         <h3 id="problematika">Směrování a směrovací tabulka</h3>
         <p>Router je L3 ISO/OSI zařízení, jehož účelem je směrovat pakety mezi sítěmi.</p>
-        <p>Směrování je proces, který využívá router (směrovač) k určení cesty do daného cíle.</p>
-        <p>Router si podobně jako switch staví směrovací tabulku, pomocí které určuje přes jaký interface bude paket vypuštěn.</p>
+        <p>Směrování/Routing je proces, který využívá router (směrovač) k určení cesty do daného cíle.</p>
+        <p>Router si podobně jako switch staví směrovací (routing) tabulku, pomocí které určuje přes jaký interface bude paket vypuštěn.</p>
         <img src="../static/styles/images/Routing/rTable_black.png" alt="RoutingTable" class="configImage" class="darkimage">
         <p>Směrovací tabulka obsahuje: </p>
         <ul>
@@ -40,7 +40,7 @@
         </section>
         <section id="staticky" class="subSection">
             <h4>Statický záznam</h4>
-            <p>Statický záznam je do tabulky nutno zadat ručně (ignorujeme-li network automatizaci).</p>
+            <p>Statický záznam je do tabulky nutno zadat ručně (ignorujeme-li síťovou automatizaci).</p>
             <p>Užití: </p>
             <ul>
                 <li class="req">Default route - cesta, která se použije tehdy když router nebude znát destinaci.</li>
@@ -54,7 +54,7 @@
             <p>Úkolem směrovacích protokolů je správa směrování, vybrání nejlepší cesty do cíle a reakce na výpadky sítí (pojem convergence).</p>
             <img src="../static/styles/images/Routing/dynamic_black.png" alt="RoutingTable" class="configImage">
             <p>*1. číslo v hranaté závorce je administrative distance, druhé je metrika</p>
-            <p>Směrovací protokoly se rozlišují dle toho zda-li to směrování probíhá v rámci jednoho autonomního systému (IGP) nebo jestli probíhá mezi vícero autonomních systemů (EGP).</p>
+            <p>Směrovací protokoly se rozlišují dle toho zda-li to směrování probíhá v rámci jednoho autonomního systému (IGP) nebo jestli probíhá mezi několika autonomníma systémama (EGP).</p>
             <p>*Autonomní systém (AS) je síť, která je pod kontrolou jedné organizace (Běžně platí, že každý ISP je v jiné AS), každé AS je přiděleno ASN, které ji identifikuje, přidělení má na starosti IANA.</p>
             <p>Nejlepší cestu k cíli určuje metrika (čim nižší tím lepší cesta). Metrika je u každého RP určená jinak (RIP používá jako metriku počet HOP, OSPF používá cost).</p>
             <p>Jakmile síť využívá vícero protokolů nebo protokol a statickou cestu, tak přednost určuje <b>Administrative Distance</b>.</p>
@@ -70,7 +70,7 @@
             <section id="LinkState" class="subSection">
                 <h5>Link-State protokoly</h5>
                 <p>Protokoly: OSPF, IS-IS</p>
-                <p>Fungují tak, že routery si vyměnují informace se všemi ostatními routery a na základě vyměněných informací jsou schopni postavit si topologie celé sítě.</p>
+                <p>Fungují tak, že routery si vyměnují informace se všemi ostatními routery a na základě vyměněných informací jsou schopni postavit si mapu topologie celé sítě.</p>
                 <p>Jsou vhodné především pro větší sítě, které vyžadují odbornou správu.</p>
                 <p>Tento druh protokolů aktualizuje směrovací tabulku pouze při detekci změny, přičemž ji nemění celou ale jen část potřebnou ke změně.</p>
                 <p>Tyto protokoly zpravidla využívají Dijkstra algoritmus.</p>
@@ -125,7 +125,7 @@
             </section>
             <section id="dynamicTerminologie">
                 <h4>Terminologie dynamických routing protokolů</h4>
-                <p>S dynamickými routing protokoly se pojí i určitá terminologie, ke které budu odkazovat</p>
+                <p>S dynamickými routing protokoly se pojí i určitá terminologie, ke které v ostatních kapitolách odkazuji.</p>
                 <section id="routerid" class="subSection">
                     <h4>Router ID & WILDCARD Mask</h4>
                     <p>Router ID slouží jako identifikátor routeru, kterýho se využívá v některých dynamických routing protokolech (EIGRP ale i OSPF).</p>

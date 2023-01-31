@@ -22,10 +22,10 @@
         <section id="DalsiTermEIGRP">
             <h3>EIGRP termíny</h3>
             <ul>
-                <li class="req">Feasible Distance - metrika od routeru až do cíle</li>
-                <li class="req">Reported Distance/Advertised Distance - metrika souseda až do cíle</li>
-                <li class="req">Successor - cesta s nejnižší metrikou do cíle (nejlepší cesta)</li>
-                <li class="req">Feasible Successor - náhradní cesta do cíle, pokud je splněná podmínka, že reported distane je nižší než successor feasible distance.</li>
+                <li class="req"><b>Feasible Distance</b> - metrika od routeru až do cíle</li>
+                <li class="req"><b>Reported Distance/Advertised Distance</b> - metrika souseda až do cíle</li>
+                <li class="req"><b>Successor</b> - cesta s nejnižší metrikou do cíle (nejlepší cesta)</li>
+                <li class="req"><b>Feasible Successor</b> - náhradní cesta do cíle, pokud je splněná podmínka, že reported distane je nižší než successor feasible distance.</li>
             </ul>
             <p>Příklad: </p>
             <p>Urči z pohledu R1 do R5 succesora a feasible succesora.</p>
@@ -65,7 +65,7 @@ R1(config-router)#network 15.4.2.0 0.0.0.255</pre>
 <pre>
 R1(config-router)#no auto-summary
 </pre>
-            <p>To samé provedeme i na R2</p>
+            <p>To samé provedeme i na R2.</p>
 <pre>
 R2(config)#router eigrp 1 
 R2(config-router)#network 192.168.1.0 0.0.0.3
@@ -103,9 +103,9 @@ R2(config-router)#no auto-summary
     <section id="EIGRPproces">
         <h3>EIGRP proces</h3>
         <section id="BecomingNeighbors" class="subSection">
-            <h4>Becoming Neighbors</h4>
-            <p>EIGRP při hledaní nových sousedů a v pozdější fázi při udržování těchto vztahů posílá <b>hello zprávy</b>.</p>
-            <p>Hello zprávy se posílají každých 5 s na lepších lincích a 60 s na horších lincích.</p>
+            <h4>Hledání sousedů</h4>
+            <p>EIGRP při hledaní nových sousedů a v pozdější fázi při udržování těchto vztahů posílá <b>hello messages</b>.</p>
+            <p>Hello messages se posílají každých 5 s na lepších lincích a 60 s na horších lincích.</p>
             <p>K tomu aby se směrovače staly EIGRP sousedy je potřeba:</p>
             <ul>
                 <li class="req">Aby byly přímo připojeni k sobě</li>
@@ -114,7 +114,7 @@ R2(config-router)#no auto-summary
                 <li class="req">Aby měly společné K-values, dle kterých se počítá metrika</li>
                 <li class="req">Aby měly v případě zapnuté autentizace společné nastavení</li>
             </ul>
-            <p>Jestliže tyto požadavky byly naplněny nový potenciální eigrp soused odpoví pomocí své Hello zprávy a plnohodnotný sousedský vztah je zahájen.</p>
+            <p>Jestliže tyto požadavky byly naplněny nový potenciální eigrp soused odpoví pomocí své Hello message a plnohodnotný sousedský vztah je zahájen.</p>
         </section>
         <section id="ExRoutingInfoEIGRP" class="subSection">
             <h4>Výměna informací</h4>
@@ -195,6 +195,10 @@ R2(config-router)#no auto-summary
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>EIGRP, protokol vyvinutý společností Cisco, je díky svým vlastnostem považován za hybrid distance-vector routing protokol protokol.</p>
+        <p>Jeho proces je založený na 3 dějích - vzniku sousedských vztahů, výměně informací a nalezení nejlepší cesty.</p>
+        <p>Nejlepší cesta určuje pomocí delay a bandwidth.</p>
+        <p>Momentálně je díky svým vlastnostem považován za jeden z nejlepších dynamic routing protokolů.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

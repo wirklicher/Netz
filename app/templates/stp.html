@@ -12,6 +12,13 @@
     <h1>STP - Spanning Tree Protocol</h1>
     <div id="templateline"></div>
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základy VLAN, základní konfigurace v PT</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět nakonfigurovat Etherchannel (LACP)</li>
+            <li class="req">Umět vysvětlit proč potřebujeme RAPID PVST+ a jak funguje (Root port, root bridge, stavy portů, a výhody PortFast)</li>
+        </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <section id="broadcastStorm" class="subSection">
@@ -113,7 +120,6 @@
             <p>Všechny porty na root bridge jsou v designated stavu.</p>
             <section id="ex" class="subSection">
                 <h5>Příklad 1</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <h5>Který switch se stane Root Bridgem?</h5>
                 <img src="../static/styles/images/STP/Ex2_RootBridge.png" alt="Ex1" class="configImage">
@@ -121,7 +127,6 @@
                 <p><i>Řešení: <b>Switch 3</b></i></p>
                 <p><i>V tomto případě je řešení velmi prosté, chceme nejnižší BP, to má již na první pohled switch 3, který se stává root bridgem.</i></p>
                 <h5>Příklad 2</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <h5>Který switch se stane Root Bridgem?</h5>
                 <img src="../static/styles/images/STP/Ex1_RootBridge.png" alt="Ex2" class="configImage">
@@ -173,7 +178,6 @@
             <p>Když root cost bude na obou switchích v rámci jednoho linku stejný designated portem se stane ten port, který bude mít nejnižší Bridge ID.</p>
             <section id="ex" class="subSection">
                 <h5>Příklad 1</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <h5>Urči typ všech portů</h5>
                 <img src="../static/styles/images/STP/Ex1_Ports.png" alt="Ex1" class="configImage">
@@ -185,7 +189,6 @@
                 <p><i>Situace na SW5 je poněkud komplikovanější, protože link vedoucí přímo k RB. je Fast Ethernet, který má RC 19, což je víc než kdyby jeho rámce šly přes SW6 (RC. je 8), takže RP je stává G0/1 na SW5.</i></p>
                 <p><i>To nám nechává poslední port, kterým je Fa0/1 na SW5, ten se stává <b>non-designated</b>.</i></p>
                 <h5>Příklad 2</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <h5>Urči typ všech portů</h5>
                 <img src="../static/styles/images/STP/Ex2_Ports.png" alt="Ex2" class="configImage">
@@ -281,7 +284,6 @@
             <p>Změna je u root cost, která je byla upravená, což přineslo lepší zapamatovatelnost a přizpůsobitelnost novějším technologiím.</p>
             <section id="rootcost" class="subSection">
                 <h5 id="problematika">Porovnání 802.1D a 802.1w verze Root cost</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <div class="overflowTable">
                     <table>
@@ -327,7 +329,6 @@
             <div class="height_spacer"></div>
             <section id="Stavportu" class="subSection">
                 <h5 id="problematika">Změna stavů portů</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>Změnu najdeme také u stavů portů, kde nám mizí <b>listening, disabled a blocking</b> stavy a jsou přesunuty pod 1 společný - Discarding port.</p>
                 <p>Ten má stejnou funkcionalitu jako blocking stav u STP.</p>
@@ -335,14 +336,12 @@
             <p>Další změnou je rozložení Non-designated portu na 2:</p>
             <section id="Alternateport" class="subSection">
                 <h5 id="problematika" class="noBorder">Alternate port</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>Standardně je Alternate port v discarding stavu.</p>
                 <p>Je brán ale jako náhradník, pokud by se s forwarding portem něco stalo.</p>
             </section>
             <section id="Backupport" class="subSection">
                 <h5 id="problematika">Backup port</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>Záložní port, když se něco stane s designated portem.</p>
                 <p>Backup port vzniká, pakliže chceme udělat propojení switch-hub-switch.</p>
@@ -351,14 +350,12 @@
             </section>
             <section id="rstptimer" class="subSection">
                 <h5 id="problematika">RSTP timers</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>RSTP posílá každé 2s Hello BPDU.</p>
                 <p>V čem je ale rozdíl oproti klasickému STP je to, že je zde výrazně snížen Max Age timer, který je nově pouze 6s.</p>
             </section>
             <section id="linktypes" class="subSection">
                 <h5 id="problematika">Link Types</h5>
-                <div id="templateline2"></div>
                 <div class="height_spacer"></div>
                 <p>RSTP nově představuje Link Types - <b>Edge</b>, <b>Point-to-point</b> a <b>shared</b>.</p>
                 <p>Edge - jsou všechny porty které propojují switch a end host zařízení. Mají stejnou funkcionalitu jako portfast - link je bez žádného dalšího protahování ve forwarding stavu. Pro nastavení tohoto link typu stačí nastavit na daném portu portfast.</p>
