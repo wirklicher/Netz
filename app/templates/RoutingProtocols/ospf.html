@@ -146,7 +146,7 @@
                 <p>DR (Designated router) je router, který se objevuje v broadcast a non-broadcast typu OSPF sítě. Jeho úkolem je návazat se všemi ostatními routery v subnetě Full adjacency.</p>
                 <p>To je dáno tím, že v broadcast a non-broadcast typu sítě spolu DROther routery v subnetě nenavazují full adjacency (Tím se zlepší LSA flooding ), ale pouze dojdou do 2-way stavu a vyměnují si LSA pouze s DR a BDR  přes multicast adresu 224.0.0.6.</p>
                 <p>BDR je router, který slouží jako případný náhradník v případě, že link bude nějak přerušen, vypadlý, manuálně vypnutý nebo bude celá OSPF činnost restartována.</p>
-                <section id="DR&BDR_Election">
+                <section id="DR&BDR_Election" class="subSection">
                     <h5>Volba DR & BDR</h5>
                     <p>Role DR a BDR se v subnetě určují pomocí: </p>
                     <ul>
@@ -239,7 +239,7 @@
         <p>Pro svoji velkou náročnost ve větších sítích byly vyvinuty tzv <b>OSPF Areas</b>.</p>
         <p>OSPF Areas nám topologii rozdělí na menší části, který mají totožnou LSDB.</p>
         <p>To má za následek menší vytížení CPU a paměti na routerech.</p>
-        <section id="AreaPros">
+        <section id="AreaPros" class="subSection">
             <h4>Výhody Areas</h4>
             <ul>
                 <li class="req">Nižší spotřeba CPU</li>
@@ -251,13 +251,13 @@
             <h4>Základní OSPF Area Terminologie</h4>
             <img src="../static/styles/images/Routing/OSPFAREA.png" alt="OSPFarea" class="configImage">
             <ul>
-                <li class="req">Area Border Router (ABR) - Router, jehož jeden interface je připojený k backbone area a druhý k nonbackbone area</li>
-                <li class="req">Backbone router - router, který je připojený v backbone area (sem se počítají i ABR)</li>
-                <li class="req">Internal router - router, jehož interface se nachází v jedné nonbackbone area</li>
-                <li class="req">Area - skupina routerů, které sdílí stejnou LSDB</li>
-                <li class="req">Backbone area - speciální typ, area ke které musí být připojený všechny ostatní OSPF area</li>
-                <li class="req">Intra-area route - route, která má cíl ve stejné area jako router</li>
-                <li class="req">Interarea route - route, která má cíl v jiné area než je router</li>
+                <li class="req"><b>Area Border Router (ABR)</b> - Router, jehož jeden interface je připojený k backbone area a druhý k nonbackbone area</li>
+                <li class="req"><b>Backbone router</b> - router, který je připojený v backbone area (sem se počítají i ABR)</li>
+                <li class="req"><b>Internal router</b> - router, jehož interface se nachází v jedné nonbackbone area</li>
+                <li class="req"><b>Area</b> - skupina routerů, které sdílí stejnou LSDB</li>
+                <li class="req"><b>Backbone area</b> - speciální typ, area ke které musí být připojený všechny ostatní OSPF area</li>
+                <li class="req"><b>Intra-area route</b> - route, která má cíl ve stejné area jako router</li>
+                <li class="req"><b>Interarea route</b> - route, která má cíl v jiné area než je router</li>
             </ul>
         </section>
         <section id="AreaCost" class="subSection">
