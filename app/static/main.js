@@ -1,11 +1,13 @@
 
 let scriptos_content = document.querySelector('#main');
 let vlan = document.querySelector('#vlan');
+let stp = document.querySelector('#stp');
 let rip = document.querySelector('#rip');
 let uvodRouting = document.querySelector('#uvodRouting');
 let eigrp = document.querySelector('#eigrp');
 let ospf = document.querySelector('#ospf');
 let bgp = document.querySelector('#bgp');
+let ipv6 = document.querySelector('#ipv6');
 let sshTelnet = document.querySelector('#sshTelnet');
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');

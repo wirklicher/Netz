@@ -113,7 +113,7 @@ main h1 {
   overflow: hidden;
   transition: max-height 0.3s;
   max-height: 0;
-  padding-left: 1em;
+  padding-left: 3.7em;
 }
 
 .submenu a {
