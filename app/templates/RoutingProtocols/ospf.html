@@ -15,7 +15,7 @@
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
-            <li class="req">Umět nakonfigurovat s spravovat single area OSPFv2</li>
+            <li class="req">Umět nakonfigurovat a spravovat single area OSPFv2</li>
             <li class="req">Neighbor adjacencies</li>
             <li class="req">Point-to-point</li>
             <li class="req">Broadcast (DR/BDR selection)</li>
@@ -25,9 +25,9 @@
     <section id="uvod">
         <h3 id="problematika">Úvod do OSPF</h3>
         <p>OSPF je jeden z link-state IGP protokolů, je postaven na Dijskra algoritmu a za dobu jeho existence vyšly 3 verze, přičemž 2. je v rámci IPv4 nejpoužívanější.</p>
-        <p>Pro zopakování link-state protokoly fungují tak, že všechny směrovače sdílí informace na všechny ostatní směrovače a společně si postaví mapu sítě (Oproti distance-vector protokolům, kde směrovač tyto údaje poskytne pouze sousedícím směrovačům).</p>
+        <p>Link-state protokoly fungují tak, že všechny směrovače sdílí informace na všechny ostatní směrovače a společně si staví mapu sítě (Oproti distance-vector protokolům, kde směrovač tyto údaje poskytne pouze sousedícím směrovačům).</p>
         <p>Jeho administrative distance je <b>110</b>.</p>
-        <p>Používá multicastovou adresu 224.0.0.5 pro posílání zpráv mezi OSPF routery (pokud v síti není DR/BDR).</p>
+        <p>Používá multicastovou adresu 224.0.0.5 pro posílání zpráv mezi OSPF směrovači (pokud v síti není DR/BDR).</p>
     </section>
     <section id="OSPFproces">
         <h3>OSPF proces</h3>
@@ -39,15 +39,15 @@
         </ul>
 
         <section id="BecomingNeighbors" class="subSection">
-            <h4>Vytvoření sousedského vztahu</h4>
+            <h4>Navázání sousedského vztahu (Becoming Neighbors)</h4>
             <p>Za OSPF sousedy jsou považovány ty směrovače, které splňují následujicí podmínky: </p>
             <ul>
-                <li class="req">Musí být ve stejné area</li>
-                <li class="req">Musí být ve stejné subnet</li>
+                <li class="req">Musí být ve stejné oblasti</li>
+                <li class="req">Musí být ve stejné subnetě</li>
                 <li class="req">OSPF nesmí být na daném interface vypnutý</li>
                 <li class="req">Router-id musí být unikátní</li>
                 <li class="req">Timers (hello & dead) musí být shodný</li>
-                <li class="req">Autentizace musí sedět</li>
+                <li class="req">Autentizace musí být shodná</li>
                 <li class="req">IP MTU musí být shodné</li>
                 <li class="req">OSPF Network typ musí být shodný</li>
             </ul>
@@ -68,7 +68,7 @@
             </section>
             <section id="InitState" class="subSection">
                 <h5>Init State</h5>
-                <p>Jestliže sousedícímu routeru přijde OSPF hello message a odpoví na ní ACK, nalézáme se v Init části Becoming Neighbors procesu.</p>
+                <p>Jestliže sousednímu routeru přijde OSPF hello message a odpoví na ní ACK, nalézáme se v Init části becoming Neighbors procesu.</p>
             </section>
             <section id="2WayState" class="subSection">
                 <h5>2-way State</h5>
@@ -78,38 +78,38 @@
         </section>
         <section id="ExchangeDatabases" class="subSection">
             <h4>Výměna databází</h4>
-            <p>V této části procesu je hlavní výměna informací, které se nacházejí v jejich směrovací tabulce.</p>
+            <p>V této části procesu nastává hlavní výměna informací, které se nacházejí v jejich směrovací tabulce.</p>
             <section id="ExstartState" class="subSection">
                 <h5>Exstart State</h5>
-                <p>OSPF routery si v tomto stavu chtějí začínají vyměňovat informace o jejich LSDB (Link-State Database).</p>
-                <p>K tomu musí ale někdo začít - nastává volba MASTER-SLAVE.</p>
+                <p>OSPF routery si v tomto stavu chtějí začínat vyměňovat informace o jejich LSDB (Link-State Database).</p>
+                <p>K tomu ale někdo musí začít - nastává volba MASTER-SLAVE.</p>
                 <p><b>Masterem</b> se stává OSPF router, který má větší router-id, ten s menší RID se stává <b>Slave</b>.</p>
                 <p>Master poté zahajuje výměnu.</p>
             </section>
             <section id="ExchangeState" class="subSection">
                 <h5>Exchange State</h5>
                 <p>Routery si v tomto stavu vyměňují DBD (Database Descriptions), který obsahuje list hlavičky LSA (Link-State Advertisment, obsahuje informace o subnetech, které router zná a je k ním přímo připojený.) v jejich LSDB.</p>
-                <p>Druhý router toto porovná se svými LSA a v případě chybějícího záznamu po druhém routeru žádá o jeho zaslání.</p>
+                <p>Druhý router tohle porovná se svými LSA a v případě chybějícího záznamu po druhém routeru žádá o jeho zaslání.</p>
             </section>
             <section id="LoadingState" class="subSection">
                 <h5>Loading State</h5>
                 <p>Chybějící záznamy jsou zaslány v podobě LSU (Link-State Update).</p>
-                <p>Jakmile routeru tyto chybějící záznamy přijdou potvrdí odesílacímu routeru pomocí LSAck zprávy, že chybějící záznamy obdržel.</p>
+                <p>Jakmile routeru tyto chybějící záznamy přijdou, potvrdí odesílacímu routeru pomocí LSAck zprávy, že chybějící záznamy obdržel.</p>
             </section>
         </section>
         <section id="AddingTheBestRoute" class="subSection">
             <h4>Přidání nejlepší cesty</h4>
-            <p>V tuto chvíli se router nachází ve <b>Full</b> state, což znamená, že všechny routery v jedné OSPF area mají stejnou LSDB.</p>
-            <p>I když mají identické LSDB stále si posílají Hello pakety, přičemž pokaždé, když tuto zprávu obdrží, vyresetuje se dead timer (40s default).</p>
-            <p>Jakmile je tento dead timer na 0, sousedský vztah je anulován.</p>
+            <p>V tuto chvíli se router nachází ve <b>Full</b> state, což znamená, že všechny routery v jedné OSPF oblasti mají stejnou LSDB.</p>
+            <p>I když mají identické LSDB stále si posílají Hello pakety, přičemž pokaždé, když tuto zprávu obdrží, vyresetuje se dead timer (běžně 40s).</p>
+            <p>Jakmile je tento dead timer na 0, sousedský vztah je zrušen.</p>
             <p>V případě změny v síti si zašlou LSU, aby měli stejnou LSDB.</p>
             <section id="OSPFCost" class="subSection">
                 <h5>OSPF Cost</h5>
-                <p>V tuto chvíli, když má router všechna dostupná data, si spočíta OSPF cost a určí nejlepší cestu do dostupných subnet.</p>
+                <p>V tuto chvíli, když má router všechna dostupná data, si spočítá OSPF cost a určí nejlepší cestu do dostupných subnet.</p>
                 <p>OSPF Cost se určuje dle bandwidth.</p>
                 <p>Celkový vzoreček je: </p>
                 <pre>COST = reference_bandwidth / interface_bandwidth </pre>
-                <p><b>Reference bandwidth</b> je defaultně 100mbps, ale lze přenastavit.</p>
+                <p><b>Reference bandwidth</b> je defaultně 100mbps, ale je možné to přenastavit.</p>
                 <pre>router(config-router)#auto-cost reference-bandwidth {*mbps}</pre>
                 <p>*Pro co největší efektivitu by tato hodnota měla být vyšší než bandwidth nejrychlejšího linku.</p>
                 <p>OSPF Cost lze nastavit i manuálně pomocí příkazu: </p>
@@ -131,21 +131,21 @@
     <section id="NetworkTypes">
         <h3>OSPF Network Types</h3>
         <p>U OSPF se také určují tzv. Network Types, který ovlivňují celý chod OSPF procesu.</p>
-        <p>OSPF Network type jde manuálně nastavit nicméně toto z vlastní zkušenosti nedoporučuji, protože si tím můžete poškodit celé ospf nastavení.</p>
+        <p>OSPF Network type jde manuálně nastavit nicméně toto z vlastní zkušenosti nedoporučuji, protože tím můžete ohrozit fungování OSPF.</p>
         <pre>Router(config-if)#ip ospf network {type}</pre>
-        <p>OSPF Network Type nám například říká zda se dynamicky hledat OSPF sousedy nebo zda se bude vybírat designated router (DR) a backup desiganed router (BDR).</p>
+        <p>OSPF Network Type nám například říká, zda se dynamicky hledají OSPF sousedy nebo zda se bude vybírat designated router (DR) a backup desiganed router (BDR).</p>
         <section id="BroadcastType" class="subSection">
             <h4>Broadcast Type</h4>
             <p>Tento typ je standardně na Ethernet a FDDI interfacích.</p>
             <p>U tohoto typu jsou OSPF sousedi dynamicky nalezeni.</p>
-            <p>U Broadcast typu se volí designated a backup designated routers (DR & BDR).</p>
+            <p>U Broadcast typu se volí designated a backup designated routery (DR & BDR).</p>
             <section id="DR&BDR" class="subSection">
                 <h5>DR & BDR</h5>
                 <p>V broadcast a non-broadcast OSPF sítích se setkáte s pojmy DR, BDR a DROther.</p>
                 <p>Routerům, který se nestaly ani DR či BDR, se přezdívá DROther.</p>
                 <p>DR (Designated router) je router, který se objevuje v broadcast a non-broadcast typu OSPF sítě. Jeho úkolem je návazat se všemi ostatními routery v subnetě Full adjacency.</p>
-                <p>To je dáno tím, že v broadcast a non-broadcast typu sítě spolu DROther routery v subnetě nenavazují full adjacency (Tím se zlepší LSA flooding ), ale pouze dojdou do 2-way stavu a vyměnují si LSA pouze s DR a BDR  přes multicast adresu 224.0.0.6.</p>
-                <p>BDR je router, který slouží jako případný náhradník v případě, že link bude nějak přerušen, vypadlý, manuálně vypnutý nebo bude celá OSPF činnost restartována.</p>
+                <p>To je dáno tím, že v broadcast a non-broadcast typu sítě spolu DROther v subnetě nenavazují full adjacency (Tím se zlepší LSA flooding ), ale pouze dojdou do 2-way stavu a vyměnují si LSA pouze s DR a BDR  přes multicast adresu 224.0.0.6.</p>
+                <p>BDR je router, který slouží jako případný náhradník v případě, že link bude nějak přerušen či manuálně vypnutý nebo bude celá OSPF činnost restartována.</p>
                 <section id="DR&BDR_Election" class="subSection">
                     <h5>Volba DR & BDR</h5>
                     <p>Role DR a BDR se v subnetě určují pomocí: </p>
@@ -154,8 +154,8 @@
                         <li class="req">pomocí nejvyšší OSPF router-id</li>
                     </ul>
                     <p>Router s 1. místem v subnetě získává roli DR, router s 2. místem získává BDR roli a všechny zbylí routery v subnetě získávají roli DROther.</p>
-                    <p>V případě že proces OSPF byl restartován a OSPF priority či router-id byly změněny DR se <b>NESTÁVÁ</b> router, který má nyní nejvyšší OSPF priority či router-id ale stává se jím bývalý BDR. Router s nynější nejvyšší priority či router-id se stává BDR.</p>
-                    <p>Když se stane že v subnet je pouze 1 ospf router, tak automaticky získává DR roli pro danou subnetu.</p>
+                    <p>V případě že proces OSPF byl restartován a OSPF priority či router-id byly změněny, DR se <b>NESTÁVÁ</b> router, který má nyní nejvyšší OSPF priority či router-id ale stává se jím bývalý BDR. Router s nynější nejvyšší priority či router-id se stává BDR.</p>
+                    <p>Když se stane, že v subnetě je pouze 1 OSPF router, tak automaticky získává DR roli pro danou subnetu.</p>
                 </section>
             </section>
         </section>
@@ -166,7 +166,7 @@
         </section>
         <section id="NonBroadcastType" class="subSection">
             <h4>Non-Broadcast Type</h4>
-            <p>Tento typ nemá dynamické objevení OSPF sousedů.</p>
+            <p>Tento typ dynamicky nehledá OSPF sousedy.</p>
             <p>Je zde přítomno DR a BDR.</p>
         </section>
         <section id="PrehledOSPFTypes" class="subSection">
@@ -235,44 +235,44 @@
         </table>
     </section>
     <section id="OSPFArea">
-        <h3>OSPF Area</h3>
-        <p>Pro svoji velkou náročnost ve větších sítích byly vyvinuty tzv <b>OSPF Areas</b>.</p>
-        <p>OSPF Areas nám topologii rozdělí na menší části, který mají totožnou LSDB.</p>
+        <h3>OSPF (area) oblasti</h3>
+        <p>Pro svoji velkou náročnost ve větších sítích byly vyvinuty tzv <b>OSPF oblasti</b>.</p>
+        <p>Ty nám topologii rozdělí na menší části, který mají totožnou LSDB.</p>
         <p>To má za následek menší vytížení CPU a paměti na routerech.</p>
         <section id="AreaPros" class="subSection">
-            <h4>Výhody Areas</h4>
+            <h4>Výhody oblastí</h4>
             <ul>
                 <li class="req">Nižší spotřeba CPU</li>
                 <li class="req">Je potřeba méně paměti</li>
-                <li class="req">Změna v síti potřebuje rekalkulaci SPF pouze na routerech v dané area, kde se něco změnilo</li>
+                <li class="req">Změna v síti potřebuje rekalkulaci SPF pouze na routerech v dané oblasti, kde se něco změnilo</li>
             </ul>
         </section>
         <section id="OSPFAreaTerminology" class="subSection">
-            <h4>Základní OSPF Area Terminologie</h4>
+            <h4>Základní OSPF area Terminologie</h4>
             <img src="../static/styles/images/Routing/OSPFAREA.png" alt="OSPFarea" class="configImage">
             <ul>
-                <li class="req"><b>Area Border Router (ABR)</b> - Router, jehož jeden interface je připojený k backbone area a druhý k nonbackbone area</li>
-                <li class="req"><b>Backbone router</b> - router, který je připojený v backbone area (sem se počítají i ABR)</li>
-                <li class="req"><b>Internal router</b> - router, jehož interface se nachází v jedné nonbackbone area</li>
-                <li class="req"><b>Area</b> - skupina routerů, které sdílí stejnou LSDB</li>
-                <li class="req"><b>Backbone area</b> - speciální typ, area ke které musí být připojený všechny ostatní OSPF area</li>
-                <li class="req"><b>Intra-area route</b> - route, která má cíl ve stejné area jako router</li>
-                <li class="req"><b>Interarea route</b> - route, která má cíl v jiné area než je router</li>
+                <li class="req"><b>Area Border Router (ABR)</b> - Router, jehož jeden interface je připojený k backbone oblasti a druhý k nonbackbone oblasti</li>
+                <li class="req"><b>Backbone router</b> - router, který je připojený v backbone oblasti (sem se počítají i ABR)</li>
+                <li class="req"><b>Internal router</b> - router, jehož interface se nachází v jedné nonbackbone oblasti</li>
+                <li class="req"><b>Area/Oblast</b> - skupina routerů, které sdílí stejnou LSDB</li>
+                <li class="req"><b>Backbone area</b> - speciální typ, oblast, ke které musí být připojený všechny ostatní OSPF oblasti</li>
+                <li class="req"><b>Intra-area route</b> - route, která má cíl ve stejné oblasti jako router</li>
+                <li class="req"><b>Interarea route</b> - route, která má cíl v jiné oblasti než je router</li>
             </ul>
         </section>
         <section id="AreaCost" class="subSection">
-            <h4>Jak areas vlastně zmenší vytížení?</h4>
-            <p>SPF (algoritmus) většinu času stráví tím, že zpracovává všechny detaily o síťové topologii (hlavně informace o routerech a lincích). Podle těchto informací se snaží určit nejlepší cestu do subnet.</p>
-            <p>Areas tento čas zredukují tím, že detailně jsou v LSDB obsaženy jen ty routery a linky v rámci té area.</p>
-            <p>I Když má LSDB díky areas míň informací o sítích mimo areu stále musí mít routes do všech subnet v rámci ospf.</p>
-            <p>OSPFv2 tento problém řeší tak, že o sítích v jiné area poskytne pouze stručné shrnutí. Tyto speciální LSA neobsahují tak detailní informace o topologii ale v podstatě jen subnet ID  a mask.</p>
-            <p>Díky tomu tyto LSA nepotřebují tolik času na zpracování, místo toho v rámci area se tyto subnety z jiných area objeví pod připojením k ABR.</p>
+            <h4>Jak oblasti vlastně zmenšují vytížení?</h4>
+            <p>SPF (algoritmus) většinu času stráví tím, že zpracovává všechny detaily o síťové topologii (hlavně informace o routerech a lincích). Podle těchto informací se snaží určit nejlepší cestu do jednotlivých subnet.</p>
+            <p>Oblasti tento čas zredukují tím, že detailně jsou v LSDB obsaženy jen ty routery a linky v rámci té oblasti.</p>
+            <p>I když má LSDB díky oblastem míň informací o sítích mimo oblast, stále musí mít routes do všech subnet v rámci OSPF.</p>
+            <p>OSPFv2 tento problém řeší tak, že o sítích v jiné oblasti poskytne pouze stručné shrnutí. Tyto speciální LSA neobsahují tak detailní informace o topologii ale v podstatě jen subnet ID a subnet mask.</p>
+            <p>Díky tomu tyto LSA nepotřebují tolik času na zpracování, místo toho v rámci oblasti se tyto subnety z jiných oblastí objeví pod připojením k ABR.</p>
         </section>
         <section id="LSATypes" class="subSection">
-            <h4>Přehled LSA Types</h4>
+            <h4>Přehled LSA Typů</h4>
             <section id="RouterLSA" class="subSection">
                 <h5>TYP 1 - Router LSA</h5>
-                <p>Tento typ je generován každým ospf routerem.</p>
+                <p>Tento typ je generován každým OSPF routerem.</p>
                 <p>Identifikuje router a sítě připojené k routeru, přičemž obsahuje RID, interface, IP adresy a status interfacu.</p>
                 <p>Posílají se pouze uvnitř area.</p>
             </section>
@@ -298,14 +298,14 @@
             <section id="ExternalLSA" class="subSection">
                 <h5>TYP 5 - External LSA</h5>
                 <p>Je generován taktéž pomocí ASBR (Autonomous system boundary router).</p>
-                <p>Tento typ propaguje routy, které byly nainportovány do ospf sítě pomocí jiných routing protokolů.</p>
+                <p>Tento typ propaguje routy, které byly nainportovány do OSPF sítě pomocí jiných routing protokolů.</p>
                 <p>Obsahuje routes, které byly přijaty od ostatních routing protokolů.</p>
             </section>
         </section>
     </section>
     <section id="OSPFConfiguration">
         <h3>Základní OSPF konfigurace</h3>
-        <p>Úkol: Nastav alespoň co se týče základních věcí ospf v této síti: </p>
+        <p>Úkol: Nastav alespoň co se týče základních věcí OSPF v této síti: </p>
         <img src="../static/styles/images/Routing/ZakladniKonfigurace.png" alt="OSPF Konfigurace" class="configImage">
         <p>Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
         <pre>
@@ -323,10 +323,10 @@ R2(config-if)#no shutdown
 R2(config-if)#interface g0/0
 R2(config-if)#ip address 192.168.1.2 255.255.255.252
 R2(config-if)#no shutdown</pre>
-<p>Nyní je třeba nastavit samotné ospf.</p>
-<p>To se dělá pomocí network/ip ospf příkazu, který routeru říká, který interface bude zahrnut v rámci ospf procesu a která area bude jemu přiřazená.</p>
-<p>Příkaz se zadává v ospf módu a ip ospf na interface.</p>
-<p>Network příkaz v ospf módu:</p>
+<p>Nyní je třeba nastavit samotné OSPF.</p>
+<p>To se dělá pomocí network/ip OSPF příkazu, který routeru říká, který interface bude zahrnut v rámci OSPF procesu a která area bude jemu přiřazená.</p>
+<p>Příkaz se zadává v ospf módu a ip OSPF na interface.</p>
+<p>Network příkaz v OSPF módu:</p>
 <pre>
 R1(config)#router ospf 1
 R1(config-router)#network 192.168.1.0 0.0.0.3 area 0
@@ -339,7 +339,7 @@ R2(config-if)#ip ospf 1 area 0
 R2(config)#interface fa0/1
 R2(config-if)#ip ospf 1 area 0
 </pre>
-<p>Dobrou praxí je také nastavit na interfacích fa0/1 na obou routerech pasivní interface - zastavení ospf procesu na těchto interfacích.</p>
+<p>Dobrou praxí je také nastavit na interfacích fa0/1 na obou routerech pasivní interface - zastavení OSPF procesu na těchto interfacích.</p>
 <p>Tento příkaz se zadává v ospf módu.</p>
 <pre>
 R1(config-router)#passive-interface fa0/1
@@ -348,8 +348,8 @@ R1(config-router)#passive-interface fa0/1
 R2(config-router)#passive-interface fa0/1
 </pre>
 <p>Dále můžeme nastavit například autentizaci, ta slouží k tomu, aby daný router neudělal sousedský vztah s kýmkoliv s kým bude tvořit podmínky.</p>
-<p>Tato autentizace může být buď v plaintextu nebo v md5.</p>
-<p>Obecně doporučuji používat spíš tu md5.</p>
+<p>Tato autentizace může být buď v plaintextu nebo v MD5.</p>
+<p>Obecně doporučuji používat spíš tu MD5.</p>
 <p>Nastavení autentizace na R1:</p>
 <pre>
 R1(config)#interface g0/0
@@ -376,7 +376,7 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>router ospf {proccess_id}</th>
-                        <td>Přepnutí do ospf módu</td>
+                        <td>Přepnutí do OSPF módu</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
@@ -396,7 +396,7 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>distance {1-255}</th>
-                        <td>Změní administrative distance ospf</td>
+                        <td>Změní administrative distance OSPF</td>
                         <td>ospf mód</td>
                     </tr>
                     <tr>
@@ -411,12 +411,12 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>ospf cost {1-65535}</th>
-                        <td>Manuálně nastaví ospf cost na daném interface</td>
+                        <td>Manuálně nastaví OSPF cost na daném interface</td>
                         <td>interface</td>
                     </tr>
                     <tr>
                         <td>ip ospf priority {0-255}</th>
-                        <td>Nastaví ospf priority na daném interface</td>
+                        <td>Nastaví OSPF priority na daném interface</td>
                         <td>interface</td>
                     </tr>
                     <tr>
@@ -441,12 +441,12 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>ip ospf message-digest-key {1-255} md5 {slovo}</th>
-                        <td>Nastaví md5 autentizační key</td>
+                        <td>Nastaví MD5 autentizační key</td>
                         <td>interface</td>
                     </tr>
                     <tr>
                         <td>ip ospf authentication message-digest</th>
-                        <td>Nastaví md5 autentizaci (pakliže je správně nastavený message-digest)</td>
+                        <td>Nastaví MD5 autentizaci (pakliže je správně nastavený message-digest)</td>
                         <td>interface</td>
                     </tr>
                     <tr>
@@ -456,7 +456,7 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>ip ospf {process_id} area {area}</th>
-                        <td>Aktivuje ospf na daném interface</td>
+                        <td>Aktivuje OSPF na daném interface</td>
                         <td>interface</td>
                     </tr>
                     <tr>
@@ -466,17 +466,17 @@ R2(config-if)#ip ospf authentication message-digest
                     </tr>
                     <tr>
                         <td>show ip ospf interface {interface}</th>
-                        <td>Zobrazí ospf nastavení na daném interface</td>
+                        <td>Zobrazí OSPF nastavení na daném interface</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
                         <td>show ip ospf neighbor</th>
-                        <td>Zobrazí ospf neighbors</td>
+                        <td>Zobrazí OSPF neighbors</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
                         <td>debug ip ospf {adj | events}</th>
-                        <td>Debugging ospf</td>
+                        <td>Debugging OSPF</td>
                         <td>EXEC</td>
                     </tr>
                     
@@ -487,9 +487,9 @@ R2(config-if)#ip ospf authentication message-digest
     <section id="zaver">
         <h3>Závěr</h3>
         <p>OSPF, momentálně jeden z nejpoužívanějších routing protokolů, je postaven na Dijskra algoritmu.</p>
-        <p>Je postaven na 3 základních procesech - hledání souseda, výměně LSDB, a nalezení nejlepší cesty do cíle.</p>
+        <p>Je postaven na 3 základních procesech - navázání sousedského vztahu, výměně LSDB, a nalezení nejlepší cesty do cíle.</p>
         <p>K nalezení nejlepší cesty do cíle používá bandwidth.</p>
-        <p>Pro větší sítě má OSPF řešení v tzv. areas.</p>
+        <p>Pro větší sítě má OSPF řešení v tzv. oblastech.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

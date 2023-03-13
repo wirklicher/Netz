@@ -61,7 +61,7 @@ if (name_of_page == 'sshTelnet'){
 }
 if (name_of_page == 'stp'){
     MCQS = [{
-        question: "K čemu má stp zabránit?",
+        question: "Čemu má STP zabránit?",
         choice1: "K vytvoření broadcast storm.",
         choice2: "K vytvoření etherchannelu.",
         choice3: "K nastavení IP adres na switchi.",

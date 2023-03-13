@@ -9,13 +9,15 @@ $spacer: 15px;
 }
 
 :root {
+    --menu-color: #07313f;
     --primary-color: white;
     --secondary-color: #db861f;
     --text-color: black;
 }
 
 .dark_mode {
-    --primary-color: #181818;
+    --menu-color: #252525;
+    --primary-color: #121212;
     --secondary-color: #db861f;;
     --text-color: white;
 
@@ -44,7 +46,7 @@ html {
 body {
     font-family: monospace;
     color: var(--text-color);
-    width: 90%;
+    width: calc(100% - 300px);
     margin: auto;
     font-size: 16px;
 }
@@ -222,6 +224,7 @@ pre {
 
 .noBorder {
     padding-bottom:0;
+    z-index: 0;
 }
 .noBorder:before {
     border-bottom: none;

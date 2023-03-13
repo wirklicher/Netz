@@ -4,13 +4,15 @@
 }
 
 :root {
+  --menu-color: #07313f;
   --primary-color: white;
   --secondary-color: #db861f;
   --text-color: black;
 }
 
 .dark_mode {
-  --primary-color: #181818;
+  --menu-color: #252525;
+  --primary-color: #121212;
   --secondary-color: #db861f;
   --text-color: white;
 }
@@ -32,7 +34,7 @@ html {
 body {
   font-family: monospace;
   color: var(--text-color);
-  width: 90%;
+  width: calc(100% - 300px);
   margin: auto;
   font-size: 16px;
 }
@@ -198,6 +200,7 @@ pre {
 
 .noBorder {
   padding-bottom: 0;
+  z-index: 0;
 }
 
 .noBorder:before {
@@ -244,7 +247,6 @@ pre {
   background-color: #07313f;
   color: #F1F1E6;
   border-radius: 10px;
-  min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
@@ -449,7 +451,6 @@ pre {
   font-size: 1.5em;
   border-top-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
-  min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
@@ -485,7 +486,6 @@ pre {
 .configImage {
   width: 100%;
   min-width: 300px;
-  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }

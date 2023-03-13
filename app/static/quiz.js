@@ -126,8 +126,8 @@ play.addEventListener('click', ()=>{
         opt3.innerText = MCQS[index].choice3;
         opt4.innerText = MCQS[index].choice4;
 
-        //console.log(MCQS[index].question);
-        //console.log(questText);
+        console.log(MCQS[index].choice1);
+        console.log(questText);
     
         timer = 0;
     }

@@ -71,7 +71,7 @@ body {
 .nav {
     left: 0;
     position: fixed;
-    background-color: #07313f;
+    background-color: var(--menu-color);
     width: 264px;
     height: 100vh;
     flex: 1;
@@ -81,7 +81,7 @@ body {
     font-weight: 400;
     overflow: auto;
     text-align: center;
-    min-width: 250px;
+    min-width: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
