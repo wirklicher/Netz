@@ -65,6 +65,11 @@ bgp.addEventListener('click', () => {
     name_of_page = 'bgp';
 })
 
+ipv6.addEventListener('click', () => {
+    $('main').load('ipv6.html');
+    name_of_page = 'ipv6';
+})
+
 let stpArray = document.querySelectorAll(".stp");
 
 

@@ -11,9 +11,64 @@
 <body>
     <h1>BGP - Border Gateway Protocol</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy směrování, alespoň 1 IGP protokol</h5>
     <section id="uvod">
-        <h3 id="problematika">Úvod do problematiky</h3>
+        <h3>Úvod do BGP</h3>
+        <p>BGP nebo-li Border Gateway Protokol, je protokol, který se používá tehdy, když se směrovat mezi autonomními systémy.</p>
+        <p>Patří do skupiny EGP - Enterior Gateway Protocol, která se dále "dělí" do skupiny Path-Vector. Tento typ protokolů funguje podobně jako Distance-Vector, rozdíl je v tom že distance-vector protokol sebou nenese celou cestu až k cíli.</p>
+        <p>Př:</p>
+        <img src="../static/styles/images/Routing/BGP_PathVector.png" alt="Path Vector" class="configImage">
+        <i>Obrázek poukazuje na funkčnost Path-Vector protokolů, kdy BGP má přesně definovaný cíl a cestu kudy k němu, čímž i zabraňuje smyčkám.</i>
+        <section id="AS" class="subSection">
+            <h4>Autonomní systém</h4>
+            <p>Autonomní systém je typicky síť, která je pod správou jedné organizace, příkladem může být Váš ISP, univerzita, či vládní instituce.</p>
+            <p>Tato síť je charakterizovaná pomocí Autonomous System Number (ASN), přičemž přidělení tohoto čísla má na starosti IANA.</p>
+            <p>ASN je nyní 32bitové číslo.</p>
+            <p>Ještě existuje rozsah privátních ASN, přičemž těmito ASN se nelze připojit na internet.</p>
+        </section>
+        <section id="Princip" class="subSection">
+            <h4>Princip BGP</h4>
+            <p>BGP funguje podobně jako OSPF a EIGRP na principu sousedství s tím rozdílem, že BGP tyto sousedské vazby aktivně nevyhledává a musí se nakonfigurovat staticky.</p>
+            <p>Mezi těmito sousedy BGP vytvoří TCP spojení (port <b>179</b>) a začne na ně posílat NLRI (Network Layer Reachability Information), což je sada informací skládajicí se například z network prefix, prefix length a BGP PA (Path Attributes).</p>
+            <p>K tomu, aby BGP vybralo nejlepší cestu do cíle využívá tzv. Path Attributes, které poté popořadě prohodnocuje.</p>
+            <section id="PA" class="subSection">
+                <h5>Path Attributes</h5>
+                <p>Path Attributes se dělí z hlediska toho zda-li musí být uznávany ve všech BGP implementacích, z hlediska toho zda se uplatňují pouze v nějakém úseku cesty a z hlediska toho zda můžou či musí být v NLRI.</p>
+                <ul>
+                    <li class="req"><b>Well-known mandatory</b> - základní PA, musí být ve všech BGP implementacích</li>
+                    <li class="req"><b>Well-known discetionary</b> - základní PA, nemusí být ale obsažená v NLRI</li>
+                    <li class="req"><b>Optional transitive</b> - nemusí být uznávaný v každé BGP implementaci a zůstává přes AS</li>
+                    <li class="req"><b>Optional non-transitive</b> - nemusí být uznávaný v každé BGP implementaci a nemusí zůstat přes AS</li>
+                </ul>
+
+                <p>Mezi základní PA patří:</p>
+
+                <ul>
+                    <li class="req"><b>Weight</b> - Cisco proprietární, BGP vybere tu cestu, která má tuto hodnotu nejvyšší, základní hodnota je 0.</li>
+                    <li class="req"><b>Local Preference</b> - používá se v rámci autonomního systému, je preferovaný vyšší, základní hodnota je 100.</li>
+                    <li class="req"><b>Originate</b> - router preferuje síť se kterou má přímé spojení</li>
+                    <li class="req"><b>AS Path Length</b> - router preferuje co nejkratší cestu</li>
+                    <li class="req"><b>Origin code</b> - router preferuje co nejnižší origin code - origin code nám říka zdroj dané cesty (Jsou 3 možné - IGP - i, EGP - e a Incomplete - ?)</li>
+                    <li class="req"><b>MED - MultiExit Discriminator</b> - router preferuje co nejnižší MED, MED se mezi AS mění a informuje ostatní AS jak by se měli do daného AS dostat.</li>
+                    <li class="req"><b>Paths</b> - router preferuje cesty od eBGP než od iBGP</li>
+                    <li class="req"><b>Oldest Path</b> - router preferuje tu cestu, kterou měl jako první</li>
+                    <li class="req"><b>Router ID</b> - router preferuje cestu která vede k sousedovi s nejnižším router ID</li>
+                    <li class="req"><b>IP adresa souseda</b> - router preferuje tu cestu, která vede k sousedovi s co nejnižší IP adresou</li>
+                </ul>
+            </section>
+            <section id="BGPtypes" class="subSection">
+                <h4>Druhy BGP</h4>
+                <p>BGP má 2 různé verze - </p>
+                <ul>
+                    <li class="req"><b>eBGP</b> - external BGP - klasické BGP - směruje mezi AS, jeho AD je 20 --> velmi preferovaný</li>
+                    <li class="req"><b>iBGP</b> - internal BGP - směruje v rámci 1 AS, jeho AD je 200 --> velmi nespolehlivý</li>
+                </ul>
+            </section>
+            <section id="NeighborStates" class="subSection">
+                <h4>Tvorba sousedských spojení</h4>
+            </section>
+        </section>
+    </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div class="overflowTable">
