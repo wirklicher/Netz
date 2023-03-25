@@ -58,16 +58,80 @@
             </section>
             <section id="BGPtypes" class="subSection">
                 <h4>Druhy BGP</h4>
-                <p>BGP má 2 různé verze - </p>
+                <p>BGP má 2 různé módy - </p>
                 <ul>
                     <li class="req"><b>eBGP</b> - external BGP - klasické BGP - směruje mezi AS, jeho AD je 20 --> velmi preferovaný</li>
-                    <li class="req"><b>iBGP</b> - internal BGP - směruje v rámci 1 AS, jeho AD je 200 --> velmi nespolehlivý</li>
+                    <li class="req"><b>iBGP</b> - internal BGP - distribujuje routy, které se dozvěděl od eBGP v AS, jeho AD je 200 --> velmi nespolehlivý</li>
+                </ul>
+            </section>
+            <section id="BGPMessages" class="subSection">
+                <h4>Přehled BGP zpráv</h4>
+                <ul>
+                    <li class="req"><b>Open</b> - zpráva, která se používá během zahajování BGP sousedství, obsahuje např. BGP verzi, ASN zahajujicího routeru, časovač (Holdtime - 180s)</li>
+                    <li class="req"><b>Keepalive</b> - zpráva, která znemožňuje vypršení časovače.</li>
+                    <li class="req"><b>Update</b> - zpráva, která obsahuje informaci o nějaké změně</li>
+                    <li class="req"><b>Notification Update</b> - zpráva, která obsahuje chybovou hlášku</li>
                 </ul>
             </section>
             <section id="NeighborStates" class="subSection">
-                <h4>Tvorba sousedských spojení</h4>
+                <h4>Vznik sousedského spojení</h4>
+                <p>Podobně jako u OSPF si BGP routery musí projít určitými stádii předtím než vznikne jejich spojení.</p>
+                <section id="Idle" class="subSection">
+                    <h5>Idle</h5>
+                    <p>Úplně první stádium. BGP čeká na impuls. Ten nastává tehdy když někdo nakonfiguruje nového BGP souseda nebo tehdy když je BGP vyresetováno.</p>
+                </section>
+                <section id="Connect" class="subSection">
+                    <h5>Connect</h5>
+                    <p>Během connect stádia BGP čeká na dokončení TCP three-way handshaku (port <b> 179</b> ). Jestliže toto proběhne bez jakýchkoliv potíží BGP přejde rovnou do OpenSent stádia, pakliže nastal problém přejde do Active stádia.</p>
+                </section>
+                <section id="Active" class="subSection">
+                    <h5>Active</h5>
+                    <p>V tomto stádiu se BGP snaží znovu dokončit TCP three-way handshake, pakliže neuspěje tak se BGP přesune zpět do Idle stádia.</p>
+                </section>
+                <section id="OpenSent" class="subSection">
+                    <h5>OpenSent</h5>
+                    <p>BGP čeká na to až dostane open zprávu, která obsahuje všechny důležitý informace o BGP protějšku.</p>
+                    <p>Pakliže je toto úspěšné začne potenciálnímu sousedovi posílat keepalive zprávy.</p>
+                </section>
+                <section id="OpenConfirm" class="subSection">
+                    <h5>OpenConfirm</h5>
+                    <p>BGP čeká na keepalive zprávy od souseda.</p>
+                    <p>Při jejich obdržení je proces dokončen a přesune se do konečného stádia.</p>
+                </section>
+                <section id="Established" class="subSection">
+                    <h5>Established</h5>
+                    <p>Sousedské spojení bylo úspěšně vytvořeno a nyní už se posílají pouze UPDATE a KEEPALIVE zprávy, přičemž pokaždé když BGP router tuto zprávu dostane vyresetuje svůj timer.</p>
+                </section>
             </section>
         </section>
+    </section>
+    <section id="config">
+        <h3>Základní konfigurace</h3>
+        <p>Nakonfiguruj BGP mezi AS 65100 a 65200: </p>
+        <img src="../static/styles/images/Routing/BGP_Konfigurace.png" alt="" class="configImage">
+        <p>Nejdřív přejdeme do BGP módu: </p>
+        <pre>R1(config)#router bgp 65100</pre>
+        <p>Teď staticky identifikujeme souseda</p>
+        <pre>R1(config-router)#neighbor 198.169.0.2 remote-AS 65200</pre>
+        <p>A definujeme které sítě má BGP propagovat </p>
+        <pre>R1(config-router)#network 192.168.1.0 mask 255.255.255.0</pre>
+        <p>To samé zopakujeme i na druhém routeru: </p>
+        <pre>R2(config)#router bgp 65200
+R2(config-router)#neighbor 198.169.0.1 remote-AS 65100
+R2(config-router)#network 192.168.2.0 mask 255.255.255.0
+</pre>
+        <p>Nakonfigurovat můžeme například i specifické router-id:</p>
+        <pre>R1(config-router)#bgp router-id 1.1.1.1</pre>
+        <pre>R2(config-router)#bgp router-id 2.2.2.2</pre>
+
+        <p>Pro troubleshooting pak například můžeme použít následujicí příkazy: </p>
+        <pre>R1#show ip bgp</pre>
+        <p>Tento příklad vypíše základní informace o BGP v síti, z příkazu jdou zjistit BGP verze, PA, propagované sítě a router-id.</p>
+        <pre>R1#show ip bgp summary</pre>
+        <p>Vypíše shrnutí bgp na routeru.</p>
+        <pre>R1#show ip bgp neighbors</pre>
+        <pre>Vypíše veškeré informace o BGP sousedovi.</pre>
+        <p>Základní konfiguraci si můžete vyzkoušet <a href="../Labs/Routing/BGP_Zaklady.pka">zde</a>.</p>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -79,72 +143,37 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>router bgp {ASN}</th>
+                        <td>přepne do bgp módu</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
+                        <td>neighbor {IP} remote-AS {ASN}</td>
+                        <td>určí souseda</td>
+                        <td>Config-Router</td>
                     </tr>
                     <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
+                        <td>network {NET_ID} mask {mask}</th>
+                        <td>propaguje specifikovanou síť</td>
+                        <td>Config-Router</td>
                     </tr>
                     <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
+                        <td>bgp router-id {R_ID}</th>
+                        <td>nastaví specifické router-id</td>
+                        <td>Config-Router</td>
                     </tr>
                     <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
+                        <td>show ip bgp</td>
                         <td>Zobrazí informace o truncích</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
+                        <td>show ip bgp summary</td>
                         <td>Zobrazí informace o VLAN</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
+                        <td>show ip bgp neighbors</td>
                         <td>Zobrazí informace o VTP</td>
                         <td>EXEC</td>
                     </tr>
@@ -154,6 +183,11 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>BGP je v dnešní době jediný používaný EGP protokol, který je velmi důležitý k fungování internetu.</p>
+        <p>Funguje na tom principu, že se autonomnímu systému přidělí identifikátor ASN, pomocí toho identifikátoru a IP adresy souseda pak síťař manuálně určí souseda.</p>
+        <p>Podstatné také je, že k tomu, aby BGP fungovalo správně musí mezi sousedy vznikout TCP spojení na portu <b>179</b>.</p>
+        <p>K vybrání nejlepší cesty do sítě používá tzv. Path Attributes.</p>
+        <p>BGP má 2 módy - eBGP - funguje mezi ASN a iBGP - funguje v rámci 1 AS a jeho cílem je distribuovat eBGP routy.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

@@ -33,8 +33,8 @@ vlan.addEventListener('click', () => {
 })
 
 sshTelnet.addEventListener('click', () => {
-    $('main').load('sshTelnet.html');
-    name_of_page = 'sshTelnet';
+    $('main').load('sshtelnet.html');
+    name_of_page = 'sshtelnet';
 })
 
 stp.addEventListener('click', () => {

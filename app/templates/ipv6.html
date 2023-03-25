@@ -30,6 +30,20 @@
         <p>Jejím účelem je nahradit již zastaralé technologie a omezení, které sebou IPv4 přinesla.</p>
         <p>Ve vývoji je od 90let.</p>
 
+        <section id="header" class="subSection">
+            <h4>Hlavička IPv6</h4>
+            <ul>
+                <li>Version - standardně 6</li>
+                <li>Traffic Class - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
+                <li>Flow Label - 20bitovy, identifikuje specificky traffic flows</li>
+                <li>Payload Length - 16bitu</li>
+                <li>Next Header - 8bitu, typ next headeru (Např TCP či UDP)</li>
+                <li>HOP limit - 8bitu, funguje jako TTL</li>
+                <li>Src. Address - 128bitu</li>
+                <li>Dest. Address - 128bitu</li>
+            </ul>
+        </section>
+
         <section id="Adresace" class="subSection">
             <h4>Adresace</h4>
             <p>IPv6 se tedy zapisuje hexadecimálně (tj. obsahuje i písmenka A-F) a skládá se z 8 skupinek 4 hexadecimálních číslic.</p>
@@ -128,22 +142,148 @@
             <section id="others" class="subSection">
                 <h5>Ostatní unicastové adresy</h5>
                 <p>Další IPv6 unicastové adresy se kterými se můžete v praxi setkat jsou: </p>
-                <li class="req">Neznámá IPv6 adresa - :: - používá se tehdy, kdy host ještě nemá nastavenou IPv6 adresu či když s ní má problémy.</li>
-                <li class="req">Loopback - ::1</li>
+                <li class="req">Neznámá IPv6 adresa - ::/128 - používá se tehdy, kdy host ještě nemá nastavenou IPv6 adresu či když s ní má problémy.</li>
+                <li class="req">Loopback - ::1/128</li>
+                <li class="req">Embedded IPv4 - ::{hex_IPv4}/80 - používá se tam, kde je podpora jak IPv4, tak IPv6</li>
             </section>
             <section id="Multicast" class="subSection">
                 <h5>Multicastová adresace</h5>
                 <p>Multicast je zpráva, která se pošle skupině routerů.</p>
-                <p>IANA ji v rámci IPv6 přiděluje rozsah FF30::/12</p>
+                <p>IANA ji v rámci IPv6 přiděluje rozsah FF00::/12</p>
+                <section id="SpecialMulticast" class="subSection">
+                    <h5>Rozsah multicastových adres</h5>
+                    <div class="overflowTable">
+                        <table>
+                            <tr>
+                                <th>Název</th>
+                                <th>První čtveřice</th>
+                                <th>Význam</th>
+                            </tr>
+                            <tr>
+                                <td>Interface-local</th>
+                                <td>FF01</td>
+                                <td>Paket zůstane v zařízení, používá se interně pro posílání paketům službám běžící na stejném zařízení</td>
+                            </tr>
+                            <tr>
+                                <td>Link-local</td>
+                                <td>FF02</td>
+                                <td>Host, který vytvoří daný paket jej může poslat na link ale routery jej nebudou posílat dál</td>
+                            </tr>
+                            <tr>
+                                <td>Site-local</th>
+                                <td>FF05</td>
+                                <td>Podobný Link-Localu, omezený fyzicky v rámci sítě</td>
+                            </tr>
+                            <tr>
+                                <td>Organization-local</th>
+                                <td>FF08</td>
+                                <td>Širší než Site-Local, v rámci jedné organizace</td>
+                            </tr>
+                            <tr>
+                                <td>Global</td>
+                                <td>FF0E</td>
+                                <td>Nemá žádnou hranici toho, kam lze poslat</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                <section id="LocalMulticastAddress" class="subSection">
+                    <h5>Lokální rozsah multicastových adres</h5>
+                    <div class="overflowTable">
+                        <table>
+                            <tr>
+                                <th>Název</th>
+                                <th>IPv6 Adresa</th>
+                                <th>IPv4 Adresa</th>
+                                <th>Význam</th>
+                            </tr>
+                            <tr>
+                                <td>All-nodes</th>
+                                <td>FF02::1</td>
+                                <td>224.0.0.1</td>
+                                <td>Všechny nody, který mají na interfacu IPv6</td>
+                            </tr>
+                            <tr>
+                                <td>All-routers</td>
+                                <td>FF02::2</td>
+                                <td>224.0.0.2</td>
+                                <td>Všechny routery, který mají na interface IPv6</td>
+                            </tr>
+                            <tr>
+                                <td>All-OSPF</th>
+                                <td>FF02::5</td>
+                                <td>224.0.0.5</td>
+                                <td>Všechny OSPF routery</td>
+                            </tr>
+                            <tr>
+                                <td>All-OSPF DR/BDR</th>
+                                <td>FF02::6</td>
+                                <td>224.0.0.6</td>
+                                <td>Všechny OSPF DR/BDR routery</td>
+                            </tr>
+                            <tr>
+                                <td>RIPng</td>
+                                <td>FF02::9</td>
+                                <td>224.0.0.9</td>
+                                <td>Všechny RIPng routery</td>
+                            </tr>
+                            <tr>
+                                <td>EIGRPv6</td>
+                                <td>FF02::A</td>
+                                <td>224.0.0.10</td>
+                                <td>Všechny EIGRPv6 routery</td>
+                            </tr>
+                            <tr>
+                                <td>DHCP Relay</td>
+                                <td>FF02::1:2</td>
+                                <td>Není</td>
+                                <td>Všechna zařízení, který se chovají jako DHCPv6 relay agent</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                <section id="Solicited-Node" class="subSection">
+                    <h5>Solicited-Node multicastová adresa</h5>
+                    <p>Speciální typ adresy, kterou používá NDP protokol.</p>
+                    <p>Skládá se ze 2 částí: </p>
+                    <ul>
+                        <li class="req">FF02::1:FF00::/104 prefixu</li>
+                        <li class="req">Posledních 6 hexů unicastové adresy</li>
+                    </ul>
+                    <p>Z global unicastové adresy - <b>2001::4512:ACD8</b> - tak bude: </p>
+                    <pre>FF02::1:FF12:ACD8</pre>
+                    <p>Zařízení počítá danou solicited node multicastovou adresu pro každou unicastovou adresu na interfacu.</p>
+                </section>
             </section>
             <section id="Anycast" class="subSection">
                 <h5>Anycast</h5>
-                <p>Anycast je u IPv6 novinkou a znamená pošli zprávu jednomu z mnoha.</p>
+                <p>Anycast je u IPv6 novinkou a znamená pošli zprávu nejbližšímu z dané skupiny (nejbližší je vybrán na základě IPv6 směrovací metriky)</p>
                 <p>Je často spjatá s /128 prefixem, protože routery zpropagují danou host route pouze pro 1 anycastovou adresu.</p>
-                
+                <p>Konfigurace: </p>
+                <pre>R1(config-if)#ipv6 address {adresa}{prefix} anycast</pre>
             </section>
         </section>
-    </section>    
+    </section>
+    <section id="NDP">
+        <h3>NDP - Neighbor Discovery Protokol</h3>
+        <p>Protokol, který má mnoho funkcionalit. Jedna z nejdůležitejších je ta, že nahrazuje ARP (mapování IP adres k MAC adresám).</p>
+        <p>ARP nahrazuje pomocí 2 zpráv NS (Neighbor Solicitation) a NA (Neighbor Advertisement).</p>
+        <p>Když bude zařízení potřebovat zjistit MAC adresu pošle tomu chtěnému zařízení NS na jeho <b>solicited-node adresu</b>.</p>
+        <p>Chtěné zařízení mu poté odpoví svou MAC adresou pomocí NA zprávy.</p>
+        <p>Další funkcí NDP protokolu je objevování routerů pomocí RS a RA zpráv</p>
+    </section>
+    <section id="Routing">
+        <h3>IPv6 a směrování</h3>
+        <section id="Static" class="subSection">
+            <h4>Statické</h4>
+            <p>Statické směrování se nastavuje podobně jako IPv4, ale nejprve jej musíme na routeru povolit pomocí příkazu: </p>
+            <pre>R1(config)#ipv6 unicast-routing</pre>
+            <p>Dál už jej nastavujeme klasicky: </p>
+            <pre>R1(config)ipv6 route {DEST_NET}/{prefix-length} {NextHOP || exit interface} {*AD}</pre>
+            <p><i>pozn. exit interface se používá jen tehdy když se nejedná o Ethernet interface.</i></p>
+            <p><i>pozn. nastavení AD je dobrovolné.</i></p>
+        </section>
+    </section>  
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div class="overflowTable">
