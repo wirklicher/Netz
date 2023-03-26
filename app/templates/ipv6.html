@@ -33,14 +33,14 @@
         <section id="header" class="subSection">
             <h4>Hlavička IPv6</h4>
             <ul>
-                <li>Version - standardně 6</li>
-                <li>Traffic Class - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
-                <li>Flow Label - 20bitovy, identifikuje specificky traffic flows</li>
-                <li>Payload Length - 16bitu</li>
-                <li>Next Header - 8bitu, typ next headeru (Např TCP či UDP)</li>
-                <li>HOP limit - 8bitu, funguje jako TTL</li>
-                <li>Src. Address - 128bitu</li>
-                <li>Dest. Address - 128bitu</li>
+                <li class="req"><b>Version</b> - standardně 6</li>
+                <li class="req"><b>Traffic Class</b> - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
+                <li class="req"><b>Flow Label</b> - 20bitovy, identifikuje specificky traffic flows</li>
+                <li class="req"><b>Payload Length</b> - 16bitu</li>
+                <li class="req"><b>Next Header</b> - 8bitu, typ next headeru (Např TCP či UDP)</li>
+                <li class="req"><b>HOP limit</b> - 8bitu, funguje jako TTL</li>
+                <li class="req"><b>Src. Address</b> - 128bitu</li>
+                <li class="req"><b>Dest. Address</b> - 128bitu</li>
             </ul>
         </section>
 
@@ -270,7 +270,8 @@
         <p>ARP nahrazuje pomocí 2 zpráv NS (Neighbor Solicitation) a NA (Neighbor Advertisement).</p>
         <p>Když bude zařízení potřebovat zjistit MAC adresu pošle tomu chtěnému zařízení NS na jeho <b>solicited-node adresu</b>.</p>
         <p>Chtěné zařízení mu poté odpoví svou MAC adresou pomocí NA zprávy.</p>
-        <p>Další funkcí NDP protokolu je objevování routerů pomocí RS a RA zpráv</p>
+        <p>Další funkcí NDP je dynamicky detekovat routery v síti</p>
+        <p>Zpráva RS - Router Solicitation (Multicast na FF02::2) a RA - Router Advertisement (FF02::1) - RA ohlašuje, že router existuje to ze existuje</p>
     </section>
     <section id="Routing">
         <h3>IPv6 a směrování</h3>
