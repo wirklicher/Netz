@@ -207,6 +207,10 @@ pre {
   border-bottom: none;
 }
 
+.beforecode {
+  padding-bottom: 0.1rem;
+}
+
 .btns_quiz {
   display: flex;
   flex-direction: row;

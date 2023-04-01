@@ -369,9 +369,19 @@ R2(config-if)#ip ospf authentication message-digest
         <h3>OSPFv3</h3>
         <p>OSPF podporujicí IPv6 směrování.</p>
         <p>Používá FF02::5 a FF02::6 multicastové adresy pro komunikaci</p>
-        <section id="OSPFv3_Conf">
+        <section id="OSPFv3_Conf" class="subSection">
             <h4>Konfigurace</h4>
             <p>Zadání: Nakonfiguruj OSPFv3 pro danou síť: </p>
+            <img src="../static/styles/images/Routing/OSPFv3.png" alt="OSPFv3Configuration" class="configImage">
+            <p>Konfiguraci začneme tím, že klasicky povolíme ipv6 routing na routerech.</p>
+            <pre>R1(config)#ipv6 unicast-routing</pre>
+            <p>Dále nakonfigurujeme na jednotlivých zařízeních router-id, který stále <b>MUSÍ</b> být 32bitové.</p>
+            <pre>R1(config)#ipv6 ospf router 1
+R1(config-router)#router-id 1.1.1.1</pre>
+            <p>Teď už nezbývá nic jiného než nakonfigurovat propagaci sítí na daných interfacích.</p>
+            <pre>R1(config)#interface range g0/0 - g0/1
+R1(config-range)#ipv6 ospf 1 area 0</pre>
+            <p>Tuto konfiguraci zopakujeme i na 2. routeru a OSPFv3 by mělo mezi routery běžet.</p>
         </section>
     </section>
     <section id="prehledPrikazu">

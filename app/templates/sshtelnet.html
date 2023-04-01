@@ -14,6 +14,29 @@
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>V dnešní době je už snad standardem, že routery a switche by měly být konfigurovatelné bez toho aniž bychom byli přímo v dané lokaci.</p>
+        <p>K tomuto se používá protokol <b>SSH</b> (Secure shell) a dříve používal <b>Telnet</b> (Teletype network).</p>
+    </section>
+    <section id="SecureDevice">
+        <h3>Zabezpečení zařízení</h3>
+        <p>Předtím než zařízení zpřístupníme pomocí SSH a telnetu, je vhodné daná zařízení zabezpečit tak, aby nedošlo k žádnému případnému zneužití.</p>
+        <p>Zabezpečit zařízení můžeme pomocí pouhých hesel a nebo pomocí uživatelů s hesly.</p>
+        <p>Tohle zabezpečení probíhá na vty (virtual teletype) line konfiguračním módu, což je virtuální port, který slouží k tomu, abychom získali vzdálený přístup k zařízení právě pomocí SSH a telnetu.</p>
+        <p class="beforecode">Při přechodu do tohoto módu musíte určit rozpětí, který značí kolik hostů bude moct být naráz připojeno, přičemž nejvyšší počet hostů připojených najednou je 16.</p>
+        <pre>Switchicek(config)#line vty 0 15</pre>
+    </section>
+    <section id="Telnet">
+        <h3>Telnet - Teletype network</h3>
+        <section id="TelnetConfiguration" class="subSection">
+            <h4>Konfigurace</h4>
+        </section>
+    </section>
+    <section id="SSH">
+        <h3>SSH - Secure shell</h3>
+        <section id="SSHConfiguration" class="subSection">
+            <h4>Konfigurace</h4>
+        </section>
+    </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div class="overflowTable">

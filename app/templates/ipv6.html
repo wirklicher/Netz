@@ -33,7 +33,7 @@
         <section id="header" class="subSection">
             <h4>Hlavička IPv6</h4>
             <ul>
-                <li class="req"><b>Version</b> - standardně 6</li>
+                <li class="req" class="beforecode"><b>Version</b> - standardně 6</li>
                 <li class="req"><b>Traffic Class</b> - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
                 <li class="req"><b>Flow Label</b> - 20bitovy, identifikuje specificky traffic flows</li>
                 <li class="req"><b>Payload Length</b> - 16bitu</li>
@@ -55,9 +55,9 @@
             <section id="Rules4Ab" class="subSection">
                 <h5>Pravidla pro zkrácení zápisu IPv6</h5>
                 <p>IPv6 bývají hodně dlouhé a lidstvo bývá líné, proto lze zápis při dodržení určitých pravidel zkrátit.</p>
-                <li class="req">Pravidlo č1 - vynech skupiny, které tvoří samé 0, to místo, kde se tyto skupiny nachází nahraď :: ale měj na paměti, že to můžeš udělat pouze 1 s tím, že pokud tam je těch skupin více tak vynech tu větší.</li>
+                <li class="req beforecode">Pravidlo č1 - vynech skupiny, které tvoří samé 0, to místo, kde se tyto skupiny nachází nahraď :: ale měj na paměti, že to můžeš udělat pouze 1 s tím, že pokud tam je těch skupin více tak vynech tu větší.</li>
                 <pre>2001:0000:0000:AC01:0000:0000:0000:1000 --> 2001:0000:0000:AC01::1000</pre>
-                <li class="req">Pravidlo č2 - vynech všechny 0 nazáčatku skupin</li>
+                <li class="req beforecode">Pravidlo č2 - vynech všechny 0 nazáčatku skupin</li>
                 <pre>2001:0000:0000:00B0:0CA1:0000:0000:0AC1 --> 2001:0:0:B0:CA1:0:0:AC1</pre>
 
                 <p>Teď když tyto pravidla zkombinuješ a uplatníš tak budeš moci vytvořit zkrácený zápis IPv6</p>
@@ -66,25 +66,23 @@
                 <b>Používání pravidla č1 vícekrát</b>
                 <b>Vynechání všech 0 nakonci skupin</b>
 
-                <p>Příklad:</p>
                 <p>Zkrať následujicí IPv6 adresy:</p>
-
+                <p class="beforecode">Př.</p>
                 <pre>2001:0000:0000:AC1E:0000:0000:0870:0451</pre>
-                <p>Řešení:</p>
+                <p class="beforecode">Řešení:</p>
                 <pre>2001::AC1E:0:0:870:451 nebo 2001:0:0:AC1E::870:451</pre>
-
+                <p class="beforecode">Př.</p>
                 <pre>FE80:C1A2:0000:0000:0000:AC1E:9874:0C00</pre>
-                <p>Řešení:</p>
+                <p class="beforecode">Řešení:</p>
                 <pre>FE80:C1A2::AC1E:9874:C00</pre>
-
                 <p>Teď proces obrátíme a ty budeš mít za úkol udělat ze zkrácené adresy adresu celou - </p>
-
+                <p class="beforecode">Př.</p>
                 <pre>2001::AC1:BC44:0</pre>
-                <p>Řešení:</p>
+                <p class="beforecode">Řešení:</p>
                 <pre>2001:0000:0000:0000:0000:0AC1:BC44:0000</pre>
-
+                <p class="beforecode">Př.</p>
                 <pre>FF02::2</pre>
-                <p>Řešení:</p>
+                <p class="beforecode">Řešení:</p>
                 <pre>FF02:0000:0000:0000:0000:0000:0000:0002</pre>
             </section>
         </section>
@@ -127,7 +125,7 @@
                 <p>Je to speciální typ unicastové adresy, který se používá pro routing a overhead protokoly.</p>
                 <p>Vlastností těchto adres je, že se neposílají do jiných subnet, tudíž zůstávají vždy v rámci LAN. Z toho například plyne to, že jdou využít jako next-hop IP adresa nebo jako default gateway.</p>
                 <p>Je definována rozsahem FE80::/10 - tzn. že první 3 hexy jsou buď FE8, FE9, FEA nebo FEB, dalších 54 bitů adresy je 0 a druhá půlka je nejčastěji vytvořená pomocí EUI-64.</p>
-                <p>Tyto adresy jsou automaticky vytvořené na každém IPv6 interfacu, nicméně lze ji nastavit i manuálně (za dodržení podmínky, že je definována ve správném rozsahu - FE80::/10).</p>
+                <p class="beforecode">Tyto adresy jsou automaticky vytvořené na každém IPv6 interfacu, nicméně lze ji nastavit i manuálně (za dodržení podmínky, že je definována ve správném rozsahu - FE80::/10).</p>
                 <pre>Router(config-if)#ipv6 address {address} link-local</pre>
                 
                 <section id="EUI64" class="subSection">
@@ -145,6 +143,7 @@
                 <li class="req">Neznámá IPv6 adresa - ::/128 - používá se tehdy, kdy host ještě nemá nastavenou IPv6 adresu či když s ní má problémy.</li>
                 <li class="req">Loopback - ::1/128</li>
                 <li class="req">Embedded IPv4 - ::{hex_IPv4}/80 - používá se tam, kde je podpora jak IPv4, tak IPv6</li>
+                <li class="req">Default route - ::0</li>
             </section>
             <section id="Multicast" class="subSection">
                 <h5>Multicastová adresace</h5>
@@ -250,16 +249,16 @@
                         <li class="req">FF02::1:FF00::/104 prefixu</li>
                         <li class="req">Posledních 6 hexů unicastové adresy</li>
                     </ul>
-                    <p>Z global unicastové adresy - <b>2001::4512:ACD8</b> - tak bude: </p>
+                    <p class="beforecode">Z global unicastové adresy - <b>2001::4512:ACD8</b> - tak bude: </p>
                     <pre>FF02::1:FF12:ACD8</pre>
                     <p>Zařízení počítá danou solicited node multicastovou adresu pro každou unicastovou adresu na interfacu.</p>
                 </section>
             </section>
             <section id="Anycast" class="subSection">
                 <h5>Anycast</h5>
-                <p>Anycast je u IPv6 novinkou a znamená pošli zprávu nejbližšímu z dané skupiny (nejbližší je vybrán na základě IPv6 směrovací metriky)</p>
+                <p>Anycast je u IPv6 novinkou a znamená pošli zprávu nejbližšímu z dané skupiny (nejbližší je vybrán na základě IPv6 směrovací metriky).</p>
                 <p>Je často spjatá s /128 prefixem, protože routery zpropagují danou host route pouze pro 1 anycastovou adresu.</p>
-                <p>Konfigurace: </p>
+                <p class="beforecode">Konfigurace: </p>
                 <pre>R1(config-if)#ipv6 address {adresa}{prefix} anycast</pre>
             </section>
         </section>
@@ -270,8 +269,21 @@
         <p>ARP nahrazuje pomocí 2 zpráv NS (Neighbor Solicitation) a NA (Neighbor Advertisement).</p>
         <p>Když bude zařízení potřebovat zjistit MAC adresu pošle tomu chtěnému zařízení NS na jeho <b>solicited-node adresu</b>.</p>
         <p>Chtěné zařízení mu poté odpoví svou MAC adresou pomocí NA zprávy.</p>
-        <p>Další funkcí NDP je dynamicky detekovat routery v síti</p>
-        <p>Zpráva RS - Router Solicitation (Multicast na FF02::2) a RA - Router Advertisement (FF02::1) - RA ohlašuje, že router existuje to ze existuje</p>
+        <p>Další funkcí NDP je dynamicky detekovat routery v síti.</p>
+        <p>Zpráva RS - Router Solicitation (Multicast na FF02::2) a RA - Router Advertisement (FF02::1) - RA ohlašuje, že router existuje to ze existuje.</p>
+        <section id="SLAAC" class="subSection">
+            <h4>SLAAC - autokonfigurace</h4>
+            <p>SLAAC používá RS a RA zprávy k tomu, aby pomocí nich vygeneroval IPv6 adresu.</p>
+            <p>Pomocí RS a RA zprávy totiž dokáže zjistit, jaký IPv6 prefix používá v síti router (jestliže SLAAC používá router tak zjistí IPv6 prefix jiného routeru).</p>
+            <p>Poté SLAAC zbytek dogeneruje náhodně nebo pomocí EUI-64.</p>
+            <p class="beforecode">SLAAC lze nastavit také na routeru pomocí příkazu:</p>
+            <pre>Router(config-if)#ipv6 address autoconfig</pre>
+        </section>
+        <section id="DAD" class="subSection">
+            <h4>DAD - Duplication Address Detection</h4>
+            <p>Mechanismus, který umožní hostům zkontrolovat zda nevygenerovali již použitou adresu, zapne se pokaždé když je nakonfigurovaná adresa na interfacu - k tomu používá NS a NA.</p>
+            <p>Funguje tak, že Host pošle na svoji vlastní IPv6 adresu NS zprávu, přičemž když mu nikdo neodpoví, tak jeho adresa je unikátní.</p>
+        </section>
     </section>
     <section id="Routing">
         <h3>IPv6 a směrování</h3>
@@ -279,12 +291,48 @@
             <h4>Statické</h4>
             <p>Statické směrování se nastavuje podobně jako IPv4, ale nejprve jej musíme na routeru povolit pomocí příkazu: </p>
             <pre>R1(config)#ipv6 unicast-routing</pre>
-            <p>Dál už jej nastavujeme klasicky: </p>
+            <p class="beforecode">Dál už jej nastavujeme klasicky: </p>
             <pre>R1(config)ipv6 route {DEST_NET}/{prefix-length} {NextHOP || exit interface} {*AD}</pre>
             <p><i>pozn. exit interface se používá jen tehdy když se nejedná o Ethernet interface.</i></p>
+            <p><b>Pokud jako next hop použijete link-local adresu, je nutné před ní ještě uvést exit interface!</b></p>
             <p><i>pozn. nastavení AD je dobrovolné.</i></p>
         </section>
-    </section>  
+    </section>
+    <section id="IPv6Conf">
+        <h3>IPv6 Konfigurace</h3>
+        <p>Našim cílem je nastavit zařízení tak, aby PC1 mohl pingnout PC2 užitím IPv6 - </p>
+        <img src="../static/styles/images/Routing/IPv6.png" alt="IPv6 konfigurace" class="configImage">
+        <p class="beforecode">Nejdříve na interfacích gig0/0 a gig0/1 povolíme zpracování IPv6 bez toho aniž by na interfacu byla nastavena (Tento krok je možný přeskočit).</p>
+        <pre>Router6(config-if-range)#ipv6 enable</pre>
+        <p class="beforecode">Teď přejdeme na interface gig0/0 a nastavíme na něm danou IPv6 adresu.</p>
+        <pre>Router6(config-if)#ipv6 address 2001::/64 eui-64</pre>
+        <p class="beforecode">Pak nastavíme gig0/1, kde specifikujeme celou IPv6 adresu.</p>
+        <pre>Router6(config-if)#ipv6 address 2222::1/64</pre>
+        <p class="beforecode">A také nastavíme manuálně link-local adresu.</p>
+        <pre>Router6(config-if)#ipv6 address FE80::1 link-local</pre>
+        <p class="beforecode">Ještě také na routeru povolíme ipv6 směrování, které je normálně vypnuté.</p>
+        <pre>Router6(config-if)ipv6 unicast-routing</pre>
+        <p class="beforecode">Na routeru6 nám zbývá ještě nastavit statické směrování, ke kterému se vrátíme, až budeme znát IPv6 adresu routeru7.</p>
+
+        <p class="beforecode">Na routeru7 nejdříve povolíme směrování, abychom později mohli na interfacu gig0/0 a koncových zařízeních nastavit autokonfiguraci IPv6 adres.</p>
+        <pre>Router7(config)#ipv6 unicast-routing</pre>
+        <p class="beforecode">Poté přejdeme na interface gig0/0 a gig0/1 a nastavíme zde zadanou IPv6 adresu stejně jako u R6 na gig0/0</p>
+        <pre>Router7(config)#interface gig0/1
+Router7(config-if)#ipv6 address 2002::1/64
+Router7(config-if)#interface gig0/0
+Router7(config-if)#ipv6 address 2222::1/64
+</pre>
+        <p class="beforecode">Abychom si zde zkontrolovali, jestli jsme IPv6 adresy přiděleli správně, můžeme použít příkaz show ipv6 interface brief.</p>
+        <pre>Router7#show ipv6 interface brief</pre>
+        <p class="beforecode">Teď nám zbývá už pouze nastavit směrování, vrátíme se proto tedy zpátky na router 6.</p>
+        <pre>Router6(config)#ipv6 route 2002::/64 2222::2</pre>
+        <p class="beforecode">Routy si můžeme na routeru zobrazit pomocí:</p>
+        <pre>Router6#show ipv6 route</pre>
+        <p class="beforecode">Na routeru 7 uděláme to samé - </p>
+        <pre>Router7(config)#ipv6 route 2001::/64 2222::1</pre>
+
+        <p>Základní konfiguraci si můžete vyzkoušet <a href="../Labs/Ipv6/IPv6_Basics.pka">zde</a>.</p>
+    </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div class="overflowTable">
@@ -295,73 +343,63 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
+                        <td>ipv6 enable</th>
+                        <td>Povolí zpracovávání ipv6 adres na interfacu</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
+                        <td>ipv6 unicast-routing</td>
+                        <td>Umožní routeru směrovat</td>
+                        <td>Global interface</td>
+                    </tr>
+                    <tr>
+                        <td>ipv6 address {ipv6_addr}/{prefix-length} [eui-64]</th>
+                        <td>Nastaví IPv6 adresu na daném interfacu</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
+                        <td>ipv6 address {ipv6_addr}/{prefix-length} anycast</th>
+                        <td>Nastaví anycastovou adresu</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
+                        <td>ipv6 address {ipv6_addr} link-local</td>
+                        <td>Manuálně nastaví link-local adresu</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>ipv6 address autoconfig</th>
+                        <td>Vygeneruje pomocí RS/RA zpráv IPv6 adresu na daném interfacu</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
+                        <td>show ipv6 interface brief</th>
+                        <td>Zobrazí nakonfigurované IPv6 adresy na interfacích</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
+                        <td>show ipv6 interface {int}</th>
+                        <td>Zobrazí IPv6 na daném interfacu</th>
+                        <td>EXEC</th>
+                    </tr>
+                    <tr>
+                        <td>ipv6 route {net_ID}/{prefix-length} {exit_interface | next_hop} [AD]</th>
+                        <td>Statické směrování</th>
+                        <td>Global config</th>
+                    </tr>
+                    <tr>
+                        <td>ipv6 route {net_ID}/{prefix-length} {exit_interface} {link-local next_hop} [AD]</th>
+                        <td>Statické směrování pomocí link-local adresy</th>
+                        <td>Global config</th>
+                    </tr>
+                    <tr>
+                        <td>show ipv6 route</td>
+                        <td>Zobrazí informace o naučených routech</td>
                         <td>EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
+                        <td>show ipv6 neighbor</td>
+                        <td>Zobrazí ipv6 NDP tabulku</td>
                         <td>EXEC</td>
                     </tr>
                 </table>
@@ -370,6 +408,11 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>IPv6 adresa vznikla jako reakce na nedostatek IPv4 adres. Pro to, aby nám za nějakou dobu vydržela, je 128bitová a zapisuje se hexadecimálně.</p>
+        <p>Má 3 typy adres - <b>Unicast</b>, <b>Multicast</b> a <b>Anycast</b>.</p>
+        <p>Unicast je adresa jednoho zařízení.</p>
+        <p>Multicast je adresa skupiny zařízení.</p>
+        <p>Anycast je adresa, která zkontaktuje nejbližšího ze skupiny.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
