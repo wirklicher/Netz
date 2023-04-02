@@ -11,7 +11,13 @@
 <body>
     <h1>SSH & Telnet</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základní znalost cli</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Nakonfigurovat vzdálený přístup pomocí SSH</li>
+        </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>V dnešní době je už snad standardem, že routery a switche by měly být konfigurovatelné bez toho aniž bychom byli přímo v dané lokaci.</p>
@@ -20,21 +26,109 @@
     <section id="SecureDevice">
         <h3>Zabezpečení zařízení</h3>
         <p>Předtím než zařízení zpřístupníme pomocí SSH a telnetu, je vhodné daná zařízení zabezpečit tak, aby nedošlo k žádnému případnému zneužití.</p>
-        <p>Zabezpečit zařízení můžeme pomocí pouhých hesel a nebo pomocí uživatelů s hesly.</p>
+        <p>Zabezpečit zařízení můžeme pomocí pouhých hesel nebo uživatelských přístupů.</p>
         <p>Tohle zabezpečení probíhá na vty (virtual teletype) line konfiguračním módu, což je virtuální port, který slouží k tomu, abychom získali vzdálený přístup k zařízení právě pomocí SSH a telnetu.</p>
         <p class="beforecode">Při přechodu do tohoto módu musíte určit rozpětí, který značí kolik hostů bude moct být naráz připojeno, přičemž nejvyšší počet hostů připojených najednou je 16.</p>
         <pre>Switchicek(config)#line vty 0 15</pre>
+        <p class="beforecode">Pro zabezpečení pomocí jednoho univerzálního hesla pro všechny slouží příkaz: </p>
+        <pre>Switchicek(config-line)#password {password}</pre>
+        <p class="beforecode">Pro zapnutí autentizace se používá příkaz</p>
+        <pre>Switchicek(config-line)#login</pre>
+        <p>Tento příkaz ale sám o sobě není příliš bezpečný, protože heslo je v zařízení uloženo jako pouhý string, takže kdokoliv si jej může zobrazit.</p>
+        <p class="beforecode">Tenhle problém lze vyřešit tím, že v global config módu nastavíme zašifrování hesel.</p>
+        <pre>Switchicek(config)#service password-encryption</pre>
+        <p>Nicméně i tento příkaz je pouhou slabou ochranou (příkaz totiž heslo zašifruje tzv. type 7, který využívá substituční vigenerovu šifru s předem daným klíčem).</p>
+        <p>Úplně nejlepší způsob, jak zabezpečit síťové zařízení je pomocí AAA serveru, bohužel jeho nastavení je již nad rámec této kapitoly.</p>
+        <p class="beforecode">Alternativním způsobem k tomuto je zabezpečení pomocí uživatelských přístupů. Toto se nastavuje v global config módu pomocí příkazu: </p>
+        <pre>Switchicek(config)#username {username} password {password}</pre>
+        <p class="beforecode">Tento příkaz opět heslo ukládá v plaintextu, nicméně je zde způsob jak heslo uložit v MD5.</p>
+        <pre>Switchicek(config)#username {username} secret {password}</pre>
+        <p class="beforecode">K tomu abychom zapnuli přihlášení pomocí uživatelského přístupu musíme na vty line použít příkaz: </p>
+        <pre>Switchicek(config)#login local</pre>
+        <p class="beforecode">Použitím line vty módu lze ještě nastavit časovač neaktivity, po jehož vypršení vás zařízení odhlásí.</p>
+        <pre>Switchicek(config-line)#exec {minuty} {sekundy}</pre>
+        <p class="beforecode">Pro obě možnosti zabezpečení je také nutné nastavit heslo na EXEC mód pomocí příkazu:</p>
+        <pre>Switchicek(config)#enable password/secret {password}</pre>
+        <p>Password nám zas opět uloží heslo v plaintextu a secret v MD5.</p>
     </section>
     <section id="Telnet">
         <h3>Telnet - Teletype network</h3>
+        <p>Telnet je protokol, který umožňuje mít vzdálený přístup k zařízení.</p>
+        <p>Funguje tak, že se uživatel na dané zařízení připojí pomocí příkazové řádky užitím příkazu telnet u kterého specifikuje IP adresu či hostname zařízení.</p>
+        <p>Telnet používá standardně TCP port <b>23</b>, tento port je "well-known" a doporučuji si ho zapamatovat.</p>
+        <p>Velká nevýhoda telnetu je, že posílá všechno v plaintextu, tudíž kdokoliv kdo zachytí nějakým způsobem komunikaci telnetu, si může vše včetně hesel přečíst.</p>
         <section id="TelnetConfiguration" class="subSection">
             <h4>Konfigurace</h4>
+            <p class="beforecode">Telnet na Cisco zařízení je standardně nastavený. Jediný co lze nastavit je absolutní povolení či zákaz pomocí příkazů.</p>
+            <pre>Switchicek(config-line)#transport input {all | telnet | ssh | none} </pre>
         </section>
     </section>
     <section id="SSH">
         <h3>SSH - Secure shell</h3>
+        <p>SSH, Secure shell, je stejně jako telnet protokol, který nám umožňuje mít vzdálený přístup k zařízení.</p>
+        <p>Byl vyvinut v 90 letech jako náhrada za telnet.</p>
+        <p>Zatím existují 2 potažmo 3 verze - SSHv1, SSHv2 a SSHv1.99 (Tahle verze podporuje zpětnou kompabilitu a používá se výhradně na SSH serverech).</p>
+        <p>Verze se od sebe liší tím, že SSHv2 je oproti SSHv1 bezpečnější.</p>
+        <p>SSH využívá TCP port <b>22</b>, stejně jako port telnetu si jej doporučuji zapamatovat.</p>
         <section id="SSHConfiguration" class="subSection">
             <h4>Konfigurace</h4>
+            <p>K tomu abychom mohli používat SSH je třeba si nejdříve nastavit hostname a domain name:</p>
+            <pre>Switchicek(config)#hostname {hostname}
+Switchicek(config)#ip domain-name {domain-name}</pre>
+            <p class="beforecode">Teď když máme hostname a domain-name je nutné si nechat vygenerovat rsa klíče. Ty slouží k tzv. public key authentication a generují se pomocí příkazu: </p>
+            <pre>Switchicek(config)#crypto key generate rsa</pre>
+            <p>Pokud budeme chtít používat SSHv2, tak tento klíč bude muset být alespoň 768bitový.</p>
+            <p>Dále je nutné dát heslo pro přístup na EXEC mód. Doporučuji také vytvořit uživatelský přístup a nakonfigurovat vty lines.</p>
+            <p class="beforecode">Je také možné změnit verzi ssh pomocí příkazu: </p>
+            <pre>Switchicek(config)#ip ssh version {1-2}</pre>
+            <section id="PraktickaUkazka" class="subSection">
+                <h5>Praktická ukazka</h5>
+                <p>Nastav SSH na routeru a switchi dle zadaní</p>
+                <img src="../static/styles/images/SSH/SSH_Prakticka.png" alt="Zadani" class="configImage">
+                <p>Nejdřív začneme routerem: </p>
+                <p class="beforecode">Prvně nakonfigurujeme IP adresu na interfacu gig0/0</p>
+                <pre>Router(config)#interface gig0/0
+Router(config-if)#ip address 192.168.0.1 255.255.255.240
+Router(config-if)#no shutdown</pre>
+                <p class="beforecode">Dalším krokem bude nastavit hostname a domain name - </p>
+                <pre>Router(config)#hostname R1
+R1(config)#ip domain-name superrouter</pre>
+                <p class="beforecode">Dále vygenerujeme rsa klíč, zde je nutné nezapomenout na to, že pro použití SSHv2 musí být alespoň 768bitový - </p>
+                <pre>R1(config)#crypto key generate rsa
+How many bits in the modulus [512]: 768</pre>
+                <p class="beforecode">Nyní nás čeká nastavit heslo na EXEC mód a vytvořit uživatele Helga -</p>
+                <pre>R1(config)#enable secret heslo
+R1(config)#username Helga secret 123helga</pre>
+                <p class="beforecode">Ještě nám schází nastavit vty line -</p>
+                <pre>R1(config)#line vty 0 15
+R1(config-line)#login local
+R1(config-line)#transport input ssh
+R1(config-line)exec 1 0</pre>
+                <p class="beforecode">Nakonec nám zbývá ještě nastavit ssh verzi - </p>
+                <pre>R1(config)#ssh version 2</pre>
+                <br>
+                <p class="beforecode">Na switchi opět začneme konfigurací IP adresy, tentokrát na vlan 1.</p>
+                <pre>Switch(config)#interface vlan 1
+Switch(config-if)#ip address 192.168.0.14 255.255.255.240
+Switch(config-if)#no shutdown</pre>
+                <p class="beforecode">Dále nastavíme hostname a domain name - </p>
+                <pre>Switch(config)#hostname Switchicek
+Switchicek(config)#ip domain-name superswitchicek</pre>
+                <p class="beforecode">Dalším krokem bude klasicky generace rsa klíče, jehož velikost není vzhledem k SSH verzi nějak omezená.</p>
+                <pre>Switchicek(config)#crypto key generate rsa
+How many bits in the modulus [512]: 360</pre>
+                <p class="beforecode">Teď opět nastavíme heslo pro přístup na EXEC mód a uživatelský přístup</p>
+                <pre>Switchicek(config)#enable password heslo
+Switchicek(config)#username Helga password 123helga</pre>
+                <p class="beforecode">Ještě nám zbývá nakonfigurovat vty line</p>
+                <pre>Switchicek(config)#line vty 0 15
+Switchicek(config-line)#login local
+Switchicek(config-line)#transport input all
+Switchicek(config-line)exec 2 0</pre>
+                <p class="beforecode">Nakonec nastavíme verzi ssh.</p>
+                <pre>Switchicek(config)#ip ssh version 1</pre>
+                <p>Základní konfiguraci SSH a Telnetu si můžete vyzkoušet <a href="../Labs/SSH/SSH_Telnet.pka">zde</a>.</p>
+            </section>
         </section>
     </section>
     <section id="prehledPrikazu">
@@ -47,73 +141,68 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>ip ssh version {1-2}</td>
+                        <td>Nastaví ssh verzi</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>ip domain-name {domain name}</td>
+                        <td>Nastaví domain name</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
+                        <td>hostname {hostname}</td>
+                        <td>Nastaví specifický hostname</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>username {username} password/secret {password}</td>
+                        <td>Vytvořít uživatelský přístup</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
+                        <td>enable password/secret</td>
+                        <td>Nastaví heslo pro přístup na EXEC mód</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
+                        <td>service password-encryption</td>
+                        <td>Zašifruje heslo typem 7</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
+                        <td>crypto key generate rsa</td>
+                        <td>Vytvoří rsa klíč</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
+                        <td>crypto key zeroize rsa</td>
+                        <td>Smaže rsa klíč</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
+                        <td>line vty 0 {1-15}</td>
+                        <td>Přechod do vty line módu</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
+                        <td>transport input {all | none | ssh | telnet}</td>
+                        <td>Povolí/zakáže dané protokoly</td>
+                        <td>Vty line mód</td>
+                    </tr>
+                    <tr>
+                        <td>login {*local}</td>
+                        <td>Nastaví nutnost přihlášení při vzdáleném přístupu</td>
+                        <td>Vty line mód</td>
+                    </tr>
+                    <tr>
+                        <td>exec {minuty} {sekundy}</td>
+                        <td>Nastaví časovač pro odpojení při neaktivitě</td>
+                        <td>Vty line mód</td>
+                    </tr>
+                    <tr>
+                        <td>show ip ssh</td>
+                        <td>Zobrazí informace o SSH</td>
                         <td>EXEC</td>
                     </tr>
                 </table>
@@ -122,6 +211,10 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>SSH a telnet jsou protokoly, které hostům umožňují vzdálený přístup na zařízení.</p>
+        <p>Telnet je zastaralý protokol ze 60.let 20.století, jehož komunikace je plaintextová. Telnet operuje na TCP portu <b>23</b>.</p>
+        <p>SSH, Secure Shell je protokol, který navazuje na telnet a jehož cílem je zprostředkovat zabezpečený vzdálený přístup. Má 2 verze - SSHv1 a SSHv2, ty se od sebe liší tím, že SSHv2 poskytuje lepší zabezpečení.</p>
+        <p>SSH funguje na TCP portu <b>22</b>.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
