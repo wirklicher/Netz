@@ -41,7 +41,7 @@
         <h3>Základní EIGRP konfigurace</h3>
         <p>Úkol: Nastav alespoň co se týče základních věcí eigrp v této síti: </p>
         <img src="../static/styles/images/Routing/ZakladniKonfigurace.png" alt="EIGRPkonfigurace" class="configImage">
-        <p>Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
+        <p class="beforecode">Nejdříve na R1 nastavíme nastavíme ip adresy na daných interfacích: </p>
         <pre>
 R1(config)#interface fa0/1
 R1(config-if)#ip address 15.4.2.1 255.255.255.0
@@ -49,7 +49,7 @@ R1(config-if)#no shutdown
 R1(config-if)#interface g0/0
 R1(config-if)#ip address 192.168.1.1 255.255.255.252 
 R1(config-if)#no shutdown</pre>
-                    <p>To samé uděláme i na R2</p>
+                    <p class="beforecode">To samé uděláme i na R2</p>
                     <pre>
 R2(config)#interface fa0/1
 R2(config-if)#ip address 15.4.3.1 255.255.255.0
@@ -57,23 +57,23 @@ R2(config-if)#no shutdown
 R2(config-if)#interface g0/0
 R2(config-if)#ip address 192.168.1.2 255.255.255.252
 R2(config-if)#no shutdown</pre>
-            <p>Nyní je třeba nastavit samotné EIGRP.</p>
+            <p class="beforecode">Nyní je třeba nastavit samotné EIGRP.</p>
         <pre>
 R1(config)#router eigrp 1* //*1 je ASN číslo, toto číslo musí být na všech routerech stejné!
 R1(config-router)#network 192.168.1.0* 0.0.0.3** //*NET_ID, **Wildcard mask
 R1(config-router)#network 15.4.2.0 0.0.0.255</pre>
-            <p>Je také dobrou praxí vypínat autosumarizaci, která danou NET_ID převede na classful.</p>
+            <p class="beforecode">Je také dobrou praxí vypínat autosumarizaci, která danou NET_ID převede na classful.</p>
 <pre>
 R1(config-router)#no auto-summary
 </pre>
-            <p>To samé provedeme i na R2.</p>
+            <p class="beforecode">To samé provedeme i na R2.</p>
 <pre>
 R2(config)#router eigrp 1 
 R2(config-router)#network 192.168.1.0 0.0.0.3
 R2(config-router)#network 15.4.3.0 0.0.0.255
 R2(config-router)#no auto-summary
 </pre>
-        <p>Dále můžeme nastavit pasivní interface, tam kam nepotřebujeme posílat eigrp zprávy.</p>
+        <p class="beforecode">Dále můžeme nastavit pasivní interface, tam kam nepotřebujeme posílat eigrp zprávy.</p>
 <pre>R1(config-router)#passive-interface fa0/1</pre>
 <pre>R2(config-router)#passive-interface fa0/1</pre>
         <p>Konfiguraci EIGRP si můžeš procvičit v labu, který můžeš stáhnout <a href="../Labs/Routing/EIGRP_lab.pka">zde</a>.</p>
@@ -96,9 +96,9 @@ R2(config-router)#no auto-summary
         <p>Správná hodnota tohoto parlamentu lze vypočítat tak, že vydělíme větší feasible distance menším feasible distnace.</p>
         <p>Příklad: </p>
         <p>1.Feasible distance je 26112</p>
-        <p>2.Feasible distance je 3072</p>
+        <p class="beforecode">2.Feasible distance je 3072</p>
         <pre>Multiplier = 26112 / 3072</pre>
-        <p>Protože nám multiplier vyšel 8.5, tuto hodnotu zaokrouhlíme na 9 a nastavíme unequal load-balacing.</p>
+        <p class="beforecode">Protože nám multiplier vyšel 8.5, tuto hodnotu zaokrouhlíme na 9 a nastavíme unequal load-balacing.</p>
         <pre>Router(config-router)#variance 9</pre>
     </section>
     <section id="EIGRPproces">
@@ -129,9 +129,9 @@ R2(config-router)#no auto-summary
         <section id="SelBestRouteEIGRP" class="subSection">
             <h4>Určení nejlepší cesty</h4>
             <p>EIGRP určuje nejlepší cestu pomocí metriky</p>
-            <p>Pro výpočet se používá vzorec:</p>
+            <p class="beforecode">Pro výpočet se používá vzorec:</p>
             <pre>Metric = ([(K1 * bandwidth) + [(K2 * bandwidth) / (256 - load) + (K3 * delay)] * [K5 / reliability + K4)]) * 256</pre>
-            <p>Při ponechání defaultně nastavených K-hodnot se vzoreček zjednoduší na:</p>
+            <p class="beforecode">Při ponechání defaultně nastavených K-hodnot se vzoreček zjednoduší na:</p>
             <pre>Metric = 256 * [(10**7 / Min. Bandwidth) + (Celková delay / 10)]</pre>
             <p>Po tom co se spočítá metrika je za <b>Succesora</b> označená cesta s nejnižší možnou metrikou a za <b>Feasible Successora</b> je označená ta cesta, která má reported distance nižší než feasible distance succesora.</p>
         </section>

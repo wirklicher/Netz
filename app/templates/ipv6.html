@@ -43,8 +43,8 @@
             <ul>
                 <li class="req" class="beforecode"><b>Version</b> - standardně 6</li>
                 <li class="req"><b>Traffic Class</b> - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
-                <li class="req"><b>Flow Label</b> - 20bitovy, identifikuje specificky traffic flows</li>
-                <li class="req"><b>Payload Length</b> - 16bitu</li>
+                <li class="req"><b>Flow Label</b> - 20bitový, identifikuje specificky traffic flows</li>
+                <li class="req"><b>Payload Length</b> - 16bitů - značí velikost zapouzdřeného segmentu</li>
                 <li class="req"><b>Next Header</b> - 8bitu, typ next headeru (Např TCP či UDP)</li>
                 <li class="req"><b>HOP limit</b> - 8bitu, funguje jako TTL</li>
                 <li class="req"><b>Src. Address</b> - 128bitu</li>
@@ -54,25 +54,25 @@
 
         <section id="Adresace" class="subSection">
             <h4>Adresace</h4>
-            <p>IPv6 se tedy zapisuje hexadecimálně (tj. obsahuje i písmenka A-F) a skládá se z 8 skupinek 4 hexadecimálních číslic.</p>
+            <p>IPv6 se zapisuje hexadecimálně (tj. obsahuje i písmenka A-F) a skládá se z 8 skupinek po 4 hexadecimálních číslicí.</p>
             <p>Příkladem IPv6 adresy může být například: 2001:0DB8:1111:ABC0:4521:4871:0000:0001</p>
             <p>Přičemž se můžete setkat se 2 typy zápisu: </p>
-            <li class="req">Celý - příkladem může být již uvedený 2001:0DB8:1111:ABC0:4521:4871:0000:0001</li>
-            <li class="req">Zkrácený - příkladem může být tato adresa: 3001:AC1::C03</li>
+            <li class="req"><b>Celý</b> - příkladem může být již uvedený 2001:0DB8:1111:ABC0:4521:4871:0000:0001</li>
+            <li class="req"><b>Zkrácený</b> - příkladem může být tato adresa: 3001:AC1::C03</li>
 
             <section id="Rules4Ab" class="subSection">
                 <h5>Pravidla pro zkrácení zápisu IPv6</h5>
                 <p>IPv6 bývají hodně dlouhé a lidstvo bývá líné, proto lze zápis při dodržení určitých pravidel zkrátit.</p>
                 <li class="req beforecode">Pravidlo č1 - vynech skupiny, které tvoří samé 0, to místo, kde se tyto skupiny nachází nahraď :: ale měj na paměti, že to můžeš udělat pouze 1 s tím, že pokud tam je těch skupin více tak vynech tu větší.</li>
                 <pre>2001:0000:0000:AC01:0000:0000:0000:1000 --> 2001:0000:0000:AC01::1000</pre>
-                <li class="req beforecode">Pravidlo č2 - vynech všechny 0 nazáčatku skupin</li>
+                <li class="req beforecode">Pravidlo č2 - vynech všechny 0 na záčatku skupin</li>
                 <pre>2001:0000:0000:00B0:0CA1:0000:0000:0AC1 --> 2001:0:0:B0:CA1:0:0:AC1</pre>
 
-                <p>Teď když tyto pravidla zkombinuješ a uplatníš tak budeš moci vytvořit zkrácený zápis IPv6</p>
+                <p>Teď když tyto pravidla zkombinujete a uplatníte, tak budete moci vytvořit zkrácený zápis IPv6</p>
 
                 <p>Typické chyby: </p>
-                <b>Používání pravidla č1 vícekrát</b>
-                <b>Vynechání všech 0 nakonci skupin</b>
+                <p><b>Používání pravidla č1 vícekrát</b></p>
+                <p><b>Vynechání všech 0 nakonci skupin</b></p>
 
                 <p>Zkrať následujicí IPv6 adresy:</p>
                 <p class="beforecode">Př.</p>
@@ -96,17 +96,17 @@
         </section>
         <section id="types" class="subSection">
             <h4>Typy IPv6 Adres</h4>
-            <p>IPv6 adresy se dělí na 3 základní skupiny - unicastové, multicastové a anycastové</p>
+            <p>IPv6 adresy se dělí na 3 základní skupiny - <b>unicastové</b>, <b>multicastové</b> a <b>anycastové</b></p>
             <section id="GUA" class="subSection">
                 <h5>Global Unicast Adresa</h5>
                 <p>Tento typ adresy funguje jako klasická veřejná IPv4 adresa.</p>
                 <p>Přiděluje ji ISP.</p>
                 <p>Byl pro ni vyhrazený blok 2000::/3 ale nyní je to v podstatě jakákoliv adresa, která neslouží pro jiný účel.</p>
-
+                <p>Skládá se z:</p>
                 <section id="Parts" class="subSection">
-                    <li class="req">Global Routing Prefix - přiděluje jej ISP, IANA či RIR, je velký P bitů</li>
-                    <li class="req">Subnet ID - je velká S bitů a slouží k identifikaci dané subnet.</li>
-                    <li class="req">Interface ID - slouží k identifikaci zařízení, je velký I bitů</li>
+                    <li class="req"><b>Global Routing Prefix</b> - přiděluje jej ISP, IANA či RIR, je velký P bitů</li>
+                    <li class="req"><b>Subnet ID</b> - je velká S bitů a slouží k identifikaci dané subnet.</li>
+                    <li class="req"><b>Interface ID</b> - slouží k identifikaci zařízení, je velký I bitů</li>
                     <p>Dohromady musí platit, že P+S+I je 128.</p>
                     <p>P+S dává dohromady <b>prefix length</b>.</p>
                 </section>
@@ -120,12 +120,12 @@
             <section id="ULUA" class="subSection">
                 <h5>Unique Local Unicast Adresa</h5>
                 <p>Chovají se stejně jako privátní IPv4 adresy, nemůžou být tedy používaný na internetu.</p>
-                <p>Je pro ně vyhrazený blok FC00::/7 s tím, že později bylo určeno, že 8 bit musí být 1 tudíž první 2 hexy musí být <b>FD</b>.</p>
+                <p>Je pro ně vyhrazený blok FC00::/7 s tím, že později bylo určeno, že 8. bit musí být 1 tudíž první 2 hexy musí být <b>FD</b>.</p>
                 <p>Složení Unique Local Unicast Adresy:</p>
-                <li class="req">FD - prvních 8 bitů</li>
-                <li class="req">Global ID - mělo by být náhodně vygenerováno - 40 bitů</li>
-                <li class="req">Subnet ID - standardně 16 bitů</li>
-                <li class="req">Interface ID - zbytek</li>
+                <li class="req"><b>FD</b> - prvních 8 bitů</li>
+                <li class="req"><b>Global ID</b> - mělo by být náhodně vygenerováno - 40 bitů</li>
+                <li class="req"><b>Subnet ID</b> - standardně 16 bitů</li>
+                <li class="req"><b>Interface ID</b> - zbytek</li>
                 <p>Nejsou přidělovány žádnou organizací.</p>
             </section>
             <section id="LLA" class="subSection">
@@ -148,10 +148,10 @@
             <section id="others" class="subSection">
                 <h5>Ostatní unicastové adresy</h5>
                 <p>Další IPv6 unicastové adresy se kterými se můžete v praxi setkat jsou: </p>
-                <li class="req">Neznámá IPv6 adresa - ::/128 - používá se tehdy, kdy host ještě nemá nastavenou IPv6 adresu či když s ní má problémy.</li>
-                <li class="req">Loopback - ::1/128</li>
-                <li class="req">Embedded IPv4 - ::{hex_IPv4}/80 - používá se tam, kde je podpora jak IPv4, tak IPv6</li>
-                <li class="req">Default route - ::0</li>
+                <li class="req"><b>Neznámá IPv6 adresa</b> - ::/128 - používá se tehdy, kdy host ještě nemá nastavenou IPv6 adresu či když s ní má problémy.</li>
+                <li class="req"><b>Loopback</b> - ::1/128</li>
+                <li class="req"><b>Embedded IPv4</b> - ::{hex_IPv4}/80 - používá se tam, kde je podpora jak IPv4, tak IPv6</li>
+                <li class="req"><b>Default route</b> - ::0</li>
             </section>
             <section id="Multicast" class="subSection">
                 <h5>Multicastová adresace</h5>

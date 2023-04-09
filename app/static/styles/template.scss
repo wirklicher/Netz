@@ -62,41 +62,24 @@ h3 {
     font-size: 2em;
     font-weight: 400;
     margin-bottom: 10px;
-    position: relative;
-    padding-bottom: 1rem;
     z-index: -99;
+    border-bottom: solid 2px var(--secondary-color);
 }
 
 h3:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: calc(32px + .5rem);
-    height: 1px;
-    width: 292.9px;
-    border-bottom: solid 2px var(--secondary-color);
-    box-shadow: 0 0 3px .5px --secondary-color;
-    z-index: -99;
+    display: inline;
 }
 
 h4 {
     font-size: 1.7em;
     font-weight: 400;
     margin-bottom: 10px;
-    position: relative;
     z-index: -99;
+    border-bottom: solid 2px var(--secondary-color);
 }
 
 h4:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: calc(32px + .25rem);
-    height: 1px;
-    width: 300px;
-    border-bottom: solid 2px var(--secondary-color);
-    box-shadow: 0 0 3px .5px --secondary-color;
-    z-index: -99;
+    display: inline
 }
 
 h5 {
@@ -105,18 +88,11 @@ h5 {
     margin-bottom: 10px;
     position: relative;
     z-index: -99;
+    border-bottom: solid 2px var(--secondary-color);
 }
 
 h5:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: calc(24px + .25rem);
-    height: 1px;
-    width: 300px;
-    border-bottom: solid 2px var(--secondary-color);
-    box-shadow: 0 0 3px .5px --secondary-color;
-    z-index: -99;
+    display: inline;
 }
 
 p {
@@ -225,6 +201,7 @@ pre {
 .noBorder {
     padding-bottom:0;
     z-index: 0;
+    border-bottom: none;
 }
 .noBorder:before {
     border-bottom: none;
@@ -545,6 +522,7 @@ pre {
     }
 }
 @media only screen and (max-width: 750px) {
+
     #questionText {
         font-size: .9rem;
         font-weight: 700;
@@ -559,5 +537,21 @@ pre {
     
 }
 
+
+@media only screen and (max-width: 600px) {
+
+    body {
+        width: 90%;
+    }
+
+    pre {
+        max-width: 90%;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+}
 
 

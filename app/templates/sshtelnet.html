@@ -49,14 +49,14 @@
         <pre>Switchicek(config-line)#exec {minuty} {sekundy}</pre>
         <p class="beforecode">Pro obě možnosti zabezpečení je také nutné nastavit heslo na EXEC mód pomocí příkazu:</p>
         <pre>Switchicek(config)#enable password/secret {password}</pre>
-        <p>Password nám zas opět uloží heslo v plaintextu a secret v MD5.</p>
+        <p>Password nám zas opět uloží heslo v plaintextu a secret zas v MD5.</p>
     </section>
     <section id="Telnet">
         <h3>Telnet - Teletype network</h3>
         <p>Telnet je protokol, který umožňuje mít vzdálený přístup k zařízení.</p>
         <p>Funguje tak, že se uživatel na dané zařízení připojí pomocí příkazové řádky užitím příkazu telnet u kterého specifikuje IP adresu či hostname zařízení.</p>
         <p>Telnet používá standardně TCP port <b>23</b>, tento port je "well-known" a doporučuji si ho zapamatovat.</p>
-        <p>Velká nevýhoda telnetu je, že posílá všechno v plaintextu, tudíž kdokoliv kdo zachytí nějakým způsobem komunikaci telnetu, si může vše včetně hesel přečíst.</p>
+        <p>Velká nevýhoda telnetu je, že veškerá komunikace je v plaintextu, tudíž kdokoliv, kdo zachytí nějakým způsobem komunikaci telnetu, si může vše včetně hesel přečíst.</p>
         <section id="TelnetConfiguration" class="subSection">
             <h4>Konfigurace</h4>
             <p class="beforecode">Telnet na Cisco zařízení je standardně nastavený. Jediný co lze nastavit je absolutní povolení či zákaz pomocí příkazů.</p>
@@ -72,7 +72,7 @@
         <p>SSH využívá TCP port <b>22</b>, stejně jako port telnetu si jej doporučuji zapamatovat.</p>
         <section id="SSHConfiguration" class="subSection">
             <h4>Konfigurace</h4>
-            <p>K tomu abychom mohli používat SSH je třeba si nejdříve nastavit hostname a domain name:</p>
+            <p class="beforecode">K tomu abychom mohli používat SSH je třeba si nejdříve nastavit hostname a domain name:</p>
             <pre>Switchicek(config)#hostname {hostname}
 Switchicek(config)#ip domain-name {domain-name}</pre>
             <p class="beforecode">Teď když máme hostname a domain-name je nutné si nechat vygenerovat rsa klíče. Ty slouží k tzv. public key authentication a generují se pomocí příkazu: </p>
@@ -105,9 +105,9 @@ R1(config-line)#login local
 R1(config-line)#transport input ssh
 R1(config-line)exec 1 0</pre>
                 <p class="beforecode">Nakonec nám zbývá ještě nastavit ssh verzi - </p>
-                <pre>R1(config)#ssh version 2</pre>
+                <pre>R1(config)#ip ssh version 2</pre>
                 <br>
-                <p class="beforecode">Na switchi opět začneme konfigurací IP adresy, tentokrát na vlan 1.</p>
+                <p class="beforecode">Na switchi opět začneme konfigurací IP adresy, tentokrát na SVI.</p>
                 <pre>Switch(config)#interface vlan 1
 Switch(config-if)#ip address 192.168.0.14 255.255.255.240
 Switch(config-if)#no shutdown</pre>
@@ -213,7 +213,7 @@ Switchicek(config-line)exec 2 0</pre>
         <h3>Závěr</h3>
         <p>SSH a telnet jsou protokoly, které hostům umožňují vzdálený přístup na zařízení.</p>
         <p>Telnet je zastaralý protokol ze 60.let 20.století, jehož komunikace je plaintextová. Telnet operuje na TCP portu <b>23</b>.</p>
-        <p>SSH, Secure Shell je protokol, který navazuje na telnet a jehož cílem je zprostředkovat zabezpečený vzdálený přístup. Má 2 verze - SSHv1 a SSHv2, ty se od sebe liší tím, že SSHv2 poskytuje lepší zabezpečení.</p>
+        <p>SSH, Secure Shell je protokol, který navazuje na Telnet a jehož cílem je zprostředkovat zabezpečený vzdálený přístup. Má 2 verze - SSHv1 a SSHv2, ty se od sebe liší tím, že SSHv2 poskytuje lepší zabezpečení.</p>
         <p>SSH funguje na TCP portu <b>22</b>.</p>
     </section>
     <div class="height_spacer"></div>

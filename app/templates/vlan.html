@@ -253,13 +253,13 @@ Router(config-subif)#ip address A.B.C.D E.F.G.H
             <p>Jak je psáno výše VTP nepropaguje za normálních okolností Extended VLANs (VLANs s id 1006-4094).</p>
             <p>VTP protokol není v CCNA a v CCNP zkoušce a zas tolik se už nepoužívá. VTP má ale dopad na síť, takže by se o těchto dopadech mělo aspoň trochu vědět.</p>
             <p>VTP je možno vypnout dle věku daného switche.</p>
-            <p>U starších zařízení se používá:</p>
+            <p class="beforecode">U starších zařízení se používá:</p>
             <pre>SW(config)#vtp mode transparent</pre>
-            <p>U novějších zařízení se používá:</p>
+            <p class="beforecode">U novějších zařízení se používá:</p>
             <pre>SW(config)#vtp mode off</pre>
             <p>Rozdíl mezi těmito příkazy je takový, že vtp mode transparent VTP zcela nevypne, kdežto vtp mode off jej zcela vypne.</p>
             <p>Obě možnosti ale znemožní VTP detekci a propagování VLAN.</p>
-            <p>Pokud někdy budete mít s VLAN konfigurací problém, doporučuji zkontrolovat VTP status pomocí příkazu.</p>
+            <p class="beforecode">Pokud někdy budete mít s VLAN konfigurací problém, doporučuji zkontrolovat VTP status pomocí příkazu.</p>
             <pre>SW#show vtp status</pre>
         </section>
         <section id="DTP" class="subSection">
@@ -269,11 +269,11 @@ Router(config-subif)#ip address A.B.C.D E.F.G.H
             <p>Z bezpečnostního hlediska není doporučené DTP používat.</p>
             <p>DTP se nastavuje na každém portu zvlášť.</p>
             <p>Pokud je port v access módu, tak DTP jej nemůže nějak změnit.</p>
-            <p>Když je port v trunk módu, tak jej též DTP nezmění, ale může pomoct změnit jej i na druhé straně trunku.</p>
+            <p class="beforecode">Když je port v trunk módu, tak jej též DTP nezmění, ale může pomoct změnit jej i na druhé straně trunku.</p>
             <pre>switch(config-if)#switchport mode dynamic auto <span>// přepne se do trunku, pokud dostane žádost.</span>
 switch(config-if)#switchport mode dynamic desirable <span>// posílá žádost o přesun do trunk modu.</span>
 </pre>
-            <p>Jestliže chceme používat trunk bez toho, aby se používalo DTP, lze jej zakázat pomocí příkazu:</p>
+            <p class="beforecode">Jestliže chceme používat trunk bez toho, aby se používalo DTP, lze jej zakázat pomocí příkazu:</p>
             <pre>switch(config-if)#switchport nonegotiate</pre>
             <h4>Tabulka switchport modu</h4>
             <div class="overflowTable">
