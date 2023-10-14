@@ -8,7 +8,13 @@ let eigrp = document.querySelector('#eigrp');
 let ospf = document.querySelector('#ospf');
 let bgp = document.querySelector('#bgp');
 let ipv6 = document.querySelector('#ipv6');
-let sshTelnet = document.querySelector('#sshTelnet');
+let nat = document.querySelector('#nat');
+let ntpptp = document.querySelector('#ntpptp');
+let dhcp = document.querySelector('#dhcp');
+let dns = document.querySelector('#dns');
+let ftp = document.querySelector('#ftp');
+let syslog = document.querySelector('#syslog');
+let sshTelnet = document.querySelector('#sshtelnet');
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
 let adress = "";
@@ -69,6 +75,30 @@ ipv6.addEventListener('click', () => {
     $('main').load('ipv6.html');
     name_of_page = 'ipv6';
 })
+nat.addEventListener('click', () => {
+    $('main').load('nat.html');
+    name_of_page = 'nat';
+})
+ntpptp.addEventListener('click', () => {
+    $('main').load('ntpptp.html');
+    name_of_page = 'ntpptp';
+})
+dhcp.addEventListener('click', () => {
+    $('main').load('dhcp.html');
+    name_of_page = 'dhcp';
+})
+dns.addEventListener('click', () => {
+    $('main').load('dns.html');
+    name_of_page = 'dns';
+})
+ftp.addEventListener('ftp', () => {
+    $('main').load('ftp.html');
+    name_of_page = 'ftp';
+})
+syslog.addEventListener('click', () => {
+    $('main').load('syslog.html');
+    name_of_page = 'syslog';
+})
 
 let stpArray = document.querySelectorAll(".stp");
 
@@ -90,7 +120,7 @@ window.onload = function() {
         a = "vlan";
     }
     if  (a == "rip"){
-        adress = "/app/templates/RoutingProtocols/";
+        adress = "/templates/RoutingProtocols/";
         a = "rip";
     }
     if  (a == "eigrp"){

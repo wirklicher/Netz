@@ -268,7 +268,7 @@ if (name_of_page == 'ipv6'){
     },
     {
         question: "Jakým příkazem povolíme IPv6 routing?",
-        choice1: "R1(config)#ipv6 routing",
+        choice1: "R1(config)#ipv6 unicast-routing",
         choice2: "R1(config-if)#ipv6 routing",
         choice3: "R1(config)#ipv6 enable",
         choice4: "R1(config)#ipv6 routing enable",
@@ -332,7 +332,7 @@ if (name_of_page == 'ipv6'){
     },
 ]
 }
-if (name_of_page == 'sshTelnet'){
+if (name_of_page == 'sshtelnet'){
     MCQS = [{
         question: "Jaký port využívá SSH?",
         choice1: "UDP 23",

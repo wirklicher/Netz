@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/template.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Scriptos - Netzwe</title>
+</head>
+<body>
+    <h1>NAT - Network Address Translation</h1>
+    <div id="templateline"></div>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: ACL, IPv4</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět nakonfigurovat a troubleshootovat source NAT</li>
+        </ul>
+    <section id="uvod">
+        <h3 id="problematika">Úvod do problematiky</h3>
+        <p>S obrovským rozmachem Internetu vznikla na počátku 90. let minulého století predikce, podle níž by mělo dojít k úplnému vyčerpání IPv4 adres v polovině 90.let. Toto zjištění nebylo vůbec pěkné a muselo se rychle konat, proto síťaři přišli s krátkodobými řešeními, jejichž kombinace vyčerpání na pár let oddálila.
+            Těmito řešeními byl <b>CIDR</b>, <b>Private Addressing</b> a <b>NAT</b> (především ale vlastně PAT).
+        </p>
+        <section id="CIDR" class="subSection">
+            <h4>CIDR</h4>
+            <p>Classless Inter-Domain Routing byl v té době vskutku revoluční změnou, která navždy ovlivnila IPv4 adresaci.</p>
+            <p>Do té doby byla IPv4 adresace tzv. "Classful" - IPv4 adresy byly rozděleny do tříd A, B, C, s pevně danou délkou (A - /8, B - /16 a C - /24) - pozn. existovala pak ještě třída D, která sloužila k multicastu a třída E, která byla experimentální. Tento blok adres jste pak dle vaší spotřeby dostali přidělený. Obrovským problémem zde ale bylo to, že pokud jste se nevešli o pár hostů do C třídy (potřebovali jste 257 hostů), tak vám museli přiděli třídu B, která byla několikanásobně větší (65534 dostupných adres) a adresami se tak zbytečně plýtvalo ve velkém.</p>
+            <p>CIDR měl tomuto plýtvání zabránit a představil, tak revoluční změnu, která síťařům umožňovala přiřadit komukoliv jak velký blok adres byl potřeba - v příkladu z minulé věty by teda namísto /16 dostal /23 blok.</p>
+            <p>Tato změna pak měla pozitivní dopad na velikost směrovací tabulky.</p>
+        </section>
+        <section id="PrivateAddressing" class="subSection">
+            <h4>Private Addressing</h4>
+            <p>Dalším řešením bylo představení privátních adres. Ty mají sloužit pro ta zařízení u nichž se NEpředpokládá, že by měli někdy sami o sobě přístup k Internetu.</p>
+            <p>Pro tenhle účel IANA (Organizace, která dohlíží na přidělování IP adres) vyčlenila bloky adres - <b>10.0.0.0/8</b>, <b>172.16.0.0/12</b>, <b>192.168.0.0/16</b>. Adresy definované v těchto blocích nemůžou být nikdy přiděleny nikomu (registrovaně) a také nejsou směrovatelné. </p>
+            <p>Jinými slovy, pokud neplánujete zařízení vůbec připojovat k Internetu či používat NAT/PAT, tak budete používat adresy z jednoho z těchto bloků.</p>
+        </section>
+        <section id="UvodDoNAT">
+            <h3>Úvod do NAT</h3>
+            <p>NAT byl posledním dílem skládačky, co se týče krátkodobého řešení nedostatku IPv4 adres. NAT nebo-li Network Address Translation umožňuje hostům s privátní adresou komunikovat s Internetem. To může dělat díky tomu, že NAT právě tyto privátní adresy "překládá" na veřejné.</p>
+            <p>Jsou 3 způsoby, jak může NAT překládat privátní adresy na veřejné - statický, dynamický a PAT.</p>
+            <section id="NAT_Terminology" class="subSection">
+                <h4>Terminologie NAT</h4>
+                <p>V NAT se často setkáte s výrazy <b>Inside Local</b>, <b>Inside Global</b>, <b>Outside Local</b> a <b>Outside Global</b>.</p>
+                <p>Pojďme si tyto pojmy vysvětlit na příkladu:</p>
+                <img src="../static/styles/images/NAT/Static_NAT_ex.png" alt="Static NAT" class="configImage">
+                <p><b>Inside Local</b> značí adresu vnitřního přístroje z pohledu vnitřní sítě.</p>
+                <p>Z toho tedy vyplývá, že IP adresy <i>192.168.0.2</i> a <i>192.168.0.3</i> jsou Inside Local.</p>
+                <p>Inside Global poté označuje adresu vnitřního přístoje z pohledu vnější sítě.</p>
+                <p>Proto by do této kategorie spadaly IP adresy <i>178.42.36.22</i> a <i>178.42.36.23</i>.</p>
+                <p>Outside Local poukazuje na adresu vnějšího přístroje z pohledu vnitřní sítě.</p>
+                <p>Tuto definici v našem případě naplňuje IP adresa <i>8.8.8.8</i>.</p>
+                <p>Outside Global ukazuje na adresu vnějšího přístroje z pohledu vnější sítě.</p>
+                <p>V našem případě toto opět naplňuje IP adresa <i>8.8.8.8</i>.</p>
+                <br>
+                <p>Je nutný zde také napsat, že ne vždy jsou Outside Local a Outside Global stejné, existuje totiž ještě destination NAT (Zde to probíráme z pohledu source NAT), kde jsou tyto IP adresy různé.</p>
+                <p>Rozdíl mezi Source NAT a Destination NAT je pak ten, že Source NAT mění v paketu IP adresu odesílatele, kdežto Destination NAT mění v paketu IP adresu příjemce.</p>
+                <section id="NATChart">
+                        <div class="overflowTable">
+                            <table>
+                                <tr>
+                                    <th>Termín</th>
+                                    <th>IP v příkladu</th>
+                                    <th>Vysvětlení</th>
+                                </tr>
+                                <tr>
+                                    <td>Inside Local/Privátní adresa</th>
+                                    <td>192.168.0.2, 192.168.0.3</td>
+                                    <td>IP adresa vnitřního přístroje z pohledu vnitřní sítě</td>
+                                </tr>
+                                <tr>
+                                    <td>Inside Global/Veřejná adresa</td>
+                                    <td>178.42.36.22, 178.42.36.23</td>
+                                    <td>IP adresa vnitřního přístroje z pohledu vnější sítě</td>
+                                </tr>
+                                <tr>
+                                    <td>Outside Local</th>
+                                    <td>8.8.8.8</td>
+                                    <td>IP adresa vnějšího přístroje z pohledu vnitřní sítě</td>
+                                </tr>
+                                <tr>
+                                    <td>Outside Global</th>
+                                    <td>8.8.8.8</td>
+                                    <td>IP adresa vnějšího přístroje z pohledu vnější sítě</td>
+                                </tr>
+                            </table>
+                        </div>
+                </section>
+            </section>
+            <section id="StaticNat" class="subSection">
+                <h4>Statická NAT</h4>
+                <p>Statická NAT funguje tak, že překládá jednu privátní IPv4 adresu na jednu veřejnou IPv4 adresu.</p>
+                <p>Názorný příklad - Jak tedy funguje statická NAT?</p>
+                <img src="../static/styles/images/NAT/Static_NAT_ex.png" alt="Static NAT" class="configImage">
+                <p>Co se tedy v našem případě stane?</p>
+                <p>Pokud <i>UbuntuDockerGuest-1</i> se bude snažit pingnout IP adresu <i>8.8.8.8</i>, tak v celé oblasti NAT INSIDE bude paket mít zdrojovou IP adresu 192.168.0.2. Jakmile paket dojde na R1 dojde k překladu ze 192.168.0.2 na 178.42.36.22 a celý Internet, tak bude komunikovat s UbuntuDockerGuest-1 jako s 178.42.36.22.</p>
+                <p>Když mu pak 8.8.8.8 bude posílat ICMP ECHO REPLY zprávu bude s ním komunikovat pod jeho veřejnou IP adresou - 178.42.36.22, jakmile paket dorazí na R1, dojde opět k překladu ze 178.42.36.22 na 192.168.0.2.</p>
+                <p>Pro UbuntuDockerGuest-2 by to bylo naprosto stejné akorát, že by jeho veřejná IP adresa byla 178.42.36.23.</p>
+                <p>Na tomto příkladě si můžeme všimnout, že statická NAT nám úplně IP adresy <b>neušetří</b>, protože na 1 privátní IP adresu, potřebujeme mít 1 veřejnou, nicméně je nutné uvést to, že NAT jako taková má pozitivní vliv na bezpečnost síťě.</p>
+                <section id="StaticNATConfiguration" class="subSection">
+                    <h5>Konfigurace statické NAT</h5>
+                    <p>Př. Nakonfigurujte statickou source NAT na R1:</p>
+                    <img src="../static/styles/images/NAT/Static_NAT_ex.png" alt="Static NAT" class="configImage">
+                    <p class="beforecode">Nejdříve si na R1 určíme inside (gig0/0) a outside (gig0/1) NAT interfaci</p>
+                    <pre>R1(config)#interface gig0/0
+R1(config-if)#ip nat inside
+R1(config-if)#interface gig0/1
+R1(config-if)#ip nat outside</pre>
+                    <p class="beforecode">Poté již stačí v globálním configu R1 nastavit jednotlivá mapování</p>
+                    <pre>R1(config)#ip nat inside source static 192.168.0.2 178.42.36.22
+R1(config)#ip nat inside source static 192.168.0.3 178.42.36.23</pre>
+<p><b>LAB UMÍSTIT KE STAŽENÍ ZDE!!!!!!!</b></p>
+                </section>
+            </section>
+            <section id="DynamicNAT" class="subSection">
+                <h4>Dynamická NAT</h4>
+                <p>Dynamická NAT funguje podobně jako statická na principu mapování jedné privátní na jednu veřejnou IPv4 adresu. Rozdíl zde je v tom, že tentokrát ta veřejná IPv4 adresa není stálá a je vybírána dynamicky z tzv. poolu.</p>
+                <p>Pool nám definuje rozsah inside global (veřejných IPv4) adres, které bude následovně po omezenou dobu přidělovat určitým inside local (privátním IPv4) adresám.</p>
+                <p>Stejně jako statická NAT nás nezbaví našeho problému s nedostatkem veřejných IPv4 adres. Nicméně i dynamická NAT má pozitivní vliv na bezpečnost síťě.</p>
+                <p>Názorný příklad - Jak tedy funguje dynamická NAT?</p>
+                <img src="../static/styles/images/NAT/Dynamic_NAT_ex.png" alt="Dynamic NAT" class="configImage">
+                <p>Pokud se v tomto případě bude snažit host <i>UbuntuDockerGuest-1</i> pingnout IP adresu 8.8.8.8, tak klasicky bude platit, že v celé oblasti NAT INSIDE bude tento paket vystupovat pod svoji privátní IPv4 adresou (192.168.0.2).</p>
+                <p>Jakmile se tento paket dostane na R1, zkontroluje se pravidlo v ACL, které určí, které privátní adresy mají být přeloženy na veřejné adresy z NAT Poolu.</p>
+                <p>Poté se tedy té dané privátní adrese přidělí 1 veřejná IP adresa z NAT Poolu a přes tuto IP adresu bude zařízení komunikovat.</p>
+                <p>Co se ale stane, jestliže vyčerpáme všechny veřejné IP adresy z našeho NAT Poolu?</p>
+                <p>Pokud byl náš pool zcela vyčerpán a do síťě se připojí nový host, tak všechen jeho provoz mířící mimo NAT INSIDE bude na routeru dropnutý do doby než nějakému jinému hostovi vyprší zapůjčení veřejné IP adresy z poolu nebo se všechna tato zapůjčení manuálně odstraní.</p>
+                <section id="DynamicNATConfiguration" class="subSection">
+                    <h5>Konfigurace dynamické NAT</h5>
+                    <p>Př. Nakonfigurujte dynamickou NAT na R1:</p>
+                    <img src="../static/styles/images/NAT/Dynamic_NAT_ex.png" alt="Dynamic NAT" class="configImage">
+                    <p class="beforecode">Prvně si opět určíme inside a outside interfaci</p>
+                    <pre>R1(config)#interface gig0/0
+R1(config-if)#ip nat inside
+R1(config-if)#interface gig0/1
+R1(config-if)#ip nat outside</pre>
+                    <p class="beforecode">Dále budeme muset vytvořit ACL, které specifikuje ty privátní IP adresy, které se budou "překládat" na veřejné IP adresy.</p>
+                    <pre>R1(config)#access-list 1 permit 192.168.0.0 0.0.0.7</pre>
+                    <p class="beforecode">Tímto příkazem jsme tedy zapříčinili to, že všechny pakety pocházející ze subnety 192.168.0.0/29 budou přeloženy na veřejnou IP adresu bude-li to možné na základě vytíženosti poolu.</p>
+                    <p class="beforecode">Nyní definujeme pool - </p>
+                    <pre>R1(config)#ip nat pool cool_pool 178.42.36.1 178.42.36.6 netmask 255.255.255.248</pre>
+                    <p>pozn. To jestli jsou adresy v rozsahu v jedné subnetě kontroluje právě netmask</p>
+                    <p class="beforecode">A nakonec toto vše dáme dohromady - </p>
+                    <pre>R1(config)#ip nat inside source list 1 pool cool_pool</pre>
+                    <p><b>LAB UMÍSTIT KE STAŽENÍ ZDE!!!!!!!</b></p>
+                </section>
+            </section>
+            <section id="PAT" class="subSection">
+                <h4>PAT - Port Address Translation</h4>
+                <p>Nakonec tu máme ještě PAT, která konečně z krátkodobého hlediska řeší nedostatek IPv4 adres. PAT nám mapuje několik privátních IPv4 adres na jednu veřejnou IPv4 adresu.</p>
+                <p>Jakpak ale R1 ví, který paket je určený pro kterého hosta v NAT INSIDE síti?</p>
+                <p>PAT k tomuto účelu využívá L4 porty, pomocích kterých dokáže odlišit, kterému zařízení v NAT INSIDE síti patří paket, který mu přišel z NAT OUTSIDE sítě.</p>
+                <p>Názorný příklad 1 - Jak tedy funguje statická PAT?</p>
+                <img src="../static/styles/images/NAT/PAT_ex1.png" alt="PAT" class="configImage">
+                <p>UbuntuDockerGuest-1 a UbuntuDockerGuest-2 se snaží dostat na 142.251.37.110:80, vytvoří tedy paket se svoji privátní IPv4 adresou a náhodným source portem.</p>
+                <p>Tyto pakety se dostanou na router, kde se nejdříve zjistí, jestli se na ně náhodou nevztahuje PAT. V našem případě se na ně PAT vztahuje, a tak budou zdrojové IPv4 adresy přeloženy na jedinou veřejnou IPv4 adresu.</p>
+                <p>Jestliže jsou zdrojové porty u obou hostů již zpočátku různé, tak je již dokonáno a sockety (IPv4 adresa:port) jsou vepsány do NAT Translation tabulky. Pokud by tak ale nebylo a oba zdrojové porty by byly stejné, tak by se jeden musel změnit.</p>
+                <p>Když se 142.251.37.110 bude snažit komunikovat s hosty využije k tomu z jeho pohledu právě porty. Porty pak na routeru správně identifikují jednotlivé hosty spolu s IP adresami.</p>
+                <section id="PATConfiguration">
+                    <h5>PAT Konfigurace</h5>
+                    <p>Př. Nakonfigurujte PAT na R1:</p>
+                    <img src="../static/styles/images/NAT/PAT_ex1.png" alt="PAT" class="configImage">
+                    <p class="beforecode">Stejně jako v předešlých konfiguracích nejdříve nakonfigurujeme NAT INSIDE a NAT OUTSIDE.</p>
+                    <pre>R1(config)#interface gig0/0
+R1(config-if)#ip nat inside
+R1(config-if)#interface gig0/1
+R1(config-if)#ip nat outside</pre>
+                    <p class="beforecode">Dále vytvoříme ACL, která routeru stejně jako u dynamické NAT říká, které IP adresy bude překládat.</p>
+                    <pre>R1(config)#access-list 1 permit 192.168.0.0 0.0.0.7</pre>
+                    <p class="beforecode">Nyní stačí již nakonfigurovat samotný PAT</p>
+                    <pre>R1(config)#ip nat inside source list 1 interface gig0/1 overload</pre>
+                    <p>Tímto příkazem jsme routeru řekli, že má přeložit všechny privátní IPv4 adresy, které naplňují ACL, a použít k tomu IP adresu, která je nakonfigurovaná na interfacu gig0/1. Klíčové slovíčko <i>overload</i> pak zapne PAT.</p>
+                </section>
+            </section>
+            <section class="TroubleshootingNAT">
+                <h4>Troubleshooting NAT</h4>
+                <p>Při práci s NAT se může stát, že někde uděláte chybu, proto vám představím následující příkazy, které můžou pomoci danou chybu odhalit.</p>
+                <p>Prvním příkazem je <i>show ip nat translations</i>. Tento příkaz vám zobrazí mapování jednotlivých privátních adres na veřejné adresy, takže se jej hodí použít, pokud si nejste jistý se správným mapováním.</p>
+                <p>Pokud narazíte na špatné mapování možná by se vám mohl hodit (obzvláště při dynamické NAT) příkaz <i>clear ip nat translations *</i>, který vyčistí všechna dosavadní zmapování.</p>
+                <p>Posledním příkazem je <i>show ip nat statistics</i>.</p>
+            </section>
+            </section>
+    <section id="prehledPrikazu">
+        <h3>Přehled příkazů (PT)</h3>
+            <div class="overflowTable">
+                <table>
+                    <tr>
+                        <th>Příkazy</th>
+                        <th>Popis</th>
+                        <th>Mód</th>
+                    </tr>
+                    <tr>
+                        <td>vlan {vlan-id}</th>
+                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>name {vlan-name}</td>
+                        <td>Pojmenuje VLAN</td>
+                        <td>VLAN interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
+                        <td>Přepne interface do modu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport nonegotiate</th>
+                        <td>Vypne DTP na interfacu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport access vlan {vlan-id}</td>
+                        <td>Přiřadí VLANu k danému interfacu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk encapsulation {protocol}</th>
+                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk native vlan {vlan-id}</th>
+                        <td>Nastaví Native VLAN</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
+                        <td>Nastaví povolené VLANy na trunku</th>
+                        <td>Interface</th>
+                    </tr>
+                    <tr>
+                        <td>encapsulation dot1q {VLAN_ID}</th>
+                        <td>Nastaví sub interface pro danou VLAN</th>
+                        <td>router - sub interface</th>
+                    </tr>
+                    <tr>
+                        <td>vtp mode {transparent | off}</th>
+                        <td>Vypne VTP</th>
+                        <td>Global Config</th>
+                    </tr>
+                    <tr>
+                        <td>show interfaces switchport</td>
+                        <td>Zobrazí informace o interfaci</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show interfaces {interface-id} trunk</td>
+                        <td>Zobrazí informace o truncích</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vlan brief</td>
+                        <td>Zobrazí informace o VLAN</td>
+                        <td>EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vtp status</td>
+                        <td>Zobrazí informace o VTP</td>
+                        <td>EXEC</td>
+                    </tr>
+                </table>
+            </div>
+    </section>
+    <div class="height_spacer"></div>
+    <section id="zaver">
+        <h3>Závěr</h3>
+    </section>
+    <div class="height_spacer"></div>
+    <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
+    <div id="templateline2" style='margin: auto;'></div>
+    <div class="height_spacer"></div>
+    <div class="btns_quiz">
+        <a class="btnquiz" id="play">Hrát</a>
+    </div>
+    <div class="quiz" id="quiz">
+        
+        <div class="question" id="question">
+            <div class="headerquest">
+                <h2 id="questionNo">1.</h2>
+                <h2 id="questionText"></h2>
+                <div class="timer" id="timer">
+                    <h6>čas:&nbsp</h6>
+                    
+                    <div class="timenum">
+                        <div class="line2"></div>
+                        <div class="circleback">
+                            <h6 id="time">00</h6>
+                        </div>
+                        <div class="line2"></div>
+                    </div>
+            </div>
+            </div>
+        </div>
+        <div class="mainer">
+            <div class="height_spacer"></div>
+            <div class="cont">
+                <div class="abc">
+                    <p class="letter">A</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">B</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">C</p>
+                    <div class="height_spacer2"></div>
+                    <p class="letter">D</p>
+                </div>
+                
+                <div class="line"></div>
+                <div id="optionList">
+                    <h4 class='choice_que noBorder' id="opt1"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt2"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt3"></h4>
+                    <div class="height_spacer"></div>
+                    <h4 class='choice_que noBorder' id="opt4"></h4>
+                    <div class="height_spacer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="answersSection">
+            <div class="answers">
+                <div class="bgans">
+                    <h3 id="total_correct" class="noBorder">0</h3>
+                </div>
+                <div class="bgbtn" id="next_quest">
+                    <h3 class="noBorder">Další</h3>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="result hidden">
+        <img src="../static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
+        <h2>Výsledky</h2>
+        <p id="points"></p>
+        <div class="height_spacer"></div>
+        <a class="playagainbtn" id="playagain">Hrát znovu</a>
+    </div>
+    <div class="height_spacer"></div>
+<script src="../static/quiz.js"></script>
+<script src="../static/quest.js"></script>
+</body>
+</html>

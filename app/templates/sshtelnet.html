@@ -32,7 +32,7 @@
         <pre>Switchicek(config)#line vty 0 15</pre>
         <p class="beforecode">Pro zabezpečení pomocí jednoho univerzálního hesla pro všechny slouží příkaz: </p>
         <pre>Switchicek(config-line)#password {password}</pre>
-        <p class="beforecode">Pro zapnutí autentizace se používá příkaz</p>
+        <p class="beforecode">Pro zapnutí autentizace se používá příkaz:</p>
         <pre>Switchicek(config-line)#login</pre>
         <p>Tento příkaz ale sám o sobě není příliš bezpečný, protože heslo je v zařízení uloženo jako pouhý string, takže kdokoliv si jej může zobrazit.</p>
         <p class="beforecode">Tenhle problém lze vyřešit tím, že v global config módu nastavíme zašifrování hesel.</p>
@@ -83,49 +83,49 @@ Switchicek(config)#ip domain-name {domain-name}</pre>
             <pre>Switchicek(config)#ip ssh version {1-2}</pre>
             <section id="PraktickaUkazka" class="subSection">
                 <h5>Praktická ukazka</h5>
-                <p>Nastav SSH na routeru a switchi dle zadaní</p>
+                <p>Nastav SSH na routeru a switchi dle zadaní -</p>
                 <img src="../static/styles/images/SSH/SSH_Prakticka.png" alt="Zadani" class="configImage">
                 <p>Nejdřív začneme routerem: </p>
-                <p class="beforecode">Prvně nakonfigurujeme IP adresu na interfacu gig0/0</p>
+                <p class="beforecode">Prvně nakonfigurujeme IP adresu na interfacu gig0/0:</p>
                 <pre>Router(config)#interface gig0/0
 Router(config-if)#ip address 192.168.0.1 255.255.255.240
 Router(config-if)#no shutdown</pre>
-                <p class="beforecode">Dalším krokem bude nastavit hostname a domain name - </p>
+                <p class="beforecode">Dalším krokem bude nastavit hostname a domain name:</p>
                 <pre>Router(config)#hostname R1
 R1(config)#ip domain-name superrouter</pre>
-                <p class="beforecode">Dále vygenerujeme rsa klíč, zde je nutné nezapomenout na to, že pro použití SSHv2 musí být alespoň 768bitový - </p>
+                <p class="beforecode">Dále vygenerujeme rsa klíč, zde je nutné nezapomenout na to, že pro použití SSHv2 musí být alespoň 768bitový:</p>
                 <pre>R1(config)#crypto key generate rsa
 How many bits in the modulus [512]: 768</pre>
-                <p class="beforecode">Nyní nás čeká nastavit heslo na EXEC mód a vytvořit uživatele Helga -</p>
+                <p class="beforecode">Nyní nás čeká nastavit heslo na EXEC mód a vytvořit uživatele Helga:</p>
                 <pre>R1(config)#enable secret heslo
 R1(config)#username Helga secret 123helga</pre>
-                <p class="beforecode">Ještě nám schází nastavit vty line -</p>
+                <p class="beforecode">Ještě nám schází nastavit vty line:</p>
                 <pre>R1(config)#line vty 0 15
 R1(config-line)#login local
 R1(config-line)#transport input ssh
 R1(config-line)exec 1 0</pre>
-                <p class="beforecode">Nakonec nám zbývá ještě nastavit ssh verzi - </p>
+                <p class="beforecode">Nakonec nám zbývá ještě nastavit ssh verzi:</p>
                 <pre>R1(config)#ip ssh version 2</pre>
                 <br>
-                <p class="beforecode">Na switchi opět začneme konfigurací IP adresy, tentokrát na SVI.</p>
+                <p class="beforecode">Na switchi opět začneme konfigurací IP adresy, tentokrát na SVI:</p>
                 <pre>Switch(config)#interface vlan 1
 Switch(config-if)#ip address 192.168.0.14 255.255.255.240
 Switch(config-if)#no shutdown</pre>
-                <p class="beforecode">Dále nastavíme hostname a domain name - </p>
+                <p class="beforecode">Dále nastavíme hostname a domain name:</p>
                 <pre>Switch(config)#hostname Switchicek
 Switchicek(config)#ip domain-name superswitchicek</pre>
-                <p class="beforecode">Dalším krokem bude klasicky generace rsa klíče, jehož velikost není vzhledem k SSH verzi nějak omezená.</p>
+                <p class="beforecode">Dalším krokem bude klasicky generace rsa klíče, jehož velikost není vzhledem k SSH verzi nějak omezená:</p>
                 <pre>Switchicek(config)#crypto key generate rsa
 How many bits in the modulus [512]: 360</pre>
-                <p class="beforecode">Teď opět nastavíme heslo pro přístup na EXEC mód a uživatelský přístup</p>
+                <p class="beforecode">Teď opět nastavíme heslo pro přístup na EXEC mód a uživatelský přístup:</p>
                 <pre>Switchicek(config)#enable password heslo
 Switchicek(config)#username Helga password 123helga</pre>
-                <p class="beforecode">Ještě nám zbývá nakonfigurovat vty line</p>
+                <p class="beforecode">Ještě nám zbývá nakonfigurovat vty line:</p>
                 <pre>Switchicek(config)#line vty 0 15
 Switchicek(config-line)#login local
 Switchicek(config-line)#transport input all
 Switchicek(config-line)exec 2 0</pre>
-                <p class="beforecode">Nakonec nastavíme verzi ssh.</p>
+                <p class="beforecode">Nakonec nastavíme verzi ssh:</p>
                 <pre>Switchicek(config)#ip ssh version 1</pre>
                 <p>Základní konfiguraci SSH a Telnetu si můžete vyzkoušet <a href="../Labs/SSH/SSH_Telnet.pka">zde</a>.</p>
             </section>

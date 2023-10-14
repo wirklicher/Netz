@@ -23,29 +23,30 @@
     <section id="uvod">
         <h3 id="problematika">Proč existuje IPv6?</h3>
         <p>Když začínal internet nepředpokládalo se, že by přístup k internetu mělo každé zařízení v chytré domácnosti včetně kávovarů a ledniček.</p>
-        <p>Proto mají IPv4 adresy "omezenou" kapacitu pouze na 2**32 adres.</p>
-        <p>S větším rozvojem internetu se síťaři snažili tento problém s omezenou kapacitou řešit tím, že vytvořili NAT (Network Address Translation), který umožní vstup do internetu lokálním zařízením pod 1 veřejnou IP adresou.</p>
-        <p>Nicméně tohle problém zdaleka tak nevyřešilo a tak síťaři museli příjít s něcím lepším.</p>
+        <p>Proto jsou IPv4 adresy pouze 32bitové.</p>
+        <p>S větším rozvojem internetu se síťaři snažili tento problém s omezenou kapacitou řešit tím, že vymysleli CIDR a i poté co toto řešení selhalo se snažili najít řešení tvorbou NAT a PAT (Network Address Translation), které například umožňují vstup do internetu lokálním zařízením pod 1 veřejnou IP adresou.</p>
+        <p>Nicméně tohle problém to zdaleka tak nevyřešilo a tak síťaři museli příjít s něcím lepším.</p>
         <section id="Ipv5" class="subSection">
             <h4>Kde je IPv5?</h4>
-            <p>IPv5 se nikdy neměla stát oficiální náhradou IPv4, protože měla spoustu problémů, týkající se adresace. Nyní je spíš známá pod jiným jménem - Stream Protokol (ST)</p>
+            <p>IPv5 se nikdy neměla stát oficiální náhradou IPv4, protože měla spoustu problémů týkající se adresace. Nyní je spíš tato verze známá pod jiným jménem - Stream Protokol (ST)</p>
             <p>Protokol se měl tak používat pro streamování videí a hlasu a položil tak základy VoIP.</p>
         </section>
     </section>
     <section id="Basics">
         <h3>Základy IPv6</h3>
-        <p>IPv6 je 128 bitová adresa, která se zapisuje hexadecimálně. 128bitová velikost nám umožní vytvořit až 340 undecilionů unikátních adres (2**128).</p>
+        <p>IPv6 je 128 bitová adresa, která se zapisuje <b>hexadecimálně</b>. 128bitová velikost nám umožní vytvořit až 340 undecilionů unikátních adres (2**128).</p>
         <p>Jejím účelem je nahradit již zastaralé technologie a omezení, které sebou IPv4 přinesla.</p>
         <p>Ve vývoji je od 90let.</p>
 
         <section id="header" class="subSection">
             <h4>Hlavička IPv6</h4>
+            <p>Celkem 40bytová</p>
             <ul>
                 <li class="req" class="beforecode"><b>Version</b> - standardně 6</li>
-                <li class="req"><b>Traffic Class</b> - 8bitovy, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
+                <li class="req"><b>Traffic Class</b> - 8bitový, v podstatě Quality of Service, nastavuje prioritu určitých zpráv (např. VoIP)</li>
                 <li class="req"><b>Flow Label</b> - 20bitový, identifikuje specificky traffic flows</li>
                 <li class="req"><b>Payload Length</b> - 16bitů - značí velikost zapouzdřeného segmentu</li>
-                <li class="req"><b>Next Header</b> - 8bitu, typ next headeru (Např TCP či UDP)</li>
+                <li class="req"><b>Next Header</b> - 8bitu, určuje jaký protokol se užívá ve 4. verze ISO/OSI (Např TCP či UDP)</li>
                 <li class="req"><b>HOP limit</b> - 8bitu, funguje jako TTL</li>
                 <li class="req"><b>Src. Address</b> - 128bitu</li>
                 <li class="req"><b>Dest. Address</b> - 128bitu</li>
@@ -54,8 +55,8 @@
 
         <section id="Adresace" class="subSection">
             <h4>Adresace</h4>
-            <p>IPv6 se zapisuje hexadecimálně (tj. obsahuje i písmenka A-F) a skládá se z 8 skupinek po 4 hexadecimálních číslicí.</p>
-            <p>Příkladem IPv6 adresy může být například: 2001:0DB8:1111:ABC0:4521:4871:0000:0001</p>
+            <p>IPv6 se zapisuje <b>hexadecimálně</b> (tj. obsahuje i písmenka A-F) a skládá se z 8 skupinek po 4 hexadecimálních číslicí.</p>
+            <p>Příkladem IPv6 adresy může být například: <b>2001:0DB8:1111:ABC0:4521:4871:0000:0001</b></p>
             <p>Přičemž se můžete setkat se 2 typy zápisu: </p>
             <li class="req"><b>Celý</b> - příkladem může být již uvedený 2001:0DB8:1111:ABC0:4521:4871:0000:0001</li>
             <li class="req"><b>Zkrácený</b> - příkladem může být tato adresa: 3001:AC1::C03</li>
@@ -70,11 +71,7 @@
 
                 <p>Teď když tyto pravidla zkombinujete a uplatníte, tak budete moci vytvořit zkrácený zápis IPv6</p>
 
-                <p>Typické chyby: </p>
-                <p><b>Používání pravidla č1 vícekrát</b></p>
-                <p><b>Vynechání všech 0 nakonci skupin</b></p>
-
-                <p>Zkrať následujicí IPv6 adresy:</p>
+                <p><b>Zkrať následujicí IPv6 adresy:</b></p>
                 <p class="beforecode">Př.</p>
                 <pre>2001:0000:0000:AC1E:0000:0000:0870:0451</pre>
                 <p class="beforecode">Řešení:</p>
@@ -97,30 +94,36 @@
         <section id="types" class="subSection">
             <h4>Typy IPv6 Adres</h4>
             <p>IPv6 adresy se dělí na 3 základní skupiny - <b>unicastové</b>, <b>multicastové</b> a <b>anycastové</b></p>
+            <p><b>Unicast</b> se používá tehdy, když chceme zprávu poslat pouze jednomu zařízení.</p>
+            <p><b>Multicast</b> se používá tehdy, jestliže zprávu chceme zaslat vícero zařízením.</p>
+            <p>Novinkou je zde <b>Anycast</b>, ten se používá tehdy, když chceme zprávu poslat jednomu zařízení z vybrané skupiny zařízení, která poskytují nějakou službu, přičemž anycast kontaktuje to zařízení, které je k nám nejblíž.</p>
             <section id="GUA" class="subSection">
                 <h5>Global Unicast Adresa</h5>
                 <p>Tento typ adresy funguje jako klasická veřejná IPv4 adresa.</p>
                 <p>Přiděluje ji ISP.</p>
-                <p>Byl pro ni vyhrazený blok 2000::/3 ale nyní je to v podstatě jakákoliv adresa, která neslouží pro jiný účel.</p>
+                <p>Byl pro ni vyhrazený blok <b>2000::/3</b> ale nyní je to v podstatě jakákoliv adresa, která neslouží pro jiný účel.</p>
                 <p>Skládá se z:</p>
                 <section id="Parts" class="subSection">
                     <li class="req"><b>Global Routing Prefix</b> - přiděluje jej ISP, IANA či RIR, je velký P bitů</li>
-                    <li class="req"><b>Subnet ID</b> - je velká S bitů a slouží k identifikaci dané subnet.</li>
+                    <li class="req"><b>Subnet ID</b> - je velká S bitů a slouží k identifikaci dané subnet</li>
                     <li class="req"><b>Interface ID</b> - slouží k identifikaci zařízení, je velký I bitů</li>
                     <p>Dohromady musí platit, že P+S+I je 128.</p>
                     <p>P+S dává dohromady <b>prefix length</b>.</p>
                 </section>
                 <section id="LookingForGRP" class="subSection">
                     <h5>Hledání IPv6 prefixu</h5>
-                    <p>Další užitečnou znalostí je umět najít prefix</p>
-                    <p>Dejme tomu, že máme zadanou IPv6 adresu 2001:1111:2222:3333:4444:5555:6666:7777/64 (/64 značí prefix length) a naším úkolem je najít prefix.</p>
-                    <p>V tomto případě je postup velmi jednoduchý, protože stačí adresu rozdělit přesně v půlce (celkově je IPv6 adresa 128bitová, našim prefix length je 64, 128-64=64) pro získání prefixu - 2001:1111:2222:3333::/64</p>
+                    <p>Další užitečnou znalostí je umět najít prefix.</p>
+                    <p>Dejme tomu, že máme zadanou IPv6 adresu 2001:1111:2222:3333:4444:5555:6666:7777/64 (/64 značí prefix length) a našim úkolem je najít prefix.</p>
+                    <p>V tomto případě je postup velmi jednoduchý, protože stačí adresu rozdělit přesně v půlce (celkově je IPv6 adresa 128bitová, prefix length je v našem případě 64, 128-64=64) pro získání prefixu - 2001:1111:2222:3333::/64.</p>
+                    <p>Také se ale může stát, že prefix length nebude tak pěkná a bude třeba /70, to už je značně problémový, protože pak je nutné si najít 70 bit. Ten je uvnitř druhé 4 (ta první je v prefixu zcela pokrytá protože, jedna číslice má 4 bity), tu druhou 4 je nutné si přepsat binárně.</p>
+                    <p>Binární hodnota 4 je 0100. První 2 číslice z této hodnoty jsou započteny v prefixu, ze zbytku se stanou nuly, což v tomto případě vůbec nic nezmění.</p>
+                    <p>Takže prefix bude 2001:1111:2222:3333:4400::/70.</p>
                 </section>
             </section>
             <section id="ULUA" class="subSection">
                 <h5>Unique Local Unicast Adresa</h5>
                 <p>Chovají se stejně jako privátní IPv4 adresy, nemůžou být tedy používaný na internetu.</p>
-                <p>Je pro ně vyhrazený blok FC00::/7 s tím, že později bylo určeno, že 8. bit musí být 1 tudíž první 2 hexy musí být <b>FD</b>.</p>
+                <p>Je pro ně vyhrazený blok <b>FC00::/7</b> s tím, že později bylo určeno, že 8. bit musí být 1 tudíž první 2 hexy musí být <b>FD</b>.</p>
                 <p>Složení Unique Local Unicast Adresy:</p>
                 <li class="req"><b>FD</b> - prvních 8 bitů</li>
                 <li class="req"><b>Global ID</b> - mělo by být náhodně vygenerováno - 40 bitů</li>
@@ -132,17 +135,19 @@
                 <h5>Link-Local Adresa</h5>
                 <p>Je to speciální typ unicastové adresy, který se používá pro routing a overhead protokoly.</p>
                 <p>Vlastností těchto adres je, že se neposílají do jiných subnet, tudíž zůstávají vždy v rámci LAN. Z toho například plyne to, že jdou využít jako next-hop IP adresa nebo jako default gateway.</p>
-                <p>Je definována rozsahem FE80::/10 - tzn. že první 3 hexy jsou buď FE8, FE9, FEA nebo FEB, dalších 54 bitů adresy je 0 a druhá půlka je nejčastěji vytvořená pomocí EUI-64.</p>
+                <p>Je definována rozsahem <b>FE80::/10</b> - tzn. že první 3 hexy jsou buď FE8, FE9, FEA nebo FEB, dalších 54 bitů adresy je 0 a druhá půlka je nejčastěji vytvořená pomocí EUI-64.</p>
                 <p class="beforecode">Tyto adresy jsou automaticky vytvořené na každém IPv6 interfacu, nicméně lze ji nastavit i manuálně (za dodržení podmínky, že je definována ve správném rozsahu - FE80::/10).</p>
                 <pre>Router(config-if)#ipv6 address {address} link-local</pre>
                 
                 <section id="EUI64" class="subSection">
                     <h5>EUI-64 - Extended Unique Identifier</h5>
-                    <p>Používá se tehdy, když se nám nechce vymýšlet interface ID (v tom případě nám stačí zadat pouze global ID s tím, že musí být 64bitový) či při tvorbě Link Local Adresy.</p>
+                    <p>Používá se tehdy, když se nám nechce vymýšlet interface ID (v tom případě nám stačí zadat pouze global ID s tím, že musí být 64bitový) či při tvorbě Link-Local adresy.</p>
                     <p>Postup je následujicí: </p>
-                    <li>1) Rozděl MAC adresu na 2 stejné části</li>
-                    <li>2) Vlož mezi ně FFFE --> díky tomu bude mít adresa potřebný počet hex číslic</li>
-                    <li>3) Invertuj 7bit interface ID</li>
+                    <ol>
+                        <li class="ordered">Rozděl MAC adresu na 2 stejné části</li>
+                        <li class="ordered">Vlož mezi ně FFFE --> díky tomu bude mít adresa potřebný počet hex číslic</li>
+                        <li class="ordered">Invertuj 7bit interface ID</li>
+                    </ol>
                 </section>
             </section>
             <section id="others" class="subSection">
@@ -274,22 +279,22 @@
     <section id="NDP">
         <h3>NDP - Neighbor Discovery Protokol</h3>
         <p>Protokol, který má mnoho funkcionalit. Jedna z nejdůležitejších je ta, že nahrazuje ARP (mapování IP adres k MAC adresám).</p>
-        <p>ARP nahrazuje pomocí 2 zpráv NS (Neighbor Solicitation) a NA (Neighbor Advertisement).</p>
-        <p>Když bude zařízení potřebovat zjistit MAC adresu pošle tomu chtěnému zařízení NS na jeho <b>solicited-node adresu</b>.</p>
+        <p>ARP nahrazuje pomocí 2 zpráv <b>NS</b> (Neighbor Solicitation) a <b>NA</b> (Neighbor Advertisement).</p>
+        <p>Když bude zařízení potřebovat zjistit MAC adresu, pošle tomu chtěnému zařízení NS na jeho <b>solicited-node adresu</b>.</p>
         <p>Chtěné zařízení mu poté odpoví svou MAC adresou pomocí NA zprávy.</p>
         <p>Další funkcí NDP je dynamicky detekovat routery v síti.</p>
-        <p>Zpráva RS - Router Solicitation (Multicast na FF02::2) a RA - Router Advertisement (FF02::1) - RA ohlašuje, že router existuje to ze existuje.</p>
+        <p>Zpráva RS - Router Solicitation (Multicast na FF02::2) a RA - Router Advertisement (FF02::1) - RA ohlašuje, že router existuje a dává hostům potřebné informace k <b>SLAAC</b>.</p>
         <section id="SLAAC" class="subSection">
             <h4>SLAAC - autokonfigurace</h4>
             <p>SLAAC používá RS a RA zprávy k tomu, aby pomocí nich vygeneroval IPv6 adresu.</p>
             <p>Pomocí RS a RA zprávy totiž dokáže zjistit, jaký IPv6 prefix používá v síti router (jestliže SLAAC používá router tak zjistí IPv6 prefix jiného routeru).</p>
-            <p>Poté SLAAC zbytek dogeneruje náhodně nebo pomocí EUI-64.</p>
+            <p>Poté SLAAC zbytek dogeneruje náhodně (novější zařízení) nebo pomocí EUI-64 (starší zařízení, v dnešní době je použití eui-64 vnímáno jako možná hrozba).</p>
             <p class="beforecode">SLAAC lze nastavit také na routeru pomocí příkazu:</p>
             <pre>Router(config-if)#ipv6 address autoconfig</pre>
         </section>
         <section id="DAD" class="subSection">
             <h4>DAD - Duplication Address Detection</h4>
-            <p>Mechanismus, který umožní hostům zkontrolovat zda nevygenerovali již použitou adresu, zapne se pokaždé když je nakonfigurovaná adresa na interfacu - k tomu používá NS a NA.</p>
+            <p>Mechanismus, který umožní hostům zkontrolovat, zda nevygenerovali již použitou adresu, zapne se pokaždé, když je nakonfigurovaná adresa na interfacu - k tomu používá NS a NA.</p>
             <p>Funguje tak, že Host pošle na svoji vlastní IPv6 adresu NS zprávu, přičemž když mu nikdo neodpoví, tak jeho adresa je unikátní.</p>
         </section>
     </section>
@@ -297,13 +302,13 @@
         <h3>IPv6 a směrování</h3>
         <section id="Static" class="subSection">
             <h4>Statické</h4>
-            <p>Statické směrování se nastavuje podobně jako IPv4, ale nejprve jej musíme na routeru povolit pomocí příkazu: </p>
+            <p class="beforecode">Statické směrování se nastavuje podobně jako IPv4, ale nejprve jej musíme na routeru povolit pomocí příkazu: </p>
             <pre>R1(config)#ipv6 unicast-routing</pre>
             <p class="beforecode">Dál už jej nastavujeme klasicky: </p>
             <pre>R1(config)ipv6 route {DEST_NET}/{prefix-length} {NextHOP || exit interface} {*AD}</pre>
+            <p><i>pozn. nastavení AD je dobrovolné.</i></p>
             <p><i>pozn. exit interface se používá jen tehdy když se nejedná o Ethernet interface.</i></p>
             <p><b>Pokud jako next hop použijete link-local adresu, je nutné před ní ještě uvést exit interface!</b></p>
-            <p><i>pozn. nastavení AD je dobrovolné.</i></p>
         </section>
     </section>
     <section id="IPv6Conf">

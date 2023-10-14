@@ -14,8 +14,8 @@
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy směrování, alespoň 1 IGP protokol</h5>
     <section id="uvod">
         <h3>Úvod do BGP</h3>
-        <p>BGP nebo-li Border Gateway Protokol, je protokol, který se používá tehdy, když se směrovat mezi autonomními systémy.</p>
-        <p>Patří do skupiny EGP - Enterior Gateway Protocol, která se dále "dělí" do skupiny Path-Vector. Tento typ protokolů funguje podobně jako Distance-Vector, rozdíl je v tom že distance-vector protokol sebou nenese celou cestu až k cíli.</p>
+        <p>BGP nebo-li Border Gateway Protokol, je protokol, který se používá tehdy, když se směruje mezi autonomními systémy.</p>
+        <p>Patří do skupiny EGP - Enterior Gateway Protocol, která se dále "dělí" do skupiny Path-Vector. Tento typ protokolů funguje podobně jako distance-Vector protokoly, rozdíl je v tom že distance-vector protokol sebou nenese celou cestu až k cíli.</p>
         <p>Př:</p>
         <img src="../static/styles/images/Routing/BGP_PathVector.png" alt="Path Vector" class="configImage">
         <i>Obrázek poukazuje na funkčnost Path-Vector protokolů, kdy BGP má přesně definovaný cíl a cestu kudy k němu, čímž i zabraňuje smyčkám.</i>
@@ -33,7 +33,9 @@
             <p>K tomu, aby BGP vybralo nejlepší cestu do cíle využívá tzv. <b>Path Attributes</b>, které poté popořadě hodnotí.</p>
             <section id="PA" class="subSection">
                 <h5>Path Attributes</h5>
-                <p>Path Attributes se dělí z hlediska toho zda-li musí být uznávany ve všech BGP implementacích, z hlediska toho zda se uplatňují pouze v nějakém úseku cesty a z hlediska toho zda můžou či musí být v NLRI.</p>
+                <p>Path Attributes nahrazuje v BGP metriku a router díky ní určuje nejlepší cestu až do cíle.</p>
+                <p>Využitím PA má síťař výhodu, protože získá kontrolu nad tím jak a přes co bude svá data směrovat namísto spoléhaní se na prostou metriku, která je založená na co nejkratší cestě do cíle.</p>
+                <p>Path Attributes se dělí do několika skupin - </p>
                 <ul>
                     <li class="req"><b>Well-known mandatory</b> - základní PA, musí být ve všech BGP implementacích</li>
                     <li class="req"><b>Well-known discetionary</b> - základní PA, nemusí být ale obsažená v NLRI</li>
@@ -61,14 +63,14 @@
                 <p>BGP má 2 různé módy - </p>
                 <ul>
                     <li class="req"><b>eBGP</b> - external BGP - klasické BGP - směruje mezi AS, jeho AD je 20 --> velmi preferovaný</li>
-                    <li class="req"><b>iBGP</b> - internal BGP - distribujuje routy, které se dozvěděl od eBGP v AS, jeho AD je 200 --> velmi nespolehlivý</li>
+                    <li class="req"><b>iBGP</b> - internal BGP - distribujuje routy, které se dozvěděl od eBGP v rámci AS, jeho AD je 200 --> velmi nespolehlivý</li>
                 </ul>
             </section>
             <section id="BGPMessages" class="subSection">
                 <h4>Přehled BGP zpráv</h4>
                 <ul>
-                    <li class="req"><b>Open</b> - zpráva, která se používá během zahajování BGP sousedství, obsahuje např. BGP verzi, ASN zahajujicího routeru, časovač (Holdtime - 180s)</li>
-                    <li class="req"><b>Keepalive</b> - zpráva, která znemožňuje vypršení časovače.</li>
+                    <li class="req"><b>Open</b> - zpráva, která se používá při tvorbě sousedského spojení, obsahuje např. BGP verzi, ASN zahajujicího routeru, časovač (Holdtime - 180s)</li>
+                    <li class="req"><b>Keepalive</b> - zpráva, která znemožňuje vypršení časovače</li>
                     <li class="req"><b>Update</b> - zpráva, která obsahuje informaci o nějaké změně</li>
                     <li class="req"><b>Notification Update</b> - zpráva, která obsahuje chybovou hlášku</li>
                 </ul>
@@ -91,7 +93,7 @@
                 <section id="OpenSent" class="subSection">
                     <h5>OpenSent</h5>
                     <p>BGP čeká na to až dostane open zprávu, která obsahuje všechny důležitý informace o BGP protějšku.</p>
-                    <p>Pakliže je toto úspěšné začne potenciálnímu sousedovi posílat keepalive zprávy.</p>
+                    <p>Jestliže je toto úspěšné začne potenciálnímu sousedovi posílat keepalive zprávy.</p>
                 </section>
                 <section id="OpenConfirm" class="subSection">
                     <h5>OpenConfirm</h5>
@@ -130,7 +132,7 @@ R2(config-router)#network 192.168.2.0 mask 255.255.255.0
         <pre>R1#show ip bgp summary</pre>
         <p class="beforecode">Vypíše shrnutí bgp na routeru.</p>
         <pre>R1#show ip bgp neighbors</pre>
-        <pre>Vypíše veškeré informace o BGP sousedovi.</pre>
+        <p>- příkaz, který vypíše veškeré informace o BGP sousedovi.</p>
         <p>Základní konfiguraci si můžete vyzkoušet <a href="../Labs/Routing/BGP_Zaklady.pka">zde</a>.</p>
     </section>
     <section id="prehledPrikazu">

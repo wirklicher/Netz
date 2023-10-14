@@ -367,7 +367,7 @@ R2(config-if)#ip ospf authentication message-digest
     </section>
     <section id="OSPFv3">
         <h3>OSPFv3</h3>
-        <p>OSPF podporujicí IPv6 směrování.</p>
+        <p>OSPF verze, která podporuje IPv6 směrování.</p>
         <p>Používá FF02::5 a FF02::6 multicastové adresy pro komunikaci</p>
         <section id="OSPFv3_Conf" class="subSection">
             <h4>Konfigurace</h4>
@@ -476,6 +476,11 @@ R1(config-range)#ipv6 ospf 1 area 0</pre>
                     <tr>
                         <td>ip ospf {process_id} area {area}</th>
                         <td>Aktivuje OSPF na daném interface</td>
+                        <td>interface</td>
+                    </tr>
+                    <tr>
+                        <td>ipv6 ospf {process_id} area {area}</th>
+                        <td>Aktivuje OSPFv3 na daném interface</td>
                         <td>interface</td>
                     </tr>
                     <tr>

@@ -119,6 +119,7 @@ play.addEventListener('click', ()=>{
 
 
     loadData = ()=>{
+        console.log(name_of_page)
         questNo.innerText = index + 1 + ". ";
         questText.innerText = MCQS[index].question;
         opt1.innerText = MCQS[index].choice1;
