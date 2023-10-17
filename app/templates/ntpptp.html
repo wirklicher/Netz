@@ -19,10 +19,10 @@
         </ul>
     </section>
     <section id="uvod">
-        <h3 id="problematika">Úvod do problematiky - Důležitost nastavení správného času</h3>
-        <p>V podstatě již každé síťové zařízení vytváří nějakým způsobem logy. Aby se v případě nějakého problému mohl log řádně prošetřit, je důležité vědět kdy daná událost nastala. K tomu slouží tzv. "timestamp".</p>
+        <h3 id="problematika">Úvod do problematiky</h3>
+        <p>V podstatě již každé síťové zařízení vytváří nějakým svým způsobem logy. Aby se v případě nějakého problému mohl log řádně prošetřit, je důležité vědět, kdy daná událost nastala. K tomu slouží tzv. "timestamp".</p>
         <p>Jak ale zařízení ví, kolik je hodin?</p>
-        <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Systém hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které běží i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
+        <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Softwarové hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které běží i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
         <p>Hlavním zdrojem času jsou pro zařízení klasicky software hodiny, které jsou napojené na hardware hodiny. Bohužel jak už to bývá, časem se stává, že se hodiny začnou opožďovat až postupně ztratí svoji relevanci. Tato nepřesnost mezi logy na různých síťových zařízení by nám mohla ztížit troubleshooting síťových problémů, proto je vhodné v síti používat NTP (Network Time Protocol) či PTP (Precision Time Protocol) protokol.</p>
     </section>
     <section id="DeviceTimeConfiguration">
