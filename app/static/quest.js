@@ -375,3 +375,46 @@ if (name_of_page == 'sshtelnet'){
     },
 ]
 }
+if (name_of_page == 'nat'){
+    MCQS = [{
+        question: "Jaký port využívá SSH?",
+        choice1: "UDP 23",
+        choice2: "TCP 22",
+        choice3: "TCP 23",
+        choice4: "UDP 22",
+        answer: 1,
+    },
+    {
+        question: "Jaký port využívá Telnet?",
+        choice1: "UDP 22",
+        choice2: "TCP 22",
+        choice3: "TCP 23",
+        choice4: "UDP 23",
+        answer: 2, 
+    },
+    {
+        question: "Jakým příkazem vygenerujeme rsa klíč na SW1?",
+        choice1: "SW1(config-if)#crypto key gen rsa",
+        choice2: "SW1(config)#crypto key gen",
+        choice3: "Sw1(config-line)crypto key gen rsa",
+        choice4: "SW1(config)#crypto key gen rsa",
+        answer: 3, 
+    },
+    {
+        question: "Aspoň kolika bitový musí být rsa klíč pro to, abychom mohli použít SSHv2?",
+        choice1: "512",
+        choice2: "768",
+        choice3: "360",
+        choice4: "548",
+        answer: 1, 
+    },
+    {
+        question: "Jakým příkazem přepnu ssh verzi na R1?",
+        choice1: "R1(config)#ip ssh version",
+        choice2: "R1(config)#ssh version",
+        choice3: "R1(config-line)#ssh version",
+        choice4: "R1(config-line)#ip ssh version",
+        answer: 0, 
+    },
+]
+}

@@ -9,11 +9,56 @@
     <title>Scriptos - Netzwe</title>
 </head>
 <body>
-    <h1>Nadpis</h1>
+    <h1>NTP & PTP</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní konfigurace v Packet Traceru</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět nakonfigurovat a troubleshootovat NTP v klient a server módu</li>
+        </ul>
+    </section>
     <section id="uvod">
-        <h3 id="problematika">Úvod do problematiky</h3>
+        <h3 id="problematika">Úvod do problematiky - Důležitost nastavení správného času</h3>
+        <p>V podstatě již každé síťové zařízení vytváří nějakým způsobem logy. Aby se v případě nějakého problému mohl log řádně prošetřit, je důležité vědět kdy daná událost nastala. K tomu slouží tzv. "timestamp".</p>
+        <p>Jak ale zařízení ví, kolik je hodin?</p>
+        <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Systém hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které běží i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
+        <p>Hlavním zdrojem času jsou pro zařízení klasicky software hodiny, které jsou napojené na hardware hodiny. Bohužel jak už to bývá, časem se stává, že se hodiny začnou opožďovat až postupně ztratí svoji relevanci. Tato nepřesnost mezi logy na různých síťových zařízení by nám mohla ztížit troubleshooting síťových problémů, proto je vhodné v síti používat NTP (Network Time Protocol) či PTP (Precision Time Protocol) protokol.</p>
+    </section>
+    <section id="DeviceTimeConfiguration">
+        <h3>Konfigurace času na Cisco zařízení</h3>
+        <p>Pro to aby bylo nastavení NTP, co nejhladšší je dobré nejdříve nastavit software a hardware hodiny.</p>
+        <p>pozn. Zařízení v Packet Traceru nemají hardware clock, proto je v labech nenastavíte.</p>
+        <p>Před nastavením samotného času je vždy dobré nastavit nejdříve časovou zónu a letní čas. To je dáno tím, že když nejdříve nastavíme čas a až poté časovou zónu a letní čas, tak se na nynější čas aplikují daná pravidla - Běžně totiž nastavujeme čas v UTC. Kdybychom tedy nastavili nejdřív to, že je 18.10.2023 18:00, tak po nastavení časové zóny na CET a letního času by z 18:00 bylo najednou 20:00.</p>
+        <p class="beforecode">Pro nastavení časové zóny a letního času použijeme následujicí příkazy: </p>
+        <pre>Router(config)#clock timezone CET 1 0
+Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00</pre>
+        <p>pozn. časová zóna či letního čas se nastavuje pouze na software hodinách</p>
+        <p class="beforecode">Pro manuální nastavení softwarových hodin na datum 15.10.2023 13:39:45 použijeme příkaz:</p>
+        <pre>Router#clock set 13:39:45 15 october 2023 </pre>
+        <p class="beforecode">Pro manuální nastavení hardwarových hodin na totéž datum použijeme příkaz:</p>
+        <pre>Router#calendar set 13:39.45 15 october 2023 </pre>
+        <p class="beforecode">Budeme-li chtít aktualizovat čas softwarových hodin pomocí hardware hodin, použijeme příkaz:</p>
+        <pre>Router#clock read-calendar</pre>
+        <p class="beforecode">Když to obrátíme a budeme chtít aktualizovat čas hardwarových hodin pomocí sofwarových hodin, aplikujeme následujicí příkaz:</p>
+        <pre>Router#clock update-calendar</pre>
+    </section>
+    <section id="NTPBasics">
+        <h3>Základy NTP</h3>
+        <p>V úvodu jsme si vysvětlili, že pouze manuální konfigurace není v běžné praxi přijatelná, protože časem se hodiny znepřesní a není snadno rozšířitelná. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje zařízení s NTP serverem.</p>
+        <p>Jak NTP funguje?</p>
+        <p>NTP funguje tak, že máme klienta a server. Klient požádá server o synchronizaci času. Server žádosti vyhoví a pošle klientovi aktuální čas. Intenzita žádostí o synchronizaci času se pohybuje od 64 sekund do 1024 sekund s tím, že se dynamicky mění dle potřeby.</p>
+        <p>Pozor NTP pracuje pouze v UTC, proto je dobré předem nastavit časovou zónu a letní čas.</p>
+        <p>NTP používá UDP port 123.</p>
+        <p>NTP dovede udržet čas v rozmezí desítek milisekund.</p>
+        <section id="NTPHierarchy">
+            <h4>NTP Hierarchie</h4>
+            <p>Úplně na začátku jsou "Referenční" hodiny.</p>
+        </section>
+    </section>
+    <section id="PTP">
+        <h3>PTP</h3>
+    </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
             <div class="overflowTable">

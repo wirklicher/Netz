@@ -11,12 +11,13 @@
 <body>
     <h1>NAT - Network Address Translation</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: ACL, IPv4</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: ACL, IPv4, základní konfigurace v Packet Traceru</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
             <li class="req">Umět nakonfigurovat a troubleshootovat source NAT</li>
         </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>S obrovským rozmachem Internetu vznikla na počátku 90. let minulého století predikce, podle níž by mělo dojít k úplnému vyčerpání IPv4 adres v polovině 90.let. Toto zjištění nebylo vůbec pěkné a muselo se rychle konat, proto síťaři přišli s krátkodobými řešeními, jejichž kombinace vyčerpání na pár let oddálila.
@@ -35,9 +36,11 @@
             <p>Pro tenhle účel IANA (Organizace, která dohlíží na přidělování IP adres) vyčlenila bloky adres - <b>10.0.0.0/8</b>, <b>172.16.0.0/12</b>, <b>192.168.0.0/16</b>. Adresy definované v těchto blocích nemůžou být nikdy přiděleny nikomu (registrovaně) a také nejsou směrovatelné. </p>
             <p>Jinými slovy, pokud neplánujete zařízení vůbec připojovat k Internetu či používat NAT/PAT, tak budete používat adresy z jednoho z těchto bloků.</p>
         </section>
+    </section>
         <section id="UvodDoNAT">
             <h3>Úvod do NAT</h3>
             <p>NAT byl posledním dílem skládačky, co se týče krátkodobého řešení nedostatku IPv4 adres. NAT nebo-li Network Address Translation umožňuje hostům s privátní adresou komunikovat s Internetem. To může dělat díky tomu, že NAT právě tyto privátní adresy "překládá" na veřejné.</p>
+            <p>NAT se dělí podle toho co mapuje na co. Pokud se mění zdrojová (source) IPv4 adresa, tak mluvíme o source NAT, pokud se mění adresa příjemce (destination) IPv4 adresa, tak mluvíme o destination NAT. My se zde budeme bavit pouze o zdrojové (source) NAT, nebude-li to specifikováno jinak.</p>
             <p>Jsou 3 způsoby, jak může NAT překládat privátní adresy na veřejné - statický, dynamický a PAT.</p>
             <section id="NAT_Terminology" class="subSection">
                 <h4>Terminologie NAT</h4>
@@ -96,7 +99,7 @@
                 <p>Pokud <i>UbuntuDockerGuest-1</i> se bude snažit pingnout IP adresu <i>8.8.8.8</i>, tak v celé oblasti NAT INSIDE bude paket mít zdrojovou IP adresu 192.168.0.2. Jakmile paket dojde na R1 dojde k překladu ze 192.168.0.2 na 178.42.36.22 a celý Internet, tak bude komunikovat s UbuntuDockerGuest-1 jako s 178.42.36.22.</p>
                 <p>Když mu pak 8.8.8.8 bude posílat ICMP ECHO REPLY zprávu bude s ním komunikovat pod jeho veřejnou IP adresou - 178.42.36.22, jakmile paket dorazí na R1, dojde opět k překladu ze 178.42.36.22 na 192.168.0.2.</p>
                 <p>Pro UbuntuDockerGuest-2 by to bylo naprosto stejné akorát, že by jeho veřejná IP adresa byla 178.42.36.23.</p>
-                <p>Na tomto příkladě si můžeme všimnout, že statická NAT nám úplně IP adresy <b>neušetří</b>, protože na 1 privátní IP adresu, potřebujeme mít 1 veřejnou, nicméně je nutné uvést to, že NAT jako taková má pozitivní vliv na bezpečnost síťě.</p>
+                <p>Na tomto příkladě si můžeme všimnout, že statická NAT nám úplně IP adresy <b>neušetří</b>, protože na 1 privátní IP adresu, potřebujeme mít 1 veřejnou, nicméně je nutné uvést to, že NAT jako taková má pozitivní vliv na bezpečnost síťě - žádné zařízení z Internetu nás nemůže kontaktovat, pokud ho my nekontaktujeme.</p>
                 <section id="StaticNATConfiguration" class="subSection">
                     <h5>Konfigurace statické NAT</h5>
                     <p>Př. Nakonfigurujte statickou source NAT na R1:</p>
@@ -148,12 +151,12 @@ R1(config-if)#ip nat outside</pre>
                 <h4>PAT - Port Address Translation</h4>
                 <p>Nakonec tu máme ještě PAT, která konečně z krátkodobého hlediska řeší nedostatek IPv4 adres. PAT nám mapuje několik privátních IPv4 adres na jednu veřejnou IPv4 adresu.</p>
                 <p>Jakpak ale R1 ví, který paket je určený pro kterého hosta v NAT INSIDE síti?</p>
-                <p>PAT k tomuto účelu využívá L4 porty, pomocích kterých dokáže odlišit, kterému zařízení v NAT INSIDE síti patří paket, který mu přišel z NAT OUTSIDE sítě.</p>
+                <p>PAT k tomuto účelu využívá L4 porty, pomocí kterých dokáže odlišit, kterému zařízení v NAT INSIDE síti patří paket, který mu přišel z NAT OUTSIDE sítě.</p>
                 <p>Názorný příklad 1 - Jak tedy funguje statická PAT?</p>
                 <img src="../static/styles/images/NAT/PAT_ex1.png" alt="PAT" class="configImage">
                 <p>UbuntuDockerGuest-1 a UbuntuDockerGuest-2 se snaží dostat na 142.251.37.110:80, vytvoří tedy paket se svoji privátní IPv4 adresou a náhodným source portem.</p>
-                <p>Tyto pakety se dostanou na router, kde se nejdříve zjistí, jestli se na ně náhodou nevztahuje PAT. V našem případě se na ně PAT vztahuje, a tak budou zdrojové IPv4 adresy přeloženy na jedinou veřejnou IPv4 adresu.</p>
-                <p>Jestliže jsou zdrojové porty u obou hostů již zpočátku různé, tak je již dokonáno a sockety (IPv4 adresa:port) jsou vepsány do NAT Translation tabulky. Pokud by tak ale nebylo a oba zdrojové porty by byly stejné, tak by se jeden musel změnit.</p>
+                <p>Tyto pakety se dostanou na router, kde se nejdříve zjistí, jestli se na ně náhodou nevztahuje PAT. V našem případě se na ně PAT vztahuje, a tak budou zdrojové IPv4 adresy přeloženy na veřejnou IPv4 adresu.</p>
+                <p>Jestliže jsou zdrojové porty u obou hostů již zpočátku různé, tak je již dokonáno a sockety (IPv4 adresa:port) jsou vepsány do překladové tabulky NAT. Pokud by tak ale nebylo a oba zdrojové porty by byly stejné, tak by se jeden musel na routeru změnit.</p>
                 <p>Když se 142.251.37.110 bude snažit komunikovat s hosty využije k tomu z jeho pohledu právě porty. Porty pak na routeru správně identifikují jednotlivé hosty spolu s IP adresami.</p>
                 <section id="PATConfiguration">
                     <h5>PAT Konfigurace</h5>
@@ -173,10 +176,10 @@ R1(config-if)#ip nat outside</pre>
             </section>
             <section class="TroubleshootingNAT">
                 <h4>Troubleshooting NAT</h4>
-                <p>Při práci s NAT se může stát, že někde uděláte chybu, proto vám představím následující příkazy, které můžou pomoci danou chybu odhalit.</p>
-                <p>Prvním příkazem je <i>show ip nat translations</i>. Tento příkaz vám zobrazí mapování jednotlivých privátních adres na veřejné adresy, takže se jej hodí použít, pokud si nejste jistý se správným mapováním.</p>
+                <p>Při práci s NAT se může stát, že někde uděláte chybu, proto vám představím příkazy, které vám můžou pomoci danou chybu odhalit.</p>
+                <p>Prvním příkazem je <i>show ip nat translations</i>. Tento příkaz vám zobrazí mapování jednotlivých privátních adres na veřejné adresy, takže se vám může hodit například, pokud si nejste jistý, jestli jste neprohodili privátní a veřejnou adresu.</p>
                 <p>Pokud narazíte na špatné mapování možná by se vám mohl hodit (obzvláště při dynamické NAT) příkaz <i>clear ip nat translations *</i>, který vyčistí všechna dosavadní zmapování.</p>
-                <p>Posledním příkazem je <i>show ip nat statistics</i>.</p>
+                <p>Posledním příkazem je <i>show ip nat statistics</i>, ten vám zas pro změnu ukáže aktuální počet záznamů v překladové tabulce NAT, či které interfaci jsou označeny jako NAT INSIDE a NAT OUTSIDE.</p>
             </section>
             </section>
     <section id="prehledPrikazu">
@@ -189,74 +192,44 @@ R1(config-if)#ip nat outside</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>ip nat {inside | outside}</th>
+                        <td>Nastaví interface jako NAT INSIDE nebo NAT OUTSIDE</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>ip nat inside source static {inside-local-address} {inside-global-address}</td>
+                        <td>Nastaví statickou NAT</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>ip nat pool {název_poolu} {start-ip} {end-ip} netmask {netmask}</th>
+                        <td>Definuje "pool" NAT adres</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
+                        <td>ip nat inside source list {access-list-number | access-list-name} pool {pool-name}</th>
+                        <td>Nastaví dynamickou NAT</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>ip nat inside source list {access-list-number | access-list-name} interface {interface} overload</td>
+                        <td>Nastaví PAT </td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>show ip nat statistics</th>
+                        <td>Zobrazí základní informace o NAT</td>
+                        <td>privileged EXEC</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
+                        <td>show ip nat translations</th>
+                        <td>Zobrazí překladovou tabulku NAT</td>
+                        <td>privileged EXEC</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
+                        <td>clear ip nat translation *</th>
+                        <td>Vyčistí všechny záznamy v překladové tabulce NAT</th>
+                        <td>privileged EXEC</th>
                     </tr>
                 </table>
             </div>
@@ -264,6 +237,13 @@ R1(config-if)#ip nat outside</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>NAT je protokol, který dokázal společně s privátní adresací a CIDRem prodloužit životnost IPv4 o několik let.</p>
+        <p>NAT funguje na principu rozdělení sítě na vnitřní/vnější - ve vnitřní síti se používají privátní IPv4 adresy (Inside Local) a ve vnější se používají veřejné IPv4 adresy (Inside Global).</p>
+        <p>Jsou 3 typy source NAT - statická, dynamická a PAT (NAT Overload).</p>
+        <p>Statická mapuje jednu privátní IPv4 adresu na 1 veřejnou IPv4 adresu.</p>
+        <p>Dynamická překládá jednu privátní IPv4 adresu na 1 veřejnou IPv4 adresu, která se dynamicky vybírá z poolu.</p>
+        <p>Nejpoužívanější typ NAT - PAT (NAT Overload) pak překládá několik veřejných IPv4 adres na jednu veřejnou IPv4 adresu - toho se dost často využívá v domacích sítí. PAT poté rozlišuje jednotlivá zařízení pomocí portů, které jsou společně s IP adresami uložené v překladové tabulce NAT.</p>
+        <p>NAT také zvyšuje bezpečnost vnitřní sítě - zařízení mimo vnitřní síť nemůže komunikovat se zařízením ve vnitřní síti, do té do doby než ho zařízení z vnitřní sítě samo kontaktuje.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
