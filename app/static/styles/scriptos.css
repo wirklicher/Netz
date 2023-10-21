@@ -229,6 +229,10 @@ input:checked:after {
   font-weight: 700;
 }
 
+.light_mode {
+  display: none;
+}
+
 @media only screen and (max-width: 600px) {
   #main {
     width: 100%;

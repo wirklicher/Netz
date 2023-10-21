@@ -18,6 +18,7 @@ let sshTelnet = document.querySelector('#sshtelnet');
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
 let adress = "";
+let dark_aware = document.querySelector('#dark_aware')
 
 const hamburger = document.querySelector(".hamburger");
 const navmenu = document.querySelector(".menu");
@@ -157,6 +158,12 @@ window.onload = function() {
 
 function dark_mode() {
     document.documentElement.classList.toggle('dark_mode');
+    if (document.documentElement.classList.contains('dark_mode')){
+        document.getElementById("dark_aware").src = "../static/styles/images/NTP/NTP_Hierarchy_dark.png"
+    }
+    else {
+        document.getElementById("dark_aware").src = "../static/styles/images/NTP/NTP_Hierarchy.png"
+    }
     localStorage.setItem('mode', document.documentElement.classList.contains('dark_mode'));
     console.log(localStorage.getItem('mode'));
 }

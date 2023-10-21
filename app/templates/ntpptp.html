@@ -21,7 +21,7 @@
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>V podstatě již každé síťové zařízení vytváří nějakým svým způsobem logy. Aby se v případě nějakého problému mohl log řádně prošetřit, je důležité vědět, kdy daná událost nastala. K tomu slouží tzv. "timestamp".</p>
-        <p>Jak ale zařízení ví, kolik je hodin?</p>
+        <p><i>Jak ale zařízení ví, kolik je hodin?</i></p>
         <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Softwarové hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které běží i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
         <p>Hlavním zdrojem času jsou pro zařízení klasicky software hodiny, které jsou napojené na hardware hodiny. Bohužel jak už to bývá, časem se stává, že se hodiny začnou opožďovat až postupně ztratí svoji relevanci. Tato nepřesnost mezi logy na různých síťových zařízení by nám mohla ztížit troubleshooting síťových problémů, proto je vhodné v síti používat NTP (Network Time Protocol) či PTP (Precision Time Protocol) protokol.</p>
     </section>
@@ -29,11 +29,11 @@
         <h3>Konfigurace času na Cisco zařízení</h3>
         <p>Pro to aby bylo nastavení NTP, co nejhladšší je dobré nejdříve nastavit software a hardware hodiny.</p>
         <p>pozn. Zařízení v Packet Traceru nemají hardware clock, proto je v labech nenastavíte.</p>
-        <p>Před nastavením samotného času je vždy dobré nastavit nejdříve časovou zónu a letní čas. To je dáno tím, že když nejdříve nastavíme čas a až poté časovou zónu a letní čas, tak se na nynější čas aplikují daná pravidla - Běžně totiž nastavujeme čas v UTC. Kdybychom tedy nastavili nejdřív to, že je 18.10.2023 18:00, tak po nastavení časové zóny na CET a letního času by z 18:00 bylo najednou 20:00.</p>
-        <p class="beforecode">Pro nastavení časové zóny a letního času použijeme následujicí příkazy: </p>
+        <p>Před nastavením samotného času je vždy dobré nastavit nejdříve časové pásmo a letní čas. To je dáno tím, že když nejdříve nastavíme čas a až poté časové pásmo a letní čas, tak se na nynější čas aplikují daná pravidla - Běžně totiž nastavujeme čas v UTC. Kdybychom tedy nastavili nejdřív to, že je 18.10.2023 18:00, tak po nastavení časové zóny na CET a letního času by z 18:00 bylo najednou 20:00.</p>
+        <p class="beforecode">Pro nastavení časového pásma a letního času použijeme následujicí příkazy: </p>
         <pre>Router(config)#clock timezone CET 1 0
 Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00</pre>
-        <p>pozn. časová zóna či letního čas se nastavuje pouze na software hodinách</p>
+        <p>pozn. časové pásmo či letního čas se nastavuje pouze na software hodinách</p>
         <p class="beforecode">Pro manuální nastavení softwarových hodin na datum 15.10.2023 13:39:45 použijeme příkaz:</p>
         <pre>Router#clock set 13:39:45 15 october 2023 </pre>
         <p class="beforecode">Pro manuální nastavení hardwarových hodin na totéž datum použijeme příkaz:</p>
@@ -45,19 +45,96 @@ Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sund
     </section>
     <section id="NTPBasics">
         <h3>Základy NTP</h3>
-        <p>V úvodu jsme si vysvětlili, že pouze manuální konfigurace není v běžné praxi přijatelná, protože časem se hodiny znepřesní a není snadno rozšířitelná. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje zařízení s NTP serverem.</p>
-        <p>Jak NTP funguje?</p>
+        <p>V úvodu jsme si vysvětlili, že pouze manuální konfigurace není v běžné praxi přijatelná, protože časem se hodiny znepřesní a také není snadno rozšířitelná. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje zařízení s NTP serverem.</p>
+        <p><i>Jak NTP funguje?</i></p>
         <p>NTP funguje tak, že máme klienta a server. Klient požádá server o synchronizaci času. Server žádosti vyhoví a pošle klientovi aktuální čas. Intenzita žádostí o synchronizaci času se pohybuje od 64 sekund do 1024 sekund s tím, že se dynamicky mění dle potřeby.</p>
-        <p>Pozor NTP pracuje pouze v UTC, proto je dobré předem nastavit časovou zónu a letní čas.</p>
+        <p>Pozor NTP pracuje pouze v UTC, proto je dobré předem nastavit časové pásmo a letní čas.</p>
         <p>NTP používá UDP port 123.</p>
         <p>NTP dovede udržet čas v rozmezí desítek milisekund.</p>
-        <section id="NTPHierarchy">
+        <p>Zařízení může být zároveň jak NTP klientem tak NTP serverem, přičemž každý zařízení, které získává čas z jiného je zároveň i serverem (bez žádné další konfigurace) a může být zdrojem času pro jiné zařízení.</p>
+        <section id="NTPHierarchy" class="subSection">
             <h4>NTP Hierarchie</h4>
-            <p>Úplně na začátku jsou "Referenční" hodiny.</p>
+            <img src="../static/styles/images/NTP/NTP_Hierarchy.png" alt="NTP Hierarchie" class="configImage" id="dark_aware">
+            <p>Úplně na začátku jsou "Referenční" hodiny. Ty jsou zdrojem času a všechna ostatní zařízení synchronizují svůj čas právě s těmito hodinami. </p>
+            <p>Z referenčních hodin získávají čas tzv. primární servery. Jako primární server označujeme zařízení, který má <b>Stratum</b> 1.</p>
+            <p>Stratum je vzdálenost zařízení od referenčních hodin. NTP servery, které mají stratum větší jak 15 jsou označeny jako nedůvěryhodné a ostatní zařízení s nimi nesynchronizují svůj čas.</p>
+            <p>Pojem sekundární server poté zahrnuje všechny ostatní NTP servery.</p>
+            <p>Nakonec nám na obrázku ještě zbývá NTP Peer, NTP peer je zařízení, který má stejný stratum a se kterým si mezi sebou synchronizujeme čas.</p>
+        </section>
+        <section id="NTPmodes" class="subSection">
+            <h4>NTP módy</h4>
+            <p>RFC 1129 nám definuje následujicí NTP módy:</p>
+            <ul>
+                <li class="req"><b>Server</b> - Zařízení, které na žádost klienta posílá aktuální čas</li>
+                <li class="req"><b>Klient</b> - Posílá NTP serveru žádost o synchronizaci</li>
+                <li class="req"><b>Symmetric Active/Passive</b> - NTP peers se spolu navzájem synchronizují, Aktivní peer posílá pasivnímu žádost o synchronizaci, Pasivní na ni odpovídá</li>
+                <li class="req"><b>Broadcast</b> - Server, který pravidelně posílá klientům broadcast s aktuálním časem</li>
+            </ul>
+        </section>
+        <section id="BestPractise" class="subSection">
+            <h4>Ověřené postupy</h4>
+            <p>Tato část zabývá doporučeními, na které je při konfiguraci NTP třeba myslet.</p>
+            <section id="loopbackInt" class="subSection">
+                <h5>Užití Loopback interfacu</h5>
+                <p>Na úvod mějme následujicí topologii:</p>
+                <img src="../static/styles/images/NTP/NTP_loopback_ex2.png" alt="NTP Loopback EX1" class="configImage">
+                <p>R2 má nastaveno to, že se NTP server má hledat na zařízení s IP adresou 192.168.0.1.</p>
+                <p>Co by se ale stalo, pokud by fyzická linka s touto IP adresou selhala?</p>
+                <img src="../static/styles/images/NTP/NTP_loopback_ex3.png" alt="NTP Loopback EX2" class="configImage">
+                <p>Pokud by linka mezi R1 a R2 selhala, tak by NTP klient prišel o svůj zdroj času, protože 192.168.0.1 by se najednou stala nedostupnou.</p>
+                <p>Tomuto lze ale zabránit, protože R1 je sám o sobě stále dosažitelný přes R3. K tomuto účelu stačí na R1 nakonfigurovat loopback interface a R2 říct, že má NTP server hledat právě na loopback adrese R1. Tím pádem by R2 měla mít zdroj času, dokud ji bude R1 dostupná.</p>
+            </section>
+        </section>
+        <section id="NTPConfiguration">
+            <h3>NTP Konfigurace</h3>
+            <p>K procvičení NTP konfigurace si zvolíme následujicí topologii: </p>
+            <img src="../static/styles/images/NTP/NTP_ex2.png" alt="NTP Exercise 1" class="configImage">
+            <p class="beforecode">Začňeme tím, že nakonfigurujeme, časové pásmo a letní čas na R1: </p>
+            <pre>R1(config)#clock timezone CET 1 0
+R1(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00</pre>
+            <p class="beforecode">Teď když máme správně nakonfigurovanoé letní čas a časové pásmo, nastala chvíle na to nakonfigurovat na R1 aktuální čas:</p>
+            <pre>R1#clock set 15:20:00 21 october 2023</pre>
+            <p class="beforecode">Pro to abychom nakonfigurovali R1 jako NTP server, použijeme následujicí příkaz:</p>
+            <pre>R1(config)#ntp master 2</pre>
+            <p>pozn. 2 zde určuje stratum</p>
+            <p class="beforecode">Nyní se přesuneme na R2, kde opět nastavíme časové pásmo, letní čas a přibližný aktuální čas:</p>
+            <pre>R2(config)#clock timezone CET 1 0
+R2(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00
+R2#clock set 15:20:00 21 october 2023</pre>
+            <p>pozn. přibližný aktuální čas na R2 nastavujeme proto, že se nám pak spolu s NTP serverem lépe synchronizují.</p>
+            <p class="beforecode">Nakonec synchronizujeme R2 se serverem, k tomu použijeme loopback adresu NTP serveru:</p>
+            <pre>R2(config)#ntp server 1.1.1.1</pre>
+            <section id="NTPTroubleshooting" class="subSection">
+                <h4>Troubleshooting NTP</h4>
+                <p class="beforecode">Někdy se stane, že během konfigurace uděláme chybu. K nalezení chyby nám v rámci NTP protokolu slouží následujicí příkazy:</p>
+                <pre>R1#show ntp status</pre>
+                <p class="beforecode">Z příkazu <i>show ntp status</i> jsou pro nás klíčové následujicí informace: stratum, ip adresa ntp serveru a to zda jsou hodiny synchronizované.</p>
+                <pre>R1#show ntp associations</pre>
+                <p>Příkaz <i>show ntp associations</i> nám zas dává důležité informace (stratum ntp serveru, reach, delay, atd) o nakonfigurovaných NTP serverech.</p>
+            </section>
+            <section id="ntpAuthConfig" class="subSection">
+                <h4>Konfigurace NTP Autentizace</h4>
+                <p>K nastavení NTP autentizace použijeme topologii z předešlé konfigurace</p>
+                <img src="../static/styles/images/NTP/NTP_ex2.png" alt="NTP Exercise 1" class="configImage">
+                <p class="beforecode">Prvně povolíme na R1 (NTP serveru) ntp autentizaci pomocí příkazu: </p>
+                <pre>R1(config)#ntp authenticate</pre>
+                <p class="beforecode">Následně na R1 (NTP serveru) vytvoříme klíč pomocí kterého se budeme ověřovat: </p>
+                <pre>R1(config)#ntp authentication-key 1 md5 netzwe</pre>
+                <p>pozn. 1 je číslo klíče, které jej identifikuje</p>
+                <p class="beforecode">Nyní na R1 (NTP serveru) specifikujeme jakým klíčům bude zařízení důvěřovat: </p>
+                <pre>R1(config)#ntp trusted-key 1</pre>
+                <p class="beforecode">Na klientu poté nastavíme totéž co na R1 + při konfiguraci NTP serveru specifikujeme jaký klíč má s tímto serverem použít: </p>
+                <pre>R2(config)#ntp server 1.1.1.1 key 1</pre>
+            </section>
         </section>
     </section>
     <section id="PTP">
         <h3>PTP</h3>
+        <p>PTP nebo-li Precision Time Protocol je protokol, který je použit tam, kde NTP již nestačí.</p>
+        <p>Je to protokol, který se snaží minimalizovat delay tak, aby zařízení dostalo co nejpřesnější čas.</p>
+        <section id="PTPConfiguration">
+            <h4>Konfigurace PTP</h4>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
