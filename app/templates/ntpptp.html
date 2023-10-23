@@ -22,8 +22,8 @@
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>V podstatě již každé síťové zařízení vytváří nějakým svým způsobem logy. Aby se v případě nějakého problému mohl log řádně prošetřit, je důležité vědět, kdy daná událost nastala. K tomu slouží tzv. "timestamp".</p>
         <p><i>Jak ale zařízení ví, kolik je hodin?</i></p>
-        <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Softwarové hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které běží i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
-        <p>Hlavním zdrojem času jsou pro zařízení klasicky software hodiny, které jsou napojené na hardware hodiny. Bohužel jak už to bývá, časem se stává, že se hodiny začnou opožďovat až postupně ztratí svoji relevanci. Tato nepřesnost mezi logy na různých síťových zařízení by nám mohla ztížit troubleshooting síťových problémů, proto je vhodné v síti používat NTP (Network Time Protocol) či PTP (Precision Time Protocol) protokol.</p>
+        <p>Cisco zařízení mají 2 typy hodin. Mají tzv. <b>hardware hodiny</b> (calendar) a <b>software hodiny</b> (clock). Softwarové hodiny jsou hodiny, které se po restartu vrátí na svoji původní hodnotu a hardware hodiny (calendar) jsou hodiny, které správně fungují i po restartu. Tyto hodiny fungují nezávisle na sobě.</p>
+        <p>Hlavním zdrojem času jsou pro zařízení klasicky software hodiny, které jsou napojené na hardware hodiny. Bohužel, jak už to bývá, časem se stává, že se hodiny začnou opožďovat až postupně ztratí svoji relevanci. Tato nepřesnost mezi logy na různých síťových zařízení by nám mohla ztížit troubleshooting síťových problémů, proto je vhodné v síti používat NTP (Network Time Protocol) či PTP (Precision Time Protocol) protokol.</p>
     </section>
     <section id="DeviceTimeConfiguration">
         <h3>Konfigurace času na Cisco zařízení</h3>
@@ -45,19 +45,19 @@ Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sund
     </section>
     <section id="NTPBasics">
         <h3>Základy NTP</h3>
-        <p>V úvodu jsme si vysvětlili, že pouze manuální konfigurace není v běžné praxi přijatelná, protože časem se hodiny znepřesní a také není snadno rozšířitelná. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje zařízení s NTP serverem.</p>
+        <p>V úvodu jsme si vysvětlili, že manuální konfigurace není v běžné praxi dostačujicí, protože časem se hodiny znepřesní a také není snadno rozšířitelná. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje zařízení s NTP serverem.</p>
         <p><i>Jak NTP funguje?</i></p>
         <p>NTP funguje tak, že máme klienta a server. Klient požádá server o synchronizaci času. Server žádosti vyhoví a pošle klientovi aktuální čas. Intenzita žádostí o synchronizaci času se pohybuje od 64 sekund do 1024 sekund s tím, že se dynamicky mění dle potřeby.</p>
         <p>Pozor NTP pracuje pouze v UTC, proto je dobré předem nastavit časové pásmo a letní čas.</p>
         <p>NTP používá UDP port 123.</p>
         <p>NTP dovede udržet čas v rozmezí desítek milisekund.</p>
-        <p>Zařízení může být zároveň jak NTP klientem tak NTP serverem, přičemž každý zařízení, které získává čas z jiného je zároveň i serverem (bez žádné další konfigurace) a může být zdrojem času pro jiné zařízení.</p>
+        <p>Zařízení může být zároveň jak NTP klientem tak NTP serverem, přičemž každý zařízení, které získává čas z jiného je zároveň i serverem (bez žádné další konfigurace) a může být zdrojem času pro jiná zařízení.</p>
         <section id="NTPHierarchy" class="subSection">
             <h4>NTP Hierarchie</h4>
             <img src="../static/styles/images/NTP/NTP_Hierarchy.png" alt="NTP Hierarchie" class="configImage" id="dark_aware">
             <p>Úplně na začátku jsou "Referenční" hodiny. Ty jsou zdrojem času a všechna ostatní zařízení synchronizují svůj čas právě s těmito hodinami. </p>
             <p>Z referenčních hodin získávají čas tzv. primární servery. Jako primární server označujeme zařízení, který má <b>Stratum</b> 1.</p>
-            <p>Stratum je vzdálenost zařízení od referenčních hodin. NTP servery, které mají stratum větší jak 15 jsou označeny jako nedůvěryhodné a ostatní zařízení s nimi nesynchronizují svůj čas.</p>
+            <p><b>Stratum</b> je vzdálenost zařízení od referenčních hodin. NTP servery, které mají stratum větší jak 15 jsou označeny jako nedůvěryhodné a ostatní zařízení s nimi nesynchronizují svůj čas.</p>
             <p>Pojem sekundární server poté zahrnuje všechny ostatní NTP servery.</p>
             <p>Nakonec nám na obrázku ještě zbývá NTP Peer, NTP peer je zařízení, který má stejný stratum a se kterým si mezi sebou synchronizujeme čas.</p>
         </section>
@@ -92,7 +92,7 @@ Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sund
             <p class="beforecode">Začňeme tím, že nakonfigurujeme, časové pásmo a letní čas na R1: </p>
             <pre>R1(config)#clock timezone CET 1 0
 R1(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00</pre>
-            <p class="beforecode">Teď když máme správně nakonfigurovanoé letní čas a časové pásmo, nastala chvíle na to nakonfigurovat na R1 aktuální čas:</p>
+            <p class="beforecode">Teď když máme správně nakonfigurovaný letní čas a časové pásmo, nastala chvíle na to nakonfigurovat na R1 aktuální čas:</p>
             <pre>R1#clock set 15:20:00 21 october 2023</pre>
             <p class="beforecode">Pro to abychom nakonfigurovali R1 jako NTP server, použijeme následujicí příkaz:</p>
             <pre>R1(config)#ntp master 2</pre>
@@ -110,7 +110,7 @@ R2#clock set 15:20:00 21 october 2023</pre>
                 <pre>R1#show ntp status</pre>
                 <p class="beforecode">Z příkazu <i>show ntp status</i> jsou pro nás klíčové následujicí informace: stratum, ip adresa ntp serveru a to zda jsou hodiny synchronizované.</p>
                 <pre>R1#show ntp associations</pre>
-                <p>Příkaz <i>show ntp associations</i> nám zas dává důležité informace (stratum ntp serveru, reach, delay, atd) o nakonfigurovaných NTP serverech.</p>
+                <p>Příkaz <i>show ntp associations</i> nám zas dává důležité informace o nakonfigurovaných NTP serverech - jako třeba stratum ntp serveru, reach, delay, atd.</p>
             </section>
             <section id="ntpAuthConfig" class="subSection">
                 <h4>Konfigurace NTP Autentizace</h4>
@@ -123,17 +123,43 @@ R2#clock set 15:20:00 21 october 2023</pre>
                 <p>pozn. 1 je číslo klíče, které jej identifikuje</p>
                 <p class="beforecode">Nyní na R1 (NTP serveru) specifikujeme jakým klíčům bude zařízení důvěřovat: </p>
                 <pre>R1(config)#ntp trusted-key 1</pre>
-                <p class="beforecode">Na klientu poté nastavíme totéž co na R1 + při konfiguraci NTP serveru specifikujeme jaký klíč má s tímto serverem použít: </p>
+                <p class="beforecode">Na klientu poté nastavíme totéž co na R1 + při konfiguraci NTP serveru specifikujeme, jaký klíč má s tímto serverem použít: </p>
                 <pre>R2(config)#ntp server 1.1.1.1 key 1</pre>
             </section>
         </section>
     </section>
     <section id="PTP">
         <h3>PTP</h3>
-        <p>PTP nebo-li Precision Time Protocol je protokol, který je použit tam, kde NTP již nestačí.</p>
-        <p>Je to protokol, který se snaží minimalizovat delay tak, aby zařízení dostalo co nejpřesnější čas.</p>
-        <section id="PTPConfiguration">
-            <h4>Konfigurace PTP</h4>
+        <p>V dnešní době přestává být NTP v některých odvětvích (telekomunikace, obchodování na burze, továrny, hraní her přes cloud apod.) dostačujicí a začíná jej nahrazovat PTP (Precision Time Protocol).</p>
+        <p><i>Proč NTP přestává stačit?</i></p>
+        <p>Problém s NTP je ten, že nepočítá s latencí, a tudíž čas, který obdrží klient od NTP serveru, nebude tak přesný a bude opožděný právě o tu latenci, která nastane během posílání NTP zpráv.</p>
+        <p>Tento problém právě řeší PTP, které změří latenci, kterou následně přičte PTP klient (Ordinary clock) k tomu svému času, aby ten čas, který obdrží byl skutečně přesný na <b>nanosekundy</b>.</p>
+        <p>PTP používá port UDP 319.</p>
+        <p>Ne každé zařízení umí s PTP protokolem pracovat, v rámci Cisca s ním umí pracovat například Industriální switche (IE).</p>
+        <section id="PTPTerminology" class="subSection">
+            <h4>PTP Terminologie</h4>
+            <ul>
+                <li class="req"><b>Grandmaster</b> - Hlavní zdroj času, začíná synchronizaci s ostatními zařízeními.</li>
+                <li class="req"><b>Boundary clock</b> - zařízení mezi Grandmasterem a Ordinary clock, které od Grandmastera získává čas a dál jej poskytuje Ordinary clock.</li>
+                <li class="req"><b>Transparent clock</b> - stejně jako Boundary clock je to prostředník mezi GM a Ordinary clock, oproti Boundary hodinám pouze měří latenci, kterou se snaží zmírnit.</li>
+                <li class="req"><b>Ordinary Clock</b> - ekvivalent NTP klienta.</li>
+            </ul>
+        </section>
+        <section id="PTPFunc" class="subSection">
+            <h4>Princip PTP</h4>
+            <p>PTP funguje tak, že se nejdříve zjistí rozdíl mezi aktuálním časem na Grandmasteru a stávajícím čase na Ordinary Clock. Poté se bude Ordinary clock snažit zjistit zpoždění, které vznikne při posílání zprávy.</p>
+            <p>Následujicí řádky vám podrobně prozradí, co se děje:</p>
+            <ul>
+                <li class="ordered">Grandmaster pošle Ordinary clock SYN zprávu. Svůj aktuální čas označuje jako <b>t1</b>.</li>
+                <li class="ordered">Ordinary clock obdrží SYN zprávu od Grandmastera, označí si, kdy zpráva došla podle jeho stávajícího času - <b>t2</b>.</li>
+                <li class="ordered">Grandmaster pošle Ordinary clock follow-up zprávu, s jeho t1 hodnotou.</li>
+                <li class="ordered">Ordinary clock dostane follow-up zprávu a porovná t1 s t2 --> a zjistí, o kolik se jeho stávajicí čas liší.</li>
+                <li class="ordered">Nicméně to mu nestačí a potřebuje zjistit, jaký je mezi nimi prodlení, proto Ordinary clock posílají Grandmasterovi delay-request zprávu. Svůj stávající čas, kdy poslali delay-request zprávu označí jako <b>t3</b>.</li>
+                <li class="ordered">Master obdrží delay-request zprávu a svůj aktuální čas kdy to obdržel označí jako <b>t4</b>.</li>
+                <li class="ordered">Master odpoví Ordinary clock delay-response zprávou, která nese jeho t4 hodnotu.</li>
+                <li class="ordered">Pomocí toho si ordinary clock dokáží spočítat offset a prodlení mezi nimi a Grandmasterem.</li>
+            </ul>
+            <p>Tento postup je opakován pravidelně!</p>
         </section>
     </section>
     <section id="prehledPrikazu">
@@ -146,37 +172,37 @@ R2#clock set 15:20:00 21 october 2023</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>show clock</th>
+                        <td>Zobrazí aktuální čas softwarových hodin</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show clock detail</td>
+                        <td>Zobrazí aktuální čas a zdroj času softwarových hodin</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show calendar</th>
+                        <td>Zobrazí aktuální čas hardwarových hodin</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>clock set {hod}:{min}:{sek} {den} {měsíc - slovy} {rok}</th>
+                        <td>Manuálně nastaví čas softwarových hodin</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>calendar set {hod}:{min}:{sek} {den} {měsíc - slovy} {rok}</td>
+                        <td>Manuálně nastaví čas hardwarových hodin</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>clock timezone {název} {offset_hod} {offset_sek}</th>
+                        <td>Nastaví časové pásmo</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
+                        <td>dopsat!!!</th>
                         <td>Nastaví Native VLAN</td>
                         <td>Interface</td>
                     </tr>
