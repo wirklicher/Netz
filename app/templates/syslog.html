@@ -11,9 +11,123 @@
 <body>
     <h1>Syslog</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: </h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní konfigurace v Packet Traceru</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět vysvětlit funkcionalitu syslogu včetně facilities a úrovní severity</li>
+        </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Pokud se na zařízení stane nějaká událost, tak pro ni systém vygeneruje tzv. "log" (Log - v tomto případě není logaritmus, nýbrž záznam nějaké činnosti).</p>
+        <p class="beforecode">S logem se například setkáte při zapnutí nebo vypnutí interfacu - </p>
+        <pre>*Oct 24, 18:40:05.4040: %LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up</pre>
+        <p>Jestliže budeme správce větší síťě, nebude v našich silách hlídat logy na každém zařízení, proto je dobrý tyto logy posílat na jedno místo - Syslog server. K tomu, abychom takto mohli posílat logy, právě slouží <b>syslog</b> protokol, definovaný v RFC 5424.</p>
+        <p>Ještě je třeba zdůraznit, že ještě existuje <b>syslog standard</b>, který nemá na starosti posílání logů na syslog server, nýbrž má na starosti samotnou generaci a formátování logů.</p>
+    </section>
+    <section id="formating">
+        <h3>Formátování logů</h3>
+        <p class="beforecode">Logy jsou formátovány následovně dle syslog standardu:</p>
+        <b><pre>(SEQ):TIMESTAMP: %FACILITY-SEVERITY-MNEMONIC: DESCRIPTION</pre></b>
+        <ul>
+            <li class="req"><b>Seq</b> - značí kolikátý log to je, běžně není nastaveno</li>
+            <li class="req"><b>Timestamp</b> - značí kdy událost nastala</li>
+            <li class="req"><b>Facility</b> - poukazuje na proces, který vygeneroval zprávu</li>
+            <li class="req"><b>Severity (Závažnost)</b> - číslo značící závažnost zprávy</li>
+            <li class="req"><b>Mnemonic</b> - krátka zpráva shrnující, co se stalo</li>
+            <li class="req"><b>Description (Popis)</b> - podrobný popisek</li>
+        </ul>
+        <p class="beforecode">Pojďme si tyto pojmy vysvětlit na příkladu: </p>
+        <pre>*Oct 24, 18:40:05.4040: %LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up</pre>
+        <ul>
+            <li class="req"><b>Seq</b> - není nastaveno</li>
+            <li class="req"><b>Timestamp</b> - *Oct 24, 18:40:05.4040</li>
+            <li class="req"><b>Facility</b> - LINK</li>
+            <li class="req"><b>Severity (Závažnost)</b> - 5</li>
+            <li class="req"><b>Mnemonic</b> - CHANGED</li>
+            <li class="req"><b>Description</b> - Interface GigabitEthernet0/0, changed state to up</li>
+        </ul>
+        <p class="beforecode">Kdybychom chtěli nahradit timestamp za sequence number, použili bychom: </p>
+        <pre>R1(config)#no service timestamp
+R1(config)#service sequence-numbers</pre>
+        <p class="beforecode">Log se sequence number:</p>
+        <pre>000030: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.0.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done</pre>
+<section id="Severity" class="subSection">
+    <h4>Úrovně Severity (Závažnosti)</h4>
+    <div class="overflowTable">
+        <table>
+            <tr>
+                <th>Číslo</th>
+                <th>Název</th>
+                <th>Popis</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>Emergency</td>
+                <td>Systém je nepoužívatelný</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Alert</td>
+                <td>Musí se neprodleně vyřešit</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Critical</td>
+                <td>Kritická chyba</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Error</td>
+                <td>Chyba</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Warning</td>
+                <td>Upozornění</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Notification</td>
+                <td>Oznámení</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Informational</td>
+                <td>Informační zpráva</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Debug</td>
+                <td>Debug zpráva</td>
+            </tr>
+        </table>
+        <br>
+    </div>
+</section>
+<section id="displayingAndStoringLogs">
+    <h3>Ukládání a zobrazování logů</h3>
+    <p class="beforecode">Cisco zařízení běžně ukládá logy na zařízení do RAM, pro jejich zobrazení, použijeme příkaz: </p>
+    <pre>Router#show logging</pre>
+    <p>Při konfiguraci zařízení by se nám měli zobrazovat logy. To jaké logy a kdy se nám zobrazují záleží na konfiguraci samotného zařízení a také na tom, jak jakým způsobem jsme na to zařízení připojeni.</p>
+    <p class="beforecode">Při připojení přes konzolový kabel, by vše mělo fungovat standardně - logy by se nám v průběhu konfigurace měly normálně zobrazovat. To je dáno tím, že příkaz <i>logging console</i> je již za normálních okolností běžně nastaven. Pakliže by se ale stalo, že by nastaven nebyl, tak se nastaví následovně:</p>
+    <pre>Router(config)#logging console</pre>
+    <p class="beforecode">Pokud jsme ale připojeni přes telnet nebo SSH, logy se nám bez dodatečné konfigurace zařízení zobrazovat nebudou. Aby se nám zobrazovali, tak je nutné použít následujicí příkazy:</p>
+    <pre>Router(config)#logging monitor
+Router#terminal monitor</pre>
+    <p>pozn. Příkaz <i>logging monitor</i> umožní všem připojeným zařízením dostávat logy, zatímco příkaz <i>terminal monitor</i> oznamuje IOSu, že relace chce přijímat logy. Příkaz <i>terminal monitor</i> je nutno použít pokaždé, když jsme připojeni přes SSH/Telnet.</p>
+    <p class="beforecode">Kdybychom chtěli zobrazovat pouze závaznější typy zpráv, tak bychom na konci specifikovali úroveň závažnosti.</p>
+    <pre>Router(config)#logging monitor {úroveň | název}</pre>
+    <p>pozn. Zobrazí na SSH/Telnet připojení pouze té úrovně a závaznější (4-0) logy.</p>
+    <p class="beforecode">Když by se stalo, že bychom narazili na zařízení, které si neukládá do RAM, a chtěli bychom to nastavit, tak bychom použili příkaz:</p>
+    <pre>Router(config)#logging buffered</pre>
+    <p class="beforecode">Při správě větší sítě by se nám nicméně pouhé ukládání logů do RAM nestačilo a bylo by potřeba logy posílat na syslog server, což lze provést použitím příkazu: </p>
+    <pre>Router(config)#logging host {IP adresa | Hostname}</pre>
+    <p class="beforecode">Pozor, tento příkaz nemůže specifikovat úroveň žávažnosti. Pro to abychom specifikovali, které typy logů půjdou dle závažnosti na syslog server aplikujeme příkaz: </p>
+    <pre>Router(config)#logging trap {úroveň | název}</pre>
+    <p>Pro posílání logů na zařízení používá syslog port <b>UDP 514</b>.</p>
+</section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -25,74 +139,44 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>service sequence-numbers</td>
+                        <td>Přidá sekvenční čísla do logů</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>logging console {závažnost}</td>
+                        <td>Začne zobrazovat logy dané závažnosti při připojení přes konzolový kabel</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
+                        <td>logging monitor {závažnost}</td>
+                        <td>Umožní zařízením připojeným přes SSH/Telnet dostávat logy dané závažnosti</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>logging host {IP adresa | hostname}</td>
+                        <td>Začne posílat logy na specifikovaný syslog server</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
+                        <td>logging trap {závažnost}</td>
+                        <td>Určí, které logy budou dle závažnosti posílany na syslog server</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
+                        <td>logging buffered {velikost v bytech} {závažnost}</td>
+                        <td>Nastaví to, že se logy budou ukládat do RAM dle závažnosti</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
+                        <td>terminal monitor</td>
+                        <td>Oznamuje zařízení, že relace chce přijímat logy</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
+                        <td>logging synchronomous</td>
+                        <td>Zabrání logům okamžitému přerušení zadávání uživatelského vstupu</td>
+                        <td>Global Config</td>
                     </tr>
                 </table>
             </div>
@@ -100,6 +184,8 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Syslog je standard, který má na starosti generaci a formátování logů. Standardně je log ve tvaru <i>TIMESTAMP: %FACILITY-SEVERITY-MNEMONIC: DESCRIPTION</i>, přičemž se bude zobrazovat pouze při připojení přes konzolový kabel a bude se ukládat do RAM.</p>
+        <p>Při správě větší sítě, je ale téměř nutné použít pro ukládání a správu logů oddělené zařízení - tzv. syslog server. Síťové zařízení může na syslog server pomocí syslog protokolu (UDP 514) posílat logy, čímž si zjednoduší správu sítě.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

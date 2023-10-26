@@ -259,6 +259,10 @@ input:checked:after {
     display: none;
 }
 
+.switch_phone {
+    display: none;
+}
+
 @media only screen and (max-width: 600px) {
 
     #main {
@@ -405,7 +409,11 @@ input:checked:after {
         
     }
 
-    #switcher {
+    .switch_phone {
+        display: block;
+    }
+
+    .switch {
         display: none;
     }
 

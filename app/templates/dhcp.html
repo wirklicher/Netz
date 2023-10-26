@@ -11,9 +11,70 @@
 <body>
     <h1>DHCP</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: DNS, základní konfigurace v Packet Traceru</h5>
+    <section id="CCNAREq">
+        <h5>CCNA požadavky:</h5>
+        <ul>
+            <li class="req">Umět vysvětlit význam DHCP</li>
+            <li class="req">Umět nakonfigurovat DHCP Snooping</li>
+        </ul>
+    </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Téměř každé zařízení v dnešním světě potřebuje přístup k Internetu. K tomu potřebuje mít nastavenou IP adresu a adresu brány, což ale ne každý umí nastavit. Proto se vyvinul DHCP protokol.</p>
+        <p>DHCP je protokol, který zařízení dynamicky nastaví síťové údaje (IP adresu, subnet mask, gateway atd.).</p>
+    </section>
+    <section id="DORA">
+        <h3>Fungování DHCP</h3>
+        <ul>
+            <li class="ordered"><b>Discover</b> - zpočátku host oskenuje síť s tím, že hledá DHCP server - broadcast</li>
+            <li class="ordered"><b>Offer</b> - DHCP servery v síti se mu nabídnou - unicast/broadcast</li>
+            <li class="ordered"><b>Request</b> - host přijme nabídku jednoho z nich - broadcast</li>
+            <li class="ordered"><b>Acknowledge</b> - DHCP server potvrdí, že nabídka byla přijatá unicast/broadcast</li>
+        </ul>
+    </section>
+    <section id="DHCPConf">
+        <h3>Konfigurace DHCP</h3>
+        <p>Konfiguraci DHCP si ukážeme na následujícím příkladu:</p>
+        <img src="../static/styles/images/DHCP/DHCP_ex1.png" alt="DHCP priklad1" class="configImage">
+        <h5>Zadání:</h5>
+        <i>
+            <p>Udělej na R2 DHCP server s následujicími parametry: </p>
+            <ul>
+                <li class="req">DHCP POOL NET1: o síti 192.168.2.0/24 s tím, že ip adresy 192.168.2.1 a 192.168.2.254 budou z DHCP Poolu vyjmuty.</li>
+                <li class="req">Nastav v DHCP POOLu NET1 implicitní bránu (default gateway) na ip adrese 192.168.0.1</li>
+                <li class="req">Nastav v DHCP POOLu NET1 DNS server na ip adrese 8.8.8.8</li>
+                <li class="req">Nastav čas "pronájmu" údajů na 12 hodin</li>
+            </ul>
+            <p>Z R4 udělej na interfacu g0/0 DHCP Relay server odkazující na R2 loopback adresu 1.1.1.1.</p>
+        </i>
+        <p class="beforecode">Nejdřív tedy vytvoříme na R2 DHCP POOL jménem NET1:</p>
+        <pre>R2(config)#ip dhcp pool NET1</pre>
+        <p class="beforecode">Vytvořením POOLu se automaticky přepneme do dhcp konfigurace, kde nastavíme potřebné údaje:</p>
+        <pre>R2(dhcp-config)#network 192.168.2.0 255.255.255.0
+R2(dhcp-config)#default-router 192.168.0.1
+R2(dhcp-config)#dns-server 8.8.8.8
+R2(dhcp-config)#lease 12</pre>
+        <p class="beforecode">Nakonec ještě na R2 nastavíme to, že adresy 192.168.2.1 a 192.168.2.254 nebudou součástí našeho DHCP POOLu.</p>
+<pre>R2(config)#ip dhcp excluded-address 192.168.2.1
+R2(config)#ip dhcp excluded-address 192.168.2.254</pre>
+        <p class="beforecode">Nyní se přesuneme na R4, kde z g0/0 uděláme DHCP RELAY odkazující na R2 loopback adresu 1.1.1.1</p>
+        <pre>R4(config-if)#ip helper-address 1.1.1.1</pre>
+        <p class="beforecode">Nyní by všichni hosti měli dostat potřebnou síťovou konfiguraci. To koneckonců můžeme i zkontrolovat pomocí příkazu:</p>
+        <pre>R2#show ip dhcp binding</pre>
+        <p>Ten nám ukazuje získanou IP adresu na zařízení s danou MAC adresou a dokonce tam i vidíme, kdy vyprší "pronájem" údajů.</p>
+    </section>
+    <section id="DHCPSecurity">
+        <h3>DHCP a bezpečnost</h3>
+        <section id="DHCPPoisoning" class="subSection">
+            <h4>DHCP Poisoning</h4>
+        </section>
+        <section id="DHCPStarvation" class="subSection">
+            <h4>DHCP Starvation</h4>
+        </section>
+        <section id="DHCPSnooping" class="subSection">
+            <h4>DHCP Snooping</h4>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>

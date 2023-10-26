@@ -92,7 +92,7 @@ dns.addEventListener('click', () => {
     $('main').load('dns.html');
     name_of_page = 'dns';
 })
-ftp.addEventListener('ftp', () => {
+ftp.addEventListener('click', () => {
     $('main').load('ftp.html');
     name_of_page = 'ftp';
 })
