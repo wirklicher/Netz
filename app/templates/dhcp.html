@@ -21,17 +21,78 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Téměř každé zařízení v dnešním světě potřebuje přístup k Internetu. K tomu potřebuje mít nastavenou IP adresu a adresu brány, což ale ne každý umí nastavit. Proto se vyvinul DHCP protokol.</p>
-        <p>DHCP je protokol, který zařízení dynamicky nastaví síťové údaje (IP adresu, subnet mask, gateway atd.).</p>
+        <p>Téměř každé zařízení v dnešním světě potřebuje přístup k Internetu. K tomu je zapotřebí mít správně nastavenou IP adresu a adresu výchozí brány, což ale ne každý umí nastavit a ve větších sítích by mohlo být ruční nastavování těchto údajů zbytečnou zátěží. Proto se vyvinul BOOTP a jeho nástupce DHCP protokol.</p>
+        <p>DHCP je protokol, který zařízení dynamicky přiřadí síťové údaje (IP adresu, subnet mask, výchozí bránu atd.).</p>
     </section>
     <section id="DORA">
         <h3>Fungování DHCP</h3>
+        <p>DHCP funguje na tom principu, že se host snaží vyhledat veškeré DHCP servery v LAN. Jakmile serverům dojde zpráva od hosta, vytvoří mu nabídku síťové konfigurace. Jednu z nabídek si host vybere a dá vědět, danému DHCP serveru, že si vybral síťovou konfiguraci právě od něj. DHCP server pak již pouze potvrdí, že to tak tedy bude a tím pádem se hostovi přidělí daná síťová konfigurace.</p>
+        <p>Právě popsaný proces se nazývá <b>DORA</b> a je založený na následujicích DHCP zprávách: </p>
         <ul>
             <li class="ordered"><b>Discover</b> - zpočátku host oskenuje síť s tím, že hledá DHCP server - broadcast</li>
             <li class="ordered"><b>Offer</b> - DHCP servery v síti se mu nabídnou - unicast/broadcast</li>
             <li class="ordered"><b>Request</b> - host přijme nabídku jednoho z nich - broadcast</li>
             <li class="ordered"><b>Acknowledge</b> - DHCP server potvrdí, že nabídka byla přijatá unicast/broadcast</li>
         </ul>
+        <section id="DHCPDISC" class="subSection">
+            <h4>DHCP Discover</h4>
+            <p>Když se zařízení připojí do sítě, zkontroluje, jestli jsou v síti k dispozici nějaké DHCP servery, které by mu na nějaký čas přiřadily síťové nastavení. K tomu, aby mohl objevit DHCP server, potřebuje vyslat DHCP Discovery zprávu. Problém je, že na to aby mohl poslat DHCP Discovery zprávu, potřebuje IP adresu o kterou si ale právě chce zažádat.</p>
+            <p><i>Co bude tedy zařízení dělat?</i></p>
+            <p>Zařízení, které ještě nemá IP adresu a potřebuje komunikovat s ostatními zařízeními, používá IP adresu <b>0.0.0.0</b>.</p>
+            <p>Protože neví, jestli a kde se DHCP server nachází, tak pošle <b>broadcast</b> zprávu.</p>
+            <p><i>DHCP Discovery zpráva ve Wiresharku:</i></p>
+            <img src="../static/styles/images/DHCP/dhcp_discovery1.png" alt="DHCP Discovery" class="configImage">
+            <p>Můžeme si všimnout, že DHCP používá BOOTP UDP porty <b>68</b> a <b>67</b>. Dále jsem na obrázku také vyznačil IP adresu a MAC adresu zařízení s tím, že DHCP serverům sdělí i svůj hostname.</p>
+            <p>Speciálně jsem ještě na obrázku zeleně označil <b>Magic cookie</b>, který odlišuje DHCP od jeho předchůdce - BOOTP.</p>
+        </section>
+        <section id="DHCPOFFER" class="subSection">
+            <h4>DHCP Offer</h4>
+            <p>DHCP servery si povšimnou DHCP hosta a pošlou mu tzv. DHCP Offer, ve kterém mu pošle nabízené údaje.</p>
+            <img src="../static/styles/images/DHCP/DHCPOFFER.png" alt="DHCP Offer" class="configImage">
+            <p>Z obrázku můžeme vidět, že IP adresa příjemce je tentokrát <b>unicastová</b>, i když oficiálně host žádnou IP adresu nemá. DHCP server totiž k tomuto účelu použije IP adresu, kterou by hostovi přidělil, pokud si ho zvolí.</p>
+            <p><i>Jak ale host pozná, že je ta DHCP Offer určená pro něj, když ta adresa příjemce ještě není jeho?</i></p>
+            <p>K tomu, aby host poznal, že DHCP Offer je určena pro něj, se použije hostova <b>MAC adresa</b>, kterou server získal z DHCP Discovery zprávy.</p>
+            <p>Nicméně je nutno uvést to, že unicast se neposílá pokaždé a závisí to na hostovi. Host to totiž určí již v DHCP Discover zprávě (na obrázku v DHCP Discovery je to označeno oranžově).</p>
+            <p>Kromě nabízené IP adresy si můžeme všimnout toho, že DHCP Server nabízí hostovi spolu s IP adresou ještě <b>výchozí bránu</b> (označeno jako option 3 - Router), <b>Domain Name Server</b>, <b>masku podsítě</b>, jak dlouho by DHCP server "pronajímal" danou konfiguraci atd.</p>
+        </section>
+        <section id="DHCPRequest" class="subSection">
+            <h4>DHCP Request</h4>
+            <p>Obvykle ten DHCP Offer, který dojde nejrychleji k hostovi bude přijat tím, že host pošle DHCP serveru <b>DHCP Request</b> zprávu.</p>
+            <img src="../static/styles/images/DHCP/DHCPREQUEST.png" alt="DHCP Request" class="configImage">
+            <p>Ta je v mnohém podobná DHCP Discovery zprávě. Opět si například můžete všimnout toho, že zařízení používá <b>0.0.0.0</b> jako IP adresu odesílatele a broadcast 255.255.255.255 jako IP adresu příjemce.</p>
+            <p><i>Proč ale host používá broadcast IP adresu, když zná IP adresu DHCP serveru, kterého si host vybral?</i></p>
+            <p>To je tím, že díky tomu upozorní ostatní DHCP servery, že si již vybral DHCP server. IP adresu 0.0.0.0 pak používá kvůli tomu, že stále ještě oficiálně nevlastní nabízenou IP adresu.</p>
+            <p>Dále si můžeme všimnout toho, že ten DHCP server, jež byl vybrán, je tam specifikován pod "Option 54 - DHCP Server Identifier".</p>
+        </section>
+        <section id="DHCPAcknowledge" class="subSection">
+            <h4>DHCP Acknowledge</h4>
+            <p>Teď už zbývá to pouze potvrdit od DHCP serveru, který pošle hostovi <b>DHCP ACK</b> zprávu, kterou to definitivně potvrdí.</p>
+            <img src="../static/styles/images/DHCP/DHCPACK.png" alt="DHCP Acknowledge" class="configImage">
+            <p>Tuto zprávu, stejně jako DHCP Offer, posílá na IP adresu, kterou mu DHCP server nabídl a host ji přijal, ale ještě není oficiálně jeho. Je zde však i možnost, že by byl DHCP ACK poslán broadcastem, avšak to záleží, stejně jako u DHCP Offer, na samotném hostovi, který to specifikuje v DHCP Request zprávě.</p>
+            <p>Přijetím této zprávy host dostává na určitou dobu síťovou konfiguraci.</p>
+        </section>
+        <section id="DHCPMessages" class="subSection">
+            <h4>Ostatní DHCP zprávy</h4>
+            <ul>
+                <li class="req"><b>DHCP Release</b> - Host se chce zbavit síťové konfigurace před vypršením "pronájmu".</li>
+                <li class="req"><b>DHCP Decline</b> - Host odmítá síťovou konfiguraci z DHCPACK, kdy by mu byly přiděleny neplatné či odlišné síťové údaje. Většinou indikátor toho, že IP adresa, kterou se DHCP server snaží hostovi přidělit, je používaná jinde.</li>
+                <li class="req"><b>DHCP NACK</b> - Server zamítá DHCP request => nesouhlasí s pronájmem dané síťové konfigurace.</li>
+            </ul>
+        </section>
+        <section id="DHCPRelay" class="subSection">
+            <h4>DHCP Server mimo LAN</h4>
+            <p>DHCP Discover zprávy nemůžou být odeslány mimo LAN, avšak u větších sítí nemusí být úplně ideální mít pro každou LAN vlastní DHCP server. Proto má router či L3 switch možnost udělat ze sebe DHCP relay, kdy se to zařízení chová jako prostředník mezi hostem a DHCP serverem.</p>
+            <p><i>Jak DHCP Relay funguje?</i></p>
+            <p>Příklad - názorná úkazka DHCP Relay: </p>
+            <img src="../static/styles/images/DHCP/DHCP_RELAY.png" alt="DHCP Relay" class="configImage">
+            <p>R1 je nastavený jako DHCP Server. Má k dispozici 2 POOLy - POOL A, POOL B.</p>
+            <p>R2 a R3 mají interface g0/0 nakonfigurovaný jako DHCP Relay, jinými slovy když jim na ten interface přijde nějaká DHCP zpráva, tak ji pošlou na daný DHCP server.</p>
+            <p>Host-1 se tedy rozhodne najít DHCP Server.</p>
+            <p>Pošle tedy broadcastem DHCP Discover zprávu. Ta dorazí na gig0/0 interface R2, který je nastavený jako DHCP Relay. Ten <b>přetransformuje zprávu na unicast</b> a pošle ji na daný DHCP server.</p>
+            <p>DHCP server mu pošle nabídku. Host ji přijme a DHCP server potvrdí přijetí.</p>
+            <p>Jestliže bude nastaveno vícero POOLů, tak DHCP server přidělí jeden POOL každé DHCP Relay, případně každé subnetě.</p>
+        </section>
+        <a href="http://"></a>
     </section>
     <section id="DHCPConf">
         <h3>Konfigurace DHCP</h3>
@@ -42,7 +103,7 @@
             <p>Udělej na R2 DHCP server s následujicími parametry: </p>
             <ul>
                 <li class="req">DHCP POOL NET1: o síti 192.168.2.0/24 s tím, že ip adresy 192.168.2.1 a 192.168.2.254 budou z DHCP Poolu vyjmuty.</li>
-                <li class="req">Nastav v DHCP POOLu NET1 implicitní bránu (default gateway) na ip adrese 192.168.0.1</li>
+                <li class="req">Nastav v DHCP POOLu NET1 výchozí bránu (default gateway) na ip adrese 192.168.0.1</li>
                 <li class="req">Nastav v DHCP POOLu NET1 DNS server na ip adrese 8.8.8.8</li>
                 <li class="req">Nastav čas "pronájmu" údajů na 12 hodin</li>
             </ul>
@@ -68,12 +129,56 @@ R2(config)#ip dhcp excluded-address 192.168.2.254</pre>
         <h3>DHCP a bezpečnost</h3>
         <section id="DHCPPoisoning" class="subSection">
             <h4>DHCP Poisoning</h4>
+            <p>DHCP Poisoning je jeden z Man-in-the-middle útoků, který z útočníka udělá prostředníka mezi dvěmi zařízeními (většinou mezi hostem a výchozí bránou).</p>
+            <p>Princip DHCP Poisoningu si vysvětlíme na následujicím příkladu:</p>
+            <img src="../static/styles/images/DHCP/Vopicka_topologie.png" alt="DHCP poison1" class="configImage">
+            <p>Do této sítě se připojí rogue DHCP server.</p>
+            <img src="../static/styles/images/DHCP/DHCP_Poison_2.png" alt="DHCP poison2" class="configImage">
+            <p>Jakmile se Hosti začnou ptát po DHCP serverech, dostanou odpověď jak od R1, tak od útočníka (Rogue-DHCP).</p>
+            <p>Host poté přijme nabídku od toho DHCP serveru, od kterého získal, co nejrychleji, odpověď. V tomto případě, byla nejrychlejší odpověď právě od útočníka, a proto Hosti získávají síťovou konfiguraci právě od něj.</p>
+            <p><i>Co tím ale útočník získá?</i></p>
+            <p>Útočník může sám sebe prostřednictvím DHCP konfigurace nakonfigurovat jako výchozí bránu, tudíž veškerá data, která budou hosté posílat mimo síť, budou posílána přes útočníka. Útočník si pak tato data může zobrazit, případně nějakým způsobem upravit.</p>
+            <p>Dál útočník může zařízení odkazovat na rogue DNS server, který může hosty odkazovat na škodlivé weby.</p>
+            <p>Tento útok probíhá často v kombinaci s DHCP Starvation útokem, který si nejdříve nechát přidělit veškeré IP adresy ze stávajicího DHCP serveru a až pak do sítě připojí svůj <b>rogue DHCP server</b>, jež bude jediný DHCP server v síti.</p>
+            <p><i>Jak se ale proti tomuto útoku bránit?</i></p>
+            <p>Zcela nejlepší prevencí by bylo nastavit na switchi <b>DHCP Snooping</b>.</p>
         </section>
         <section id="DHCPStarvation" class="subSection">
             <h4>DHCP Starvation</h4>
+            <p>DHCP Starvation má za cíl znemožnit hostům získat síťové údaje z DHCP serveru tím, že útočník spotřebuje všechny adresy v DHCP POOLu.</p>
+            <p>Princip si opět vysvětlíme na příkladu: </p>
+            <img src="../static/styles/images/DHCP/DHCP_Starvation_ex1.png" alt="DHCP starvation1" class="configImage">
+            <p>Máme následující topologii, kde R1 funguje jako DHCP server, který má pool A s dostupnými IP adresami 192.168.0.100-120.</p>
+            <p>Do sítě se nyní připojí útočník - YER, který pomocí programu Yersinia, spotřebuje veškeré dostupné IP adresy z POOLu A.</p>
+            <img src="../static/styles/images/DHCP/DHCP_Starvation_ex2.png" alt="DHCP starvation1" class="configImage">
+            <p>Pozn. Program Yersinia vytvoří velký počet DHCP Request broadcastů s vymyšlenými MAC adresami.</p>
+            <p>Tím pádem již žádný další host nezíská síťovou konfiguraci z R1.</p>
+            <p>Tomuto útoku můžeme předcházet nakonfigurováním <b>port security</b> či <b>DHCP Snoopingu</b>.</p>
         </section>
         <section id="DHCPSnooping" class="subSection">
             <h4>DHCP Snooping</h4>
+            <p>DHCP Snooping je prevencí proti DHCP útokům. Ten funguje na tom principu, že na <b>switchi</b> (Switch je povětšinou mezi DHCP serverem a hostem, tudíž má možnost zachytit potenciální útok) filtruje DHCP zprávy, které přijme na nedůvěryhodných portech. Nedůvěryhodné porty by měly být ty, které nevedou od DHCP serveru, přičemž v základu jsou tak nastaveny všechny.</p>
+            <p>Jakmile na nedůvěryhodný port dorazí zpráva, tak se zkoumá, jestli to je zpráva, kterou typicky posílá server, nebo zpráva od hosta. Je-li to zpráva od DHCP serveru, tak je zpráva automaticky zahozena. Bude-li to zpráva hosta, tak tam se pak ještě zkoumá typ zprávy a pak samotné parametry těch zpráv.</p>
+            <ul>
+                <li class="req"><b>DHCP Discovery, DHCP Request</b> - U těchto zpráv se zkoumá to, zda-li je uvedená stejná MAC Adresa v samotném rámci a poté přímo v samotné DHCP Discovery/Request zprávě pod Client MAC address parametrem - z čehož se stává obraný mechanismus proti DHCP Starvation útoku. Jestliže je odhalena nesouvislost, tak se interface přepne do err-disabled stavu.</li>
+                <li class="req"><b>DHCP Release, Decline</b> - U těchto zpráv se prověřuje to, jestli se shodují se záznamem v <b>DHCP Snooping Binding tabulce</b>. DHCP Snooping Binding tabulka tvoří záznamy, když host úspěšně získá síťovou konfiguraci z DHCP severu. Je v ní například Půjčená IP adresa, interface, vlan a MAC adresa. Zprávy které se neshodují se záznamem v tabulce jsou zahozeny a interface se přepne do err-disabled stavu.</li>
+            </ul>
+            <p>Ještě předtím než se vrhneme na konfiguraci je nutné upozornit na to, že DHCP Snooping má obvykle automaticky aktivovanou tzv. <b>"option 82"</b>. Option 82 má smysl pouze s použitím L3 switche, kdy se zařízení chová jako switch i jako DHCP Relay. V případě, že budete mít aktivovanou "Option 82" na L2 switchi či L3 switchi, který není DHCP Relay, vám nebude DHCP fungovat správně.</p>
+            <section id="DHCPSnoopingConfiguration" class="subSection">
+                <h5>Konfigurace DHCP Snoopingu</h5>
+                <p>Konfiguraci si opět ukážeme na příkladu:</p>
+                <img src="../static/styles/images/DHCP/DHCP_Snooping.png" alt="DHCP starvation1" class="configImage">
+                <p class="beforecode">Prvně na SW1 povolíme DHCP Snooping a určíme v jaké vlaně: </p>
+                <pre>SW1(config)#ip dhcp snooping
+SW1(config)#ip dhcp snooping vlan 1</pre>
+                <p class="beforecode">Následně určíme, který port bude trusted (gig0/0): </p>
+                <pre>SW1(config)#int gig0/0
+SW1(config-if)#ip dhcp snooping trusted</pre>
+                <p class="beforecode">A nakonec vzhledem k tomu, že máme pouhopouhý L2 Switch zrušíme nastavení "option 82": </p>
+                <pre>SW1(config)#no ip dhcp information option</pre>
+                <p class="beforecode">Budeme-li si chtít naší konfiguraci ověřit, tak použijeme příkaz: </p>
+                <pre>SW1#show ip dhcp snooping</pre>
+            </section>
         </section>
     </section>
     <section id="prehledPrikazu">
@@ -86,74 +191,69 @@ R2(config)#ip dhcp excluded-address 192.168.2.254</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>ip dhcp pool {nazev}</th>
+                        <td>Definice a přepnutí do DHCP POOL módu</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
+                        <td>network {net-ID} {maska podsítě}</td>
+                        <td>Specifikuje velikost POOLu</td>
+                        <td>DHCP POOL mód</td>
                     </tr>
                     <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
+                        <td>default-router {ip-adresa}</th>
+                        <td>Specifikuje IP adresu výchozí brány</td>
+                        <td>DHCP POOL mód</td>
                     </tr>
                     <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
+                        <td>dns-server {ip-adresa}</th>
+                        <td>Určí ip adresu dns serveru</td>
+                        <td>DHCP POOL mód</td>
                     </tr>
                     <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
+                        <td>lease {hod | infinity}</td>
+                        <td>Nastaví čas pronájmu síťové konfigurace</td>
+                        <td>DHCP POOL mód</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>ip dhcp excluded-address {první IP adresa} {poslední IP adresa}</th>
+                        <td>Určí, které IP adresy mají být vyjmuty z nabízeného rozsahu</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
+                        <td>ip helper-address {ip-adresa}</th>
+                        <td>Nastaví DHCP Relay</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>show ip dhcp binding</th>
+                        <td>Zobrazí vazbu půjčené IP adresy na MAC adresu zařízení s časem "pronájmu"</th>
+                        <td>Priviledged EXEC</th>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
+                        <td>ip dhcp snooping</th>
+                        <td>Povolí na switchi DHCP Snooping</th>
                         <td>Global Config</th>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
+                        <td>ip dhcp snooping vlan {vlan-ID}</th>
+                        <td>Určí na které vlaně aktivujeme DHCP Snooping</th>
+                        <td>Global Config</th>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
+                        <td>ip dhcp snooping trusted</td>
+                        <td>Nastaví daný interface jako důvěryhodný</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
+                        <td>no ip dhcp information option</td>
+                        <td>Zakáže tzv. "Option 82"</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
+                        <td>show ip dhcp snooping</td>
+                        <td>Zobrazí informace o DHCP Snoopingu</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                 </table>
             </div>
@@ -161,6 +261,9 @@ R2(config)#ip dhcp excluded-address 192.168.2.254</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>DHCP je protokol, který nám má dynamicky přidělovat síťovou konfiguraci na určitý čas, to je důležité zejména pro to, že ne každý uživatel počítače, mobilu či chytré ledničky ví, co to je výchozí brána a neuměl by to nastavit a také by manuální nastavování těchto údajů nebylo příliš efektivní ve větších sítích.</p>
+        <p>Samotný protokol funguje tak, že nejdříve host vyhledá DHCP servery v síti, které mu nabídnou svoji síťovou konfiguraci. Host si poté vybere tu nabídku, která mu přijde nejdřív a DHCP Server to potom potvrdí.</p>
+        <p>DHCP je velice náchylný vůči útokům, a tak je nutno jim předcházet - jedna z možností, jak lze těmto útokům předcházet je nasazení DHCP Snoopingu na switchi, který bude filtrovat DHCP zprávy na nedůvěryhodných portech.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
