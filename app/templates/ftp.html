@@ -11,7 +11,7 @@
 <body>
     <h1>FTP</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní konfigurace v Packet Traceru</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -20,6 +20,55 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Cisco IOS není dokonalý a někdy se stane, že se v něm objeví chyba, kterou je nutné bezokladně napravit novou verzí.</p>
+        <p><i>Jenže jak se tam ta nová verze nahraje?</i></p>
+        <p>Právě k tomuto účelu slouží FTP a TFTP protokol.</p>
+        <p>FTP nebo-li File Transport Protocol, je protokol, který se používá pro přenos dat mezi FTP serverem a klientem.</p>
+    </section>
+    <section id="PrincipFTP">
+        <h3>Princip FTP</h3>
+        <p>Pro umožnění přenosu dat, je nejprve důležité navázat TCP relaci pomocí TCP 3-way handshaku (Na to se používá <b>TCP port 20</b>).</p>
+        <p>Jakmile se naváže TCP spojení, je nutné, aby se klient přihlásil. Je nutné zde zmínit to, že komunikace přes FTP protokol není žádným způsobem zašifrovaná, a veškerý přenos je v plaintextu. Přihlášování nám pouze dovolí omezit určitým uživatelům přístup do specifických složek a také jim může znemožnit například mazat obsah FTP serveru.</p>
+        <p>Když je klient přihlášený, může si na FTP server libovolně <b>procházet, vytvářet, mazat, či upravovat soubory či složky</b>. Na přenos souborů mezi klientem a serverem se používá port <b>TCP 21</b>.</p>
+    </section>
+    <section id="FTPModes">
+        <h3>FTP Módy</h3>
+        <p>Klient může s FTP serverem komunikovat:</p>
+        <ul>
+            <li class="req"><b>Aktivně</b> - Klient inicializuje celou komunikace, server začíná TCP 3-way handshake. Používá se v LAN</li>
+            <li class="req"><b>Pasivně</b> - Klient začíná TCP 3-way handshake, používá se většinou při komunikaci s FTP serverem mimo LAN (Firewall by nedovolil serveru začít TCP 3-way handshake)</li>
+        </ul>
+    </section>
+    <section id="FTPConfiguration">
+        <h3>Použití FTP k aktualizování IOSu</h3>
+        <p>Máme následujicí situaci - chceme upgradovat IOS na nejnovější verzi 15.7.3M8.</p>
+        <img src="../static/styles/images/FTP/FTP_Configuration.png" alt="FTP Konfigurace" class="configImage">
+        <p>Nejnovější verze je nahraná na našem lokálním FTP serveru s IP adresou 192.168.0.2.</p>
+        <p>Přihlašovací údaje jsou admin/admin123.</p>
+        <p class="beforecode">Nejdříve na R1 specifikujeme přihlašovací údaje:</p>
+        <pre>R1(config)#ip ftp username admin
+R1(config)#ip ftp password admin123</pre>
+        <p class="beforecode">Ještě předtím než stáhneme IOS z FTP serveru, je dobré si tam nahrát stávající verzi IOSu, to uděláme pomocí příkazu:</p>
+        <pre>R1#copy flash:c2900-universalk9-mz.SPA.156-3.M9.bin ftp:c2900-universalk9-mz.SPA.156-3.M9.bin</pre>
+        <p class="beforecode">Nyní přetáhneme novou verzi z FTP serveru - </p>
+        <pre>R1#copy ftp:c2900-universalk9-mz.SPA.157-3.M8.bin flash:c2900-universalk9-mz.SPA.157-3.M8.bin</pre>
+        <p class="beforecode">Novou verzi pak stačí pouze nabootovat a restartovat systém - </p>
+        <pre>R1(config)#boot system flash:c2900-universalk9-mz.SPA.157-3.M8.bin
+R1#reload</pre>
+        <p class="beforecode">Nyní by se R1 mělo nabootovat s novou verzí - to koneckonců můžeme po nabootování zkontrolovat - </p>
+        <pre>R1#show version</pre>
+    </section>
+    <section id="TFTP">
+        <h3>TFTP</h3>
+        <p>TFTP byl vyvinut po FTP a je určený k pouhému přenosům dat, čili neumožňuje například mazání obsahu, procházení obsahu atd.</p>
+        <p>TFTP používá <b>UDP port 69</b>. Použití UDP by vám mělo naznačit, že protokol nebude spolehlivý, nicméně TFTP zaručí spolehlivost svým způsobem. K tomu, aby TFTP byl spolehlivý využívá techniku potvrzování zpráv, kdy zařízení pošle ACK zprávu po tom, co obdrželo daná data od druhého zařízení. Zařízení má na odpověď určitý čas, pokud ten čas vypršel, tak druhé zařízení posílá danou zprávu znova.</p>
+    </section>
+    <section id="otherFTP">
+        <p>Za tu dobu, co FTP existuje, vzniklo mnoho dalších variant - </p>
+        <ul>
+            <li class="req">FTPS - FTP Secure</li>
+            <li class="req">SFTP - SSH File Transfer Protocol</li>
+        </ul>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
