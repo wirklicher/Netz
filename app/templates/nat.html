@@ -112,7 +112,7 @@ R1(config-if)#ip nat outside</pre>
                     <p class="beforecode">Poté již stačí v globálním configu R1 nastavit jednotlivá mapování</p>
                     <pre>R1(config)#ip nat inside source static 192.168.0.2 178.42.36.22
 R1(config)#ip nat inside source static 192.168.0.3 178.42.36.23</pre>
-<p><b>LAB UMÍSTIT KE STAŽENÍ ZDE!!!!!!!</b></p>
+<p>Konfiguraci statické NAT si můžete vyzkoušet <a href="../Labs/NAT/Static_NAT.pka">zde</a>.</p>
                 </section>
             </section>
             <section id="DynamicNAT" class="subSection">
@@ -144,7 +144,7 @@ R1(config-if)#ip nat outside</pre>
                     <p>pozn. To jestli jsou adresy v rozsahu v jedné subnetě kontroluje právě netmask</p>
                     <p class="beforecode">A nakonec toto vše dáme dohromady - </p>
                     <pre>R1(config)#ip nat inside source list 1 pool cool_pool</pre>
-                    <p><b>LAB UMÍSTIT KE STAŽENÍ ZDE!!!!!!!</b></p>
+                    <p>Konfiguraci dynamické NAT si můžete vyzkoušet <a href="../Labs/NAT/Dynamic_NAT.pka">zde</a>.</p>
                 </section>
             </section>
             <section id="PAT" class="subSection">
@@ -172,6 +172,7 @@ R1(config-if)#ip nat outside</pre>
                     <p class="beforecode">Nyní stačí již nakonfigurovat samotný PAT</p>
                     <pre>R1(config)#ip nat inside source list 1 interface gig0/1 overload</pre>
                     <p>Tímto příkazem jsme routeru řekli, že má přeložit všechny privátní IPv4 adresy, které naplňují ACL, a použít k tomu IP adresu, která je nakonfigurovaná na interfacu gig0/1. Klíčové slovíčko <i>overload</i> pak zapne PAT.</p>
+                    <p>Konfiguraci PAT (Overload NAT) si můžete vyzkoušet <a href="../Labs/NAT/Overload_NAT.pka">zde</a>.</p>
                 </section>
             </section>
             <section class="TroubleshootingNAT">

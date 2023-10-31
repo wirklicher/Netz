@@ -1,4 +1,4 @@
-if (name_of_page == 'vlan'){
+if (name_of_page == 'vlan') {
     MCQS = [{
         question: "Co se stane pakliže přiřadíme k Access portu vlan-id, které neexistuje?",
         choice1: "Vznikne chyba",
@@ -13,7 +13,7 @@ if (name_of_page == 'vlan'){
         choice2: "Ne",
         choice3: "Žádná VLAN nejde smazat",
         choice4: "Ano, ale jen pouze když změním Native VLAN",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Můžu vytvořit VLAN s ID 52824?",
@@ -21,7 +21,7 @@ if (name_of_page == 'vlan'){
         choice2: "Ano",
         choice3: "Nemůžu tvořit VLAN",
         choice4: "Ne, ID je příliš vysoké",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "K čemu slouží ROAS?",
@@ -29,7 +29,7 @@ if (name_of_page == 'vlan'){
         choice2: "Ke zprovoznění komunikace mezi VLANy",
         choice3: "K zobrazení všech VLAN na switchi",
         choice4: "K průchodu VLAN po trunku bez označení",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Je rámec pocházejicí z Native VLAN označen při příchodu na trunk?",
@@ -37,12 +37,12 @@ if (name_of_page == 'vlan'){
         choice2: "Jen pokud je Native VLAN 1",
         choice3: "Ovšem",
         choice4: "Rámce se nikdy neoznačují při příchodu na trunk",
-        answer: 0, 
+        answer: 0,
     }
-]
+    ]
 }
 
-if (name_of_page == 'stp'){
+if (name_of_page == 'stp') {
     MCQS = [{
         question: "Čemu má STP zabránit?",
         choice1: "K vytvoření broadcast storm.",
@@ -57,7 +57,7 @@ if (name_of_page == 'stp'){
         choice2: "Broadcast storm vzniká, když 2 switche s stp si pošlou rámec.",
         choice3: "Broadcast storm vzniká v redundantní síti, zahlcuje síť.",
         choice4: "Broadcast storm vzniká v síti, která není redundantní, zahlcuje síť.",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Jak STP řeší broadcast storm?",
@@ -65,7 +65,7 @@ if (name_of_page == 'stp'){
         choice2: "Zablokováním specifických portů.",
         choice3: "Vymazáním MAC tabulky.",
         choice4: "Zablokováním všech fa portů.",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Podle čeho se stane z jednoho ze switchů root bridge?",
@@ -73,7 +73,7 @@ if (name_of_page == 'stp'){
         choice2: "Podle menší priority a jestliže jsou stejné tak podle větší MAC adresy.",
         choice3: "Podle MAC adresy.",
         choice4: "Podle menší priority a jestliže jsou stejné tak podle menší MAC adresy.",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Jaký je hlavní rozdíl mezi RSTP a IEEE 802.1d?",
@@ -81,7 +81,7 @@ if (name_of_page == 'stp'){
         choice2: "RSTP umožňuje každé VLAN udělat svoji STP topologii.",
         choice3: "IEE 802.1d nazývá věci jinak než RSTP.",
         choice4: "RSTP neobsahuje portfast.",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Co dělá Etherchannel?",
@@ -89,7 +89,7 @@ if (name_of_page == 'stp'){
         choice2: "Řeší broadcast storm.",
         choice3: "dělá z nekonečně mnoho fyzických linků 1 virtuální.",
         choice4: "dělá až z 8 fyzických linků 1 virtuální.",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Jaký etherchannel protokol nenajdete na Juniper switchi?",
@@ -97,11 +97,11 @@ if (name_of_page == 'stp'){
         choice2: "PAgP",
         choice3: "LACP",
         choice4: "static",
-        answer: 1, 
+        answer: 1,
     },
-]
+    ]
 }
-if (name_of_page == 'uvodRouting'){
+if (name_of_page == 'uvodRouting') {
     MCQS = [{
         question: "BGP je protokol jakého typu?",
         choice1: "EGP",
@@ -116,7 +116,7 @@ if (name_of_page == 'uvodRouting'){
         choice2: "Distance-vector protokol je ideální pro velkou síť",
         choice3: "Link-state protokoly si staví mapu sítě",
         choice4: "BGP je distance-vector protokol",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Co je to default route?",
@@ -124,11 +124,11 @@ if (name_of_page == 'uvodRouting'){
         choice2: "Cesta kam se posílají úplně všechna data",
         choice3: "Synonymum pro statickou cestu",
         choice4: "Default route je cesta, kam router pošle paket, u něhož nezná cílovou subnetu",
-        answer: 3, 
+        answer: 3,
     },
-]
+    ]
 }
-if (name_of_page == 'rip'){
+if (name_of_page == 'rip') {
     MCQS = [{
         question: "Jakou má RIP administrative distance?",
         choice1: "1",
@@ -143,7 +143,7 @@ if (name_of_page == 'rip'){
         choice2: "15",
         choice3: "10",
         choice4: "25",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Do jaké skupiny patří RIP?",
@@ -151,7 +151,7 @@ if (name_of_page == 'rip'){
         choice2: "path-vector",
         choice3: "link-state",
         choice4: "hybrid distance-vector",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Která z uvedených vět je pravdivá?",
@@ -159,7 +159,7 @@ if (name_of_page == 'rip'){
         choice2: "RIPng podporuje pouze IPv4 směrování.",
         choice3: "RIPv1 podporuje VLSM.",
         choice4: "RIPng je určeno pro IPv6 směrování.",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Jaká je adresa multicastu, který používá RIPv2?",
@@ -167,11 +167,11 @@ if (name_of_page == 'rip'){
         choice2: "224.0.0.10",
         choice3: "224.0.0.9",
         choice4: "224.0.0.6",
-        answer: 2, 
+        answer: 2,
     },
-]
+    ]
 }
-if (name_of_page == 'eigrp'){
+if (name_of_page == 'eigrp') {
     MCQS = [{
         question: "Jakou multicastovou adresu EIGRP využívá?",
         choice1: "224.0.0.9",
@@ -186,7 +186,7 @@ if (name_of_page == 'eigrp'){
         choice2: "bandwidth a delay",
         choice3: "bandwidth",
         choice4: "25",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Co je to succesor?",
@@ -194,7 +194,7 @@ if (name_of_page == 'eigrp'){
         choice2: "Označení dalšího eigrp routeru",
         choice3: "Cesta s nejnižší metrikou do cíle",
         choice4: "Backup cesta",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Jakou hodnotu má internal EIGRP pro administrative distance?",
@@ -202,7 +202,7 @@ if (name_of_page == 'eigrp'){
         choice2: "110",
         choice3: "70",
         choice4: "170",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Jaký protokol je EIGRP?",
@@ -210,11 +210,11 @@ if (name_of_page == 'eigrp'){
         choice2: "Path-Vector",
         choice3: "Hybrid Distance-Vector",
         choice4: "Distance-Vector",
-        answer: 2, 
+        answer: 2,
     },
-]
+    ]
 }
-if (name_of_page == 'bgp'){
+if (name_of_page == 'bgp') {
     MCQS = [{
         question: "Co je to autonomní systém?",
         choice1: "Internet",
@@ -229,7 +229,7 @@ if (name_of_page == 'bgp'){
         choice2: "TCP 179",
         choice3: "TCP 168",
         choice4: "UDP 179",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Co BGP využívá k určení nejlepší cesty?",
@@ -237,7 +237,7 @@ if (name_of_page == 'bgp'){
         choice2: "AD",
         choice3: "BPDU",
         choice4: "PA",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Jaká je AD iBGP?",
@@ -245,11 +245,11 @@ if (name_of_page == 'bgp'){
         choice2: "115",
         choice3: "20",
         choice4: "255",
-        answer: 0, 
+        answer: 0,
     },
-]
+    ]
 }
-if (name_of_page == 'ipv6'){
+if (name_of_page == 'ipv6') {
     MCQS = [{
         question: "Komu se pošle anycastová zpráva?",
         choice1: "nic takového neexistuje",
@@ -264,7 +264,7 @@ if (name_of_page == 'ipv6'){
         choice2: "FE80::4500:8C4::1",
         choice3: "FE80::4500:8C4:0:1",
         choice4: "FE8::45:08C4:0:1",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Jakým příkazem povolíme IPv6 routing?",
@@ -272,7 +272,7 @@ if (name_of_page == 'ipv6'){
         choice2: "R1(config-if)#ipv6 routing",
         choice3: "R1(config)#ipv6 enable",
         choice4: "R1(config)#ipv6 routing enable",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Jaká IPv6 multicastová adresa pošle zprávu na všechny routery?",
@@ -280,7 +280,7 @@ if (name_of_page == 'ipv6'){
         choice2: "FF02::2",
         choice3: "FF02::1",
         choice4: "FF02::5",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Jaký IPv6 protokol nahrazuje ARP?",
@@ -288,7 +288,7 @@ if (name_of_page == 'ipv6'){
         choice2: "SLAAC",
         choice3: "ARPv6",
         choice4: "DAD",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "K čemu se používá DAD?",
@@ -296,7 +296,7 @@ if (name_of_page == 'ipv6'){
         choice2: "K mapování IPv6 adres k MAC adresám",
         choice3: "K ověření zda nakonfigurovaná IPv6 adresa již existuje",
         choice4: "K výrobě IPv6 adres z MAC adresy",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Která z těchto adres je link-local?",
@@ -304,7 +304,7 @@ if (name_of_page == 'ipv6'){
         choice2: "FC00:4574::1",
         choice3: "2001::5724:ac74",
         choice4: "FE80::5724:1c0b:fd57:8390",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Kolika bitova IPv6 je?",
@@ -312,7 +312,7 @@ if (name_of_page == 'ipv6'){
         choice2: "32",
         choice3: "48",
         choice4: "192",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Který z typu IPv6 adres, je stejný jako public IPv4?",
@@ -320,7 +320,7 @@ if (name_of_page == 'ipv6'){
         choice2: "unique local",
         choice3: "global unicast",
         choice4: "anycast",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Najdi IPv6 prefix adresy 4584::4514:ac47:3333:aaaa/64",
@@ -328,11 +328,11 @@ if (name_of_page == 'ipv6'){
         choice2: "4548::",
         choice3: "4548::4514:ac00",
         choice4: "4548::4500",
-        answer: 1, 
+        answer: 1,
     },
-]
+    ]
 }
-if (name_of_page == 'sshtelnet'){
+if (name_of_page == 'sshtelnet') {
     MCQS = [{
         question: "Jaký port využívá SSH?",
         choice1: "UDP 23",
@@ -347,7 +347,7 @@ if (name_of_page == 'sshtelnet'){
         choice2: "TCP 22",
         choice3: "TCP 23",
         choice4: "UDP 23",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Jakým příkazem vygenerujeme rsa klíč na SW1?",
@@ -355,7 +355,7 @@ if (name_of_page == 'sshtelnet'){
         choice2: "SW1(config)#crypto key gen",
         choice3: "Sw1(config-line)crypto key gen rsa",
         choice4: "SW1(config)#crypto key gen rsa",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Aspoň kolika bitový musí být rsa klíč pro to, abychom mohli použít SSHv2?",
@@ -363,7 +363,7 @@ if (name_of_page == 'sshtelnet'){
         choice2: "768",
         choice3: "360",
         choice4: "548",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "Jakým příkazem přepnu ssh verzi na R1?",
@@ -371,11 +371,11 @@ if (name_of_page == 'sshtelnet'){
         choice2: "R1(config)#ssh version",
         choice3: "R1(config-line)#ssh version",
         choice4: "R1(config-line)#ip ssh version",
-        answer: 0, 
+        answer: 0,
     },
-]
+    ]
 }
-if (name_of_page == 'nat'){
+if (name_of_page == 'nat') {
     MCQS = [{
         question: "Který typ source NAT naplňuje následujicí definici 'Mapuje X privátních IPv4 adres na 1 veřejnou IPv4 adresu'?",
         choice1: "Statická NAT",
@@ -390,7 +390,7 @@ if (name_of_page == 'nat'){
         choice2: "IP adresa vnějšího přístroje z pohledu vnitřní sítě",
         choice3: "IP adresa vnějšího přístroje z pohledu vnější sítě",
         choice4: "IP adresa vnitřního přístroje z pohledu vnější sítě",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Co mapuje Dynamická NAT? Vyberte nejlepší odpověď",
@@ -398,7 +398,7 @@ if (name_of_page == 'nat'){
         choice2: "Mapuje 1 privátní IPv4 adresu na X veřejných IPv4 adres",
         choice3: "Mapuje 1 privátní IPv4 adresu na 1 veřejnou IPv4 adresu",
         choice4: "Mapuje 1 privátní IPv4 adresu na 1 veřejnou adresu z poolu IPv4 adres",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Která z těchto IPv4 adres NEPATŘÍ mezi privátní adresy?",
@@ -406,7 +406,7 @@ if (name_of_page == 'nat'){
         choice2: "10.0.5.4",
         choice3: "172.32.45.1",
         choice4: "172.16.36.84",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Definujte Inside Global (privátní) adresu",
@@ -414,11 +414,11 @@ if (name_of_page == 'nat'){
         choice2: "IP adresa vnitřního přístroje z pohledu vnitřní sítě",
         choice3: "IP adresa vnitřního přístroje z pohledu vnější sítě",
         choice4: "IP adresa vnějšího přístroje z pohledu vnější sítě",
-        answer: 2, 
+        answer: 2,
     },
-]
+    ]
 }
-if (name_of_page == 'ntpptp'){
+if (name_of_page == 'ntpptp') {
     MCQS = [{
         question: "Definujte referenční hodiny, vyberte nejlepší odpověď",
         choice1: "Zdroj času",
@@ -433,7 +433,7 @@ if (name_of_page == 'ntpptp'){
         choice2: "TCP 20",
         choice3: "UDP 123",
         choice4: "UDP 20",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Co je to stratum? Vyberte nejlepší odpověď",
@@ -441,7 +441,7 @@ if (name_of_page == 'ntpptp'){
         choice2: "Vzdálenost zařízení od primárního NTP serveru",
         choice3: "Vzdálenost mezi NTP zařízením a serverem",
         choice4: "Vzdálenost zařízení od sekundárního NTP serveru",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Co je v rámci PTP označováno jako Grandmaster?",
@@ -449,7 +449,7 @@ if (name_of_page == 'ntpptp'){
         choice2: "Nic takového v PTP není",
         choice3: "Ekvivalent NTP klienta",
         choice4: "Hlavní zdroj času, začíná synchronizaci s ostatními zařízeními",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Definujte primární NTP server",
@@ -457,11 +457,11 @@ if (name_of_page == 'ntpptp'){
         choice2: "Zařízení, které má stratum 1",
         choice3: "Zdroj času",
         choice4: "Zařízení, které má stratum 0",
-        answer: 1, 
+        answer: 1,
     },
-]
+    ]
 }
-if (name_of_page == 'syslog'){
+if (name_of_page == 'syslog') {
     MCQS = [{
         question: "Jaký port využívá syslog protokol?",
         choice1: "TCP 21",
@@ -476,7 +476,7 @@ if (name_of_page == 'syslog'){
         choice2: "ADJCHG",
         choice3: "5",
         choice4: "000030",
-        answer: 0, 
+        answer: 0,
     },
     {
         question: "Jakou úroveň závažnosti (severity) má nasledujicí log? '00:07:01: %OSPF-5-ADJCHG: ...'",
@@ -484,11 +484,11 @@ if (name_of_page == 'syslog'){
         choice2: "Notification",
         choice3: "Alert",
         choice4: "Warning",
-        answer: 1, 
+        answer: 1,
     },
-]
+    ]
 }
-if (name_of_page == 'dhcp'){
+if (name_of_page == 'dhcp') {
     MCQS = [{
         question: "Jaký typ zprávy je DHCP DISCOVER?",
         choice1: "Multicast",
@@ -503,7 +503,7 @@ if (name_of_page == 'dhcp'){
         choice2: "TCP 20 a 21",
         choice3: "UDP 66 a 67",
         choice4: "UDP 67 a UDP 68",
-        answer: 3, 
+        answer: 3,
     },
     {
         question: "Který z těchto údajů neposkytuje DHCP?",
@@ -511,7 +511,7 @@ if (name_of_page == 'dhcp'){
         choice2: "IP adresu",
         choice3: "IP adresu NTP serveru",
         choice4: "IP adresu DNS serveru",
-        answer: 2, 
+        answer: 2,
     },
     {
         question: "Který typ DHCP zprávy je v rámci DHCP Snoopingu bezokladně po přijetí zahozen?",
@@ -519,7 +519,7 @@ if (name_of_page == 'dhcp'){
         choice2: "DHCP Offer",
         choice3: "DHCP Release",
         choice4: "DHCP Request",
-        answer: 1, 
+        answer: 1,
     },
     {
         question: "U kterých typů zpráv DHCP Snooping kontroluje soulad MAC adresy v rámci a MAC adresy ve zprávě?",
@@ -527,7 +527,42 @@ if (name_of_page == 'dhcp'){
         choice2: "DHCP Offer",
         choice3: "DHCP NACK",
         choice4: "DHCP ACK",
-        answer: 0, 
+        answer: 0,
     },
-]
+    ]
+}
+if (name_of_page == 'ftp') {
+    MCQS = [{
+        question: "Na jakém principu je založen FTP protokol?",
+        choice1: "klient/server",
+        choice2: "peer2peer",
+        choice3: "peer2server",
+        choice4: "klient/peer",
+        answer: 0,
+    },
+    {
+        question: "Jaký port používá ovládací spojení?",
+        choice1: "TCP 20",
+        choice2: "TCP 69",
+        choice3: "TCP 21",
+        choice4: "UDP 69",
+        answer: 3,
+    },
+    {
+        question: "Které z následujicích operací umožňuje TFTP?",
+        choice1: "Výpis souborů z TFTP serveru",
+        choice2: "přenos souborů z/na TFTP server",
+        choice3: "Smazání souborů z TFTP serveru",
+        choice4: "Vytváření složek na TFTP serveru",
+        answer: 1,
+    },
+    {
+        question: "Jaký port používá TFTP?",
+        choice1: "TCP 69",
+        choice2: "TCP 20",
+        choice3: "TCP 21",
+        choice4: "UDP 69",
+        answer: 3,
+    },
+    ]
 }

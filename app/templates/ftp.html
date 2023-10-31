@@ -27,20 +27,26 @@
     </section>
     <section id="PrincipFTP">
         <h3>Princip FTP</h3>
-        <p>Pro umožnění přenosu dat, je nejprve důležité navázat TCP relaci pomocí TCP 3-way handshaku (Na to se používá <b>TCP port 20</b>).</p>
-        <p>Jakmile se naváže TCP spojení, je nutné, aby se klient přihlásil. Je nutné zde zmínit to, že komunikace přes FTP protokol není žádným způsobem zašifrovaná, a veškerý přenos je v plaintextu. Přihlášování nám pouze dovolí omezit určitým uživatelům přístup do specifických složek a také jim může znemožnit například mazat obsah FTP serveru.</p>
-        <p>Když je klient přihlášený, může si na FTP server libovolně <b>procházet, vytvářet, mazat, či upravovat soubory či složky</b>. Na přenos souborů mezi klientem a serverem se používá port <b>TCP 21</b>.</p>
-    </section>
-    <section id="FTPModes">
-        <h3>FTP Módy</h3>
-        <p>Klient může s FTP serverem komunikovat:</p>
+        <p>FTP je založené na principu <b>klient/server</b>.</p>
+        <p>Klient a server spolu navazují dva typy spojení - datové (Data connection) a ovládací (Control connection). Datové slouží k přenosu dat mezi serverem a klientem. Ovládací zas k zasílání FTP příkazů na server.</p>
+        <p>Celkově funguje FTP tak, že:</p>
         <ul>
-            <li class="req"><b>Aktivně</b> - Klient inicializuje celou komunikace, server začíná TCP 3-way handshake. Používá se v LAN</li>
-            <li class="req"><b>Pasivně</b> - Klient začíná TCP 3-way handshake, používá se většinou při komunikaci s FTP serverem mimo LAN (Firewall by nedovolil serveru začít TCP 3-way handshake)</li>
+            <li class="ordered">Mezi klientem a FTP serverem proběhne <b>TCP 3-Way handshake</b></li>
+            <li class="ordered">Pokud to není anonymní, bude třeba se ověřit pomocí uživatelského jména a hesla.</li>
+            <li class="ordered">Jestliže autorizace proběhne v pořádku, je <b>navázáno ovládací spojení</b>. V rámci ovládacího spojení používá FTP server <b>TCP port 21</b>. Pomocí ovládacího spojení může oprávněný uživatel <b>vytvářet, mazat, procházet, upravovat či přenášet soubory a složky</b> na FTP serveru.</li>
+            <li class="ordered">Při přenášení souboru se pak dle nastavení módu <b>naváže datové spojení</b>, které slouží k přenosu samotného souboru.</li>
+        </ul>
+        <p>Veškerá komunikace klasického FTP protokolu <b>není žádným způsobem zašifrovaná</b> - veškerý přenos je v plaintextu (včetně FTP autentizace).</p>
+    </section>
+    <section id="FTPModes" class="subSection">
+        <h3>Typy datového spojení</h3>
+        <ul>
+            <li class="req"><b>Aktivní</b> - Server na žádost klienta naváže datové spojení na portu 20 - používá se výhradně v LAN (Firewall a NAT by nedovolí serveru inicializovat přenos dat.)</li>
+            <li class="req"><b>Pasivní</b> - Klient naváže datové spojení - používá se na přenos mezi klientem a FTP serverem přes Internet</li>
         </ul>
     </section>
     <section id="FTPConfiguration">
-        <h3>Použití FTP k aktualizování IOSu</h3>
+        <h3>Použití FTP k aktualizování Cisco IOSu</h3>
         <p>Máme následujicí situaci - chceme upgradovat IOS na nejnovější verzi 15.7.3M8.</p>
         <img src="../static/styles/images/FTP/FTP_Configuration.png" alt="FTP Konfigurace" class="configImage">
         <p>Nejnovější verze je nahraná na našem lokálním FTP serveru s IP adresou 192.168.0.2.</p>
@@ -62,12 +68,23 @@ R1#reload</pre>
         <h3>TFTP</h3>
         <p>TFTP byl vyvinut po FTP a je určený k pouhému přenosům dat, čili neumožňuje například mazání obsahu, procházení obsahu atd.</p>
         <p>TFTP používá <b>UDP port 69</b>. Použití UDP by vám mělo naznačit, že protokol nebude spolehlivý, nicméně TFTP zaručí spolehlivost svým způsobem. K tomu, aby TFTP byl spolehlivý využívá techniku potvrzování zpráv, kdy zařízení pošle ACK zprávu po tom, co obdrželo daná data od druhého zařízení. Zařízení má na odpověď určitý čas, pokud ten čas vypršel, tak druhé zařízení posílá danou zprávu znova.</p>
+        <section id="TFTPKonfigurace" class="subSection">
+            <h4>Zálohování configů pomocí TFTP protokolu:</h4>
+            <p>Minule jsme FTP použili k aktualizaci IOSu, nyní si ukážeme další využití této skupiny protokolů - Zálohování configu:</p>
+            <p class="beforecode">K tomu, abychom zálohovali config pomocí TFTP nám stačí pouze jediný příkaz - </p>
+            <pre>R1#copy startup-config tftp:</pre>
+            <p>Příkaz nás potom dále vyzve k zadání IP adresy TFTP serveru a k pojmenování přetáhnutého souboru. Poté tam přesune samotný soubor.</p>
+            <p class="beforecode">Kdybychom chtěli config poslat zpátky na router, tak bychom pouze obrátili startup-config a tftp:</p>
+            <pre>R1#copy tftp: startup-config</pre>
+            <p>Při použití příkazu bychom pak byli vyzváni, kromě zadání IP adresy, ke specifikaci souboru k odeslání.</p>
+        </section>
     </section>
     <section id="otherFTP">
-        <p>Za tu dobu, co FTP existuje, vzniklo mnoho dalších variant - </p>
+        <h3>Další variaty FTP protokolu</h3>
+        <p>Za tu dobu, co FTP existuje, vzniklo mnoho dalších variant, které vylepšují zabezpečení:</p>
         <ul>
-            <li class="req">FTPS - FTP Secure</li>
-            <li class="req">SFTP - SSH File Transfer Protocol</li>
+            <li class="req"><b>FTPS</b> - FTP Secure - Šifrovaná FTP varianta pomocí TLS</li>
+            <li class="req"><b>SFTP</b> - SSH File Transfer Protocol - Šifrovaný FTP pomocí SSH</li>
         </ul>
     </section>
     <section id="prehledPrikazu">
@@ -80,81 +97,43 @@ R1#reload</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>ip ftp username {uživatelské jméno}</td>
+                        <td>Specifikuje uživatelské jméno</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</th>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>ip ftp password</td>
+                        <td>Specifikuje heslo</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
+                        <td>ip ftp passive</td>
+                        <td>Navazování datového spojení v pasivním módu</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
+                        <td>copy {zdroj} {příjemce}</td>
+                        <td>Přenese specifikovaný soubor</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
+                        <td>boot system {Cisco IOS}</td>
+                        <td>Specifikuje jaký IOS se má po restartu spustit</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
+                        <td>reload</td>
+                        <td>Restartuje zařízení</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
-                    </tr>
                 </table>
             </div>
     </section>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>FTP a protokoly na něm založené slouží k přenosu dat.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
