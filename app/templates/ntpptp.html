@@ -123,7 +123,7 @@ R2#clock set 15:20:00 21 october 2023</pre>
                 <p>pozn. 1 je číslo klíče, které jej identifikuje</p>
                 <p class="beforecode">Nyní na R1 (NTP serveru) specifikujeme jakým klíčům bude zařízení důvěřovat: </p>
                 <pre>R1(config)#ntp trusted-key 1</pre>
-                <p class="beforecode">Na klientu poté nastavíme totéž co na R1 + při konfiguraci NTP serveru specifikujeme, jaký klíč má s tímto serverem použít: </p>
+                <p class="beforecode">Na klientu poté nastavíme authentication-key a při konfiguraci NTP serveru ještě specifikujeme, jaký klíč má s tímto serverem použít: </p>
                 <pre>R2(config)#ntp server 1.1.1.1 key 1</pre>
             </section>
         </section>

@@ -20,7 +20,36 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Každá webová stránka, internetová služba je dostupná pomocí své IP adresy. Problém je, že ne každý si dokáže zapamatovat každou IP adresu každé webové stránky či služby kterou navštěvuje. Proto vznikl DNS (Domain Name Server) protokol, který IP adresy překládá na zapamatovatelná doménová jména. Příkladem použití DNS v reálném světě by například mohlo být navštívení webových stránek naší školy. Pokud by DNS neexistovalo, museli bychom si zapamatovat IP adresu <i>176.118.170.226</i>, která by nás na webovou stránku odkázala. Díky DNS tak stačí do prohlízeče napsat ssps.cz a hned jsme na stránkách.</p>
+        <p>Každá webová stránka, internetová služba je dostupná pomocí své IP adresy. </p>
+        <p>Problém však je, že IP adresy jsou těžko zapamatovatelné a jejich užití není tak uživatelsky přívětivé.</p>
+        <p>Tento problém právě řeší DNS (Domain Name System) protokol. Ten totiž překládá IP adresy na lidsky snadno zapamatovatelná doménová jména, která tím pádem půjdou použít k přístupu na webové stránky či služby.</p>
+    </section>
+    <section id="PrincipDNS">
+        <h3>Princip DNS</h3>
+        <p>DNS je postaveno na tom, že máme nějaký/á zařízení a v tom/těch zařízení je definováno to, že IP adresa je přiřazená k danému doménovému jménu.</p>
+        <p>Jako příklad zde nyní můžu uvést situaci, kdy na počítači v naší lokální síti nastavíme, že IP adresa "192.168.0.1" je také označená doménovým jménem "router". Kdybychom poté chtěli ten router pingnout, tak by se nám naskytla příležitost k tomu použít místo IP adresy jeho doménové jméno.</p>
+        <p>Na Internetu je však již tento proces poněkud složitější a vyžaduje součinnost několika specifických DNS serverů.</p>
+        <p>Příklad:</p>
+        <p>PC1 se chce dostat na stránky "www.google.com"</p>
+        <p><i>Jak PC1 tedy zjistí IP adresu stránek Googlu?</i></p>
+        <p>Za předpokladu, že PC1 nemá k doménovému jménu manuálně přiřazenou IP adresu a v poslední době na googlu nebyl (DNS Cache na PC1), se stane následujicí.</p>
+        <ul>
+            <li class="ordered">PC1 kontaktuje svého DNS Resolvera (což povětšinou bývá ISP), s dotazem, jestli neví, kde je IP adresa googlu. Jestliže žádný host připojený k tomuto DNS Resolverovi v poslední době na googlu nebyl, tak se DNS Resolver obrátí se stejným dotazem (DNS Query) na Root Name Server.</li>
+            <li class="ordered">Root Name Server odkáže DNS Resolver na TLD (Top Level Domain) server. Root Name Servery mají k dispozici informace o všech možných doménách (.com, .net, .org, .cz atd.)</li>
+            <li class="ordered">TLD server nás zas odkáže na IP adresu Autoritativního serveru. TLD server obsahuje informace o autoritativních serverech pod danou doménou.</li>
+            <li class="ordered">Nakonec DNS Resolver tedy kontaktuje autoritativní server, který již zná IP adresu přiřazenou k domenovému jménu "google.com"</li>
+            <li class="ordered">DNS Resolver si pak do své cache dočasně uloží překlad toho doménového jména na IP adresu a samotnou IP adresu poskytne PC1, který tím pádem bude moci navštívit samotnou stránku. Stejně jako DNS Resolver si daný "překlad" ukládá dočasně do své cache.</li>
+        </ul>
+        <p>K celé této operaci využívá DNS porty <b>TCP a UDP 53</b>. UDP 53 je používáno standardně. TCP 53 pouze pokud UDP 53 z nějakého důvodu použít nejde.</p>
+        <section id="Terminology" class="subSection">
+            <h4>Shrnutí DNS Terminologie</h4>
+        </section>
+    </section>
+    <section id="DNSConfiguration">
+        <h3>Konfigurace DNS</h3>
+    </section>
+    <section id="Security">
+        <h3>DNS a bezpečnostní hrozby</h3>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
