@@ -20,11 +20,11 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Pokud se na zařízení stane nějaká událost, tak pro ni systém vygeneruje tzv. "log" (Log - v tomto případě není logaritmus, nýbrž záznam nějaké činnosti).</p>
+        <p>Pokud se na zařízení stane nějaká událost, tak pro ni systém vygeneruje tzv. "<b>log</b>" (Log - v tomto případě není logaritmus, nýbrž záznam nějaké činnosti).</p>
         <p class="beforecode">S logem se například setkáte při zapnutí nebo vypnutí interfacu - </p>
         <pre>*Oct 24, 18:40:05.4040: %LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up</pre>
         <p>Jestliže budeme správce větší síťě, nebude v našich silách hlídat logy na každém zařízení, proto je dobrý tyto logy posílat na jedno místo - Syslog server. K tomu, abychom takto mohli posílat logy, právě slouží <b>syslog</b> protokol, definovaný v RFC 5424.</p>
-        <p>Ještě je třeba zdůraznit, že ještě existuje <b>syslog standard</b>, který nemá na starosti posílání logů na syslog server, nýbrž má na starosti samotnou generaci a formátování logů.</p>
+        <p>Ještě je třeba zdůraznit, že existuje <b>syslog standard</b>, který nemá na starosti posílání logů na syslog server, nýbrž má na starosti samotnou generaci a formátování logů.</p>
     </section>
     <section id="formating">
         <h3>Formátování logů</h3>
@@ -65,7 +65,7 @@ R1(config)#service sequence-numbers</pre>
             <tr>
                 <td>0</td>
                 <td>Emergency</td>
-                <td>Systém je nepoužívatelný</td>
+                <td>Systém je nepouživatelný</td>
             </tr>
             <tr>
                 <td>1</td>
@@ -116,7 +116,7 @@ R1(config)#service sequence-numbers</pre>
     <p class="beforecode">Pokud jsme ale připojeni přes telnet nebo SSH, logy se nám bez dodatečné konfigurace zařízení zobrazovat nebudou. Aby se nám zobrazovali, tak je nutné použít následujicí příkazy:</p>
     <pre>Router(config)#logging monitor
 Router#terminal monitor</pre>
-    <p>pozn. Příkaz <i>logging monitor</i> umožní všem připojeným zařízením dostávat logy, zatímco příkaz <i>terminal monitor</i> oznamuje IOSu, že relace chce přijímat logy. Příkaz <i>terminal monitor</i> je nutno použít pokaždé, když jsme připojeni přes SSH/Telnet.</p>
+    <p>pozn. Příkaz <i>logging monitor</i> umožní všem připojeným zařízením dostávat logy, zatímco příkaz <i>terminal monitor</i> oznamuje IOSu, že relace chce přijímat logy. Příkaz <i>terminal monitor</i> je nutno použít pokaždé, když jsme připojeni přes SSH/Telnet. Příkaz <i>logging monitor</i> <b>není</b> dostupný v PT.</p>
     <p class="beforecode">Kdybychom chtěli zobrazovat pouze závaznější typy zpráv, tak bychom na konci specifikovali úroveň závažnosti.</p>
     <pre>Router(config)#logging monitor {úroveň | název}</pre>
     <p>pozn. Zobrazí na SSH/Telnet připojení pouze té úrovně a závaznější (4-0) logy.</p>
@@ -127,6 +127,7 @@ Router#terminal monitor</pre>
     <p class="beforecode">Pozor, tento příkaz nemůže specifikovat úroveň žávažnosti. Pro to abychom specifikovali, které typy logů půjdou dle závažnosti na syslog server aplikujeme příkaz: </p>
     <pre>Router(config)#logging trap {úroveň | název}</pre>
     <p>Pro posílání logů na zařízení používá syslog port <b>UDP 514</b>.</p>
+    <p class="beforecode">Konfiguraci syslogu si můžete vyzkoušet <a href="../Labs/Syslog/Syslog.pka">zde</a>.</p>
 </section>
     </section>
     <section id="prehledPrikazu">
@@ -174,7 +175,7 @@ Router#terminal monitor</pre>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>logging synchronomous</td>
+                        <td>logging synchrononous</td>
                         <td>Zabrání logům okamžitému přerušení zadávání uživatelského vstupu</td>
                         <td>Global Config</td>
                     </tr>

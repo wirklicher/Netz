@@ -55,9 +55,11 @@
         <pre>R1(config)#ip ftp username admin
 R1(config)#ip ftp password admin123</pre>
         <p class="beforecode">Ještě předtím než stáhneme IOS z FTP serveru, je dobré si tam nahrát stávající verzi IOSu, to uděláme pomocí příkazu:</p>
-        <pre>R1#copy flash:c2900-universalk9-mz.SPA.156-3.M9.bin ftp:c2900-universalk9-mz.SPA.156-3.M9.bin</pre>
+        <pre>R1#copy flash: ftp:</pre>
+        <p>Následně se nás systém zeptá, na IP adresu ftp serveru a na soubor, který tam chceme poslat, případně také jak se soubor bude na FTP serveru nazývat.</p>
         <p class="beforecode">Nyní přetáhneme novou verzi z FTP serveru - </p>
-        <pre>R1#copy ftp:c2900-universalk9-mz.SPA.157-3.M8.bin flash:c2900-universalk9-mz.SPA.157-3.M8.bin</pre>
+        <pre>R1#copy ftp: flash:</pre>
+        <p>Tímto příkazem se nás systém opět zeptá na IP adresu FTP serveru a na soubor, který chceme přetáhnout, případně také jak se bude soubor u nás nazývat.</p>
         <p class="beforecode">Novou verzi pak stačí pouze nabootovat a restartovat systém - </p>
         <pre>R1(config)#boot system flash:c2900-universalk9-mz.SPA.157-3.M8.bin
 R1#reload</pre>
@@ -77,6 +79,7 @@ R1#reload</pre>
             <p class="beforecode">Kdybychom chtěli config poslat zpátky na router, tak bychom pouze obrátili startup-config a tftp:</p>
             <pre>R1#copy tftp: startup-config</pre>
             <p>Při použití příkazu bychom pak byli vyzváni, kromě zadání IP adresy, ke specifikaci souboru k odeslání.</p>
+            <p>Konfiguraci FTP a TFTP si můžete vyzkoušet <a href="../Labs/FTP/FTP.pka">zde</a>.</p>
         </section>
     </section>
     <section id="otherFTP">
@@ -134,6 +137,9 @@ R1#reload</pre>
     <section id="zaver">
         <h3>Závěr</h3>
         <p>FTP a protokoly na něm založené slouží k přenosu dat.</p>
+        <p>Síťařům většinou tento protokol slouží k nahrání nové verze na zařízení či k zálohování configů.</p>
+        <p>FTP funguje na principu otevření dvou spojení - datového, ovládacího. Přes datové se posílají data a přes ovládací uživatel zadává příkazy FTP serveru.</p>
+        <p>Existují další, bezpečnější (FTPS, SFTP) či jednodušší (TFTP) verze FTP</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

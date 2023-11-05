@@ -566,3 +566,38 @@ if (name_of_page == 'ftp') {
     },
     ]
 }
+if (name_of_page == 'dns') {
+    MCQS = [{
+        question: "Kdy DNS použije port UDP 53?",
+        choice1: "Když je velikost zprávy větší jak 512 bytů",
+        choice2: "Když je velikost zprávy menší než 512 bytů",
+        choice3: "Když je velikost zprávy přesně rovna 768 bytům",
+        choice4: "Když je velikost zprávy menší než 768 bytů",
+        answer: 1,
+    },
+    {
+        question: "Jak byste definovali DNS Resolver (za předpokladu že má prázdnou cache)?",
+        choice1: "Nejvýše postavený server v celé DNS hierarchii",
+        choice2: "Server, jež má aktuální a nejbližší informaci o specifickém doménovém jméně",
+        choice3: "DNS server na který uživatel posílá DNS Query",
+        choice4: "Server, který obsahuje data všech doménových jmen v rámci jedné domény",
+        answer: 2,
+    },
+    {
+        question: "Který z následujicích útoků zahltí DNS Server dotazy pod IP adresou oběti?",
+        choice1: "DNS Tunneling",
+        choice2: "DNS Spoofing",
+        choice3: "Žádný takový útok neexistuje",
+        choice4: "DNS Amplification",
+        answer: 3,
+    },
+    {
+        question: "Kdy DNS použije port TCP 53?",
+        choice1: "Když je velikost zprávy větší jak 512 bytů",
+        choice2: "Když je velikost zprávy menší než 768 bytů",
+        choice3: "DNS nepoužívá port TCP 53",
+        choice4: "Když je velikost zprávy menší než 512 bytů",
+        answer: 0,
+    },
+    ]
+}

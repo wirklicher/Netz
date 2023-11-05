@@ -11,7 +11,7 @@
 <body>
     <h1>DNS</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní konfigurace v Packet Traceru</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -40,16 +40,41 @@
             <li class="ordered">Nakonec DNS Resolver tedy kontaktuje autoritativní server, který již zná IP adresu přiřazenou k domenovému jménu "google.com"</li>
             <li class="ordered">DNS Resolver si pak do své cache dočasně uloží překlad toho doménového jména na IP adresu a samotnou IP adresu poskytne PC1, který tím pádem bude moci navštívit samotnou stránku. Stejně jako DNS Resolver si daný "překlad" ukládá dočasně do své cache.</li>
         </ul>
-        <p>K celé této operaci využívá DNS porty <b>TCP a UDP 53</b>. UDP 53 je používáno standardně. TCP 53 pouze pokud UDP 53 z nějakého důvodu použít nejde.</p>
+        <p>K celé této operaci využívá DNS porty <b>TCP a UDP 53</b>. UDP 53 je používáno standardně pro DNS zprávy menší než 512 bytů. TCP 53 pouze pokud je velikost DNS zprávy větší jak 512 bytů.</p>
         <section id="Terminology" class="subSection">
             <h4>Shrnutí DNS Terminologie</h4>
+            <ul>
+                <li class="req"><b>DNS Query</b> - zpráva, kterou host/DHCP Resolver žádá o IP adresu přidělenou k doménovému jménu.</li>
+                <li class="req"><b>DNS Resolver</b> - DNS server na který uživatel posílá DNS Query, pokud doménu nemá ve vlastní cache, tak se po IP adrese ptá dál Root serveru, většinou ISP.</li>
+                <li class="req"><b>Root server</b> - Nejvýše postavený server v celé DNS hierarchii, většinou poskytují IP adresu TLD serveru. Celkově jich je na světě 13.</li>
+                <li class="req"><b>TLD server</b> - Server, který obsahuje data všech doménových jmen v rámci jedné domény.</li>
+                <li class="req"><b>Autoritativní server</b> - Server, jež má aktuální a nejbližší informaci o specifickém doménovém jméně</li>
+            </ul>
         </section>
     </section>
     <section id="DNSConfiguration">
         <h3>Konfigurace DNS</h3>
+        <p>Příklad: </p>
+        <img src="../static/styles/images/DNS/DNS_Configuration.png" alt="DNS Configuration" class="configImage">
+        <p>Zprovozni v síti DNS:</p>
+        <p class="beforecode">Nejdříve na routeru zprovozníme DNS (povětšinou automaticky zapnuté):</p>
+        <pre>R1(config)#ip domain-lookup</pre>
+        <p class="beforecode">Dále manuálně na R1 specifikujeme, jakou IP adresu má DNS Resolver:</p>
+        <pre>R1(config)#ip name-server 178.241.36.2</pre>
+        <p class="beforecode">Nyní nastavíme routeru doménové jméno (to se automaticky připíná k hostname bez domény ping H1 --> ping H1.R1): </p>
+        <pre>R1(config)#ip domain-name R1</pre>
+        <p class="beforecode">A na konec si lokálně namapujeme IP adresy hostů 1-3 na doménová jména:</p>
+        <pre>R1(config)#ip host H1 192.168.0.2
+R1(config)#ip host H2 192.168.0.3</pre>
+        <p>Konfiguraci DNS v PT si můžete vyzkoušet <a href="../Labs/DNS/DNS.pka">zde</a>.</p>
     </section>
     <section id="Security">
         <h3>DNS a bezpečnostní hrozby</h3>
+            <ul>
+                <li class="req"><b>DNS Spoofing</b> - Útočník upraví záznamy v DNS Cache. Útok pak může přenést oběť na falešnou kopii stránky, která se vydává za pravou stránku. Prevencí může být například používání DNS Security Extensions.</li>
+                <li class="req"><b>DNS Amplification</b> - Útočník zahltí DNS Server dotazy pod IP adresou oběti. Zatížená oběť pak nemůže zpracovávat ostatní požadavky.</li>
+                <li class="req"><b>DNS Tunneling</b> - Útočník využije DNS zprávu k poslání škodlivého kódu či dokonce programu. Vzhledem k tomu, že DNS je běžnou součástí každodenního používání Internetu, tak je možný že jej firewall bez potíží propustí dál do sít.</li>
+            </ul>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -61,74 +86,29 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</th>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>ip domain lookup</td>
+                        <td>Zprovozní DNS lookup</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
+                        <td>ip name-server {ip_adresa_DNS_serveru}</td>
+                        <td>Určí adresu DNS serveru</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</th>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
+                        <td>ip domain-name {doménové_jméno}</td>
+                        <td>Určí doménové jméno zařízení</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport nonegotiate</th>
+                        <td>ip host {doménové_jméno} {ip_adresa_zařízení}</td>
                         <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</th>
-                        <td>Nastaví trunking protokol na switchi</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</th>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</th>
-                        <td>Nastaví povolené VLANy na trunku</th>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</th>
-                        <td>Nastaví sub interface pro danou VLAN</th>
-                        <td>router - sub interface</th>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</th>
-                        <td>Vypne VTP</th>
-                        <td>Global Config</th>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
+                        <td>ip dns server</td>
+                        <td>Udělá ze zařízení DNS Server</td>
+                        <td>Global Config</td>
                     </tr>
                 </table>
             </div>
@@ -136,6 +116,9 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>DNS nebo-li Domain Name System protokol je jeden z důležitějších protokolů. Slouží k překladu lidsky nečitelných IP adres na lidsky čitelná domenová jména.</p>
+        <p>DNS funguje na tom principu že uživatel posílá dotazy (DNS Query) DNS Serveru, zda neví která IP adresa pasuje k danému doménovému jménu.</p>
+        <p>DNS používá jak TCP tak UDP porty. Když je DNS Query menší jak 512 bytů, použije UDP 53. Jakmile je však větší než 512 bytů použije TCP 53.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
