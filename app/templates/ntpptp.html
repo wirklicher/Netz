@@ -28,13 +28,13 @@
     <section id="DeviceTimeConfiguration">
         <h3>Konfigurace času na Cisco zařízení</h3>
         <p>Pro to aby bylo nastavení NTP, co nejhladší je dobré nejdříve nastavit software a hardware hodiny.</p>
-        <p>pozn. Zařízení v Packet Traceru nemají hardware clock, proto je v labech nenastavíte.</p>
-        <p>V praxi platí, že před nastavením samotného času je vždy dobré nastavit nejdříve časové pásmo a letní čas. To je dáno tím, že když nejdříve nastavíme čas a až poté časové pásmo a letní čas, tak se na nynější čas aplikují daná pravidla - čas na síťových zařízení totiž nastavujeme v UTC. Kdybychom tedy nastavili nejdřív to, že je 18.10.2023 18:00, tak po nastavení časové zóny na CET a letního času by z 18:00 bylo najednou 20:00 (V PT se tak stane vždy nehledě na to, co nastavíme jako první).</p>
+        <p>pozn. Zařízení v Packet Traceru nemají hardwarové hodiny a letní čas, proto je v labech nenastavíte.</p>
+        <p>V praxi platí, že před nastavením samotného času je vždy dobré nastavit nejdříve časové pásmo a letní čas. To je dáno tím, že když nejdříve nastavíme čas a až poté časové pásmo a letní čas, tak se na nynější čas aplikují daná pravidla - čas na síťových zařízení totiž nastavujeme v UTC. Kdybychom tedy nastavili nejdřív to, že je 18.10.2023 18:00, tak po nastavení časového pásma na CET a letního času by z 18:00 bylo najednou 20:00 (V PT se tak stane vždy nehledě na to, co nastavíme jako první).</p>
         <p class="beforecode">Pro nastavení časového pásma a letního času použijeme následujicí příkazy: </p>
         <pre>Router(config)#clock timezone CET 1 0
 Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00</pre>
-        <p>pozn. časové pásmo či letního čas se nastavuje pouze na software hodinách</p>
-        <p class="beforecode">Pro manuální nastavení softwarových hodin na datum 15.10.2023 13:39:45 použijeme příkaz:</p>
+        <p>pozn. Časové pásmo či letního čas se nastavuje pouze na software hodinách.</p>
+        <p class="beforecode">Pro manuální nastavení datumu a času 15.10.2023 13:39:45 na softwarových hodinách použijeme příkaz:</p>
         <pre>Router#clock set 13:39:45 15 october 2023 </pre>
         <p class="beforecode">Pro manuální nastavení hardwarových hodin na totéž datum použijeme příkaz:</p>
         <pre>Router#calendar set 13:39.45 15 october 2023 </pre>
@@ -48,10 +48,10 @@ Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sund
         <p>V úvodu jsme si vysvětlili, že manuální konfigurace není v běžné praxi dostačujicí, protože časem se hodiny znepřesní a také není snadno rozšířitelná na ostatní zařízení. Aby k tomuto nedocházelo, vyvinul se NTP protokol, který synchronizuje čas na zařízení s NTP serverem.</p>
         <p><i>Jak NTP funguje?</i></p>
         <p>NTP funguje tak, že máme klienta a server. Klient požádá server o synchronizaci času. Server žádosti vyhoví a pošle klientovi aktuální čas. Intenzita žádostí o synchronizaci času se pohybuje od 64 sekund do 1024 sekund s tím, že se dynamicky mění dle potřeby.</p>
-        <p>Pozor NTP pracuje pouze v UTC, proto je dobré předem nastavit časové pásmo a letní čas.</p>
+        <p>Pozor NTP pracuje pouze v UTC, proto je dobré si předem na zařízení nastavit časové pásmo a letní čas.</p>
         <p>NTP používá port <b>UDP 123</b>.</p>
         <p>NTP dovede udržet čas v rozmezí desítek milisekund.</p>
-        <p>Zařízení může být zároveň jak NTP klientem tak NTP serverem, přičemž každé zařízení, které získává čas z jiného, je zároveň i NTP serverem (bez žádné další konfigurace) a může být zdrojem času pro jiná zařízení.</p>
+        <p>Zařízení může být zároveň jak NTP klientem tak NTP serverem, přičemž každé zařízení, které získává čas z jiného, je automaticky NTP serverem (bez žádné další konfigurace) a může být zdrojem času pro jiná zařízení.</p>
         <section id="NTPHierarchy" class="subSection">
             <h4>NTP Hierarchie</h4>
             <img src="../static/styles/images/NTP/NTP_Hierarchy.png" alt="NTP Hierarchie" class="configImage" id="dark_aware">
@@ -59,17 +59,17 @@ Router(config)#clock summer-time CEST reccuring last sunday march 2:00 last sund
             <p>Z referenčních hodin získávají čas tzv. <b>primární servery</b>. Jako primární server označujeme zařízení, který má <b>Stratum</b> 1.</p>
             <p><b>Stratum</b> je vzdálenost zařízení od referenčních hodin. NTP servery, které mají stratum větší jak 15 jsou označeny jako nedůvěryhodné a ostatní zařízení s nimi nesynchronizují svůj čas.</p>
             <p>Pojem <b>sekundární server</b> poté zahrnuje všechny ostatní NTP servery.</p>
-            <p>MOŽNÁ PŘEFORMULOVAT!!! Nakonec nám na obrázku ještě zbývá <b>NTP Peer</b>. NTP peer se skládá ze dvou zařízení, která si mezi sebou synchronizují čas. Obě zařízení mají stejné stratum. Význam NTP Peer tkví v tom, že jeden druhému slouží jako nahrádní NTP server pro případ, kdyby jedno zařízení z dvojice přestalo dostávat čas od jeho NTP serveru. NTP peer nelze nakonfigurovat v PT. </p>
+            <p>Nakonec nám na obrázku ještě zbývá <b>NTP Peer</b>. NTP peer se skládá ze dvou zařízení, která si mezi sebou synchronizují čas. Obě zařízení mají stejné stratum. Význam NTP Peer tkví v tom, že jeden druhému slouží jako nahrádní NTP server pro případ, kdyby jedno zařízení z dvojice přestalo dostávat čas od jeho NTP serveru. NTP peer nelze nakonfigurovat v PT. </p>
             <p></p>
         </section>
         <section id="NTPmodes" class="subSection">
             <h4>NTP módy</h4>
             <p>RFC 1129 nám definuje následujicí NTP módy:</p>
             <ul>
-                <li class="req"><b>Server</b> - Zařízení, které na žádost klienta posílá aktuální čas</li>
-                <li class="req"><b>Klient</b> - Posílá NTP serveru žádost o synchronizaci</li>
-                <li class="req"><b>Symmetric Active/Passive</b> - NTP peers se spolu navzájem synchronizují, Aktivní peer posílá pasivnímu žádost o synchronizaci, Pasivní na ni odpovídá</li>
-                <li class="req"><b>Broadcast</b> - Server, který pravidelně posílá klientům broadcast s aktuálním časem</li>
+                <li class="req"><b>Server</b> - Zařízení, které na žádost klienta posílá aktuální čas.</li>
+                <li class="req"><b>Klient</b> - Posílá NTP serveru žádost o synchronizaci.</li>
+                <li class="req"><b>Symmetric Active/Passive</b> - NTP peers se spolu navzájem synchronizují, Aktivní peer posílá pasivnímu žádost o synchronizaci, Pasivní na ni odpovídá.</li>
+                <li class="req"><b>Broadcast</b> - Server, který pravidelně posílá klientům broadcast s aktuálním časem.</li>
             </ul>
         </section>
         <section id="BestPractise" class="subSection">
@@ -102,7 +102,7 @@ R1(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday o
             <pre>R2(config)#clock timezone CET 1 0
 R2(config)#clock summer-time CEST reccuring last sunday march 2:00 last sunday october 3:00
 R2#clock set 15:20:00 21 october 2023</pre>
-            <p>pozn. přibližný aktuální čas na R2 nastavujeme proto, že se nám pak spolu s NTP serverem lépe synchronizují.</p>
+            <p>pozn. přibližný aktuální čas na R2 nastavujeme proto, že se nám pak spolu s NTP serverem rychleji synchronizují.</p>
             <p class="beforecode">Nakonec synchronizujeme R2 se serverem, k tomu použijeme loopback adresu NTP serveru:</p>
             <pre>R2(config)#ntp server 1.1.1.1</pre>
             <section id="NTPTroubleshooting" class="subSection">
@@ -116,17 +116,17 @@ R2#clock set 15:20:00 21 october 2023</pre>
             <section id="ntpAuthConfig" class="subSection">
                 <h4>Konfigurace NTP Autentizace</h4>
                 <p>NTP Autentizace slouží klientovi k ověření toho, že komunikuje se správným NTP serverem.</p>
-                <p>K nastavení NTP autentizace použijeme topologii z předešlé konfigurace</p>
+                <p>K nastavení NTP autentizace použijeme topologii z předešlé konfigurace.</p>
                 <img src="../static/styles/images/NTP/NTP_ex2.png" alt="NTP Exercise 1" class="configImage">
                 <p class="beforecode">Prvně povolíme na klientovi (R2) ntp autentizaci pomocí příkazu: </p>
                 <pre>R2(config)#ntp authenticate</pre>
                 <p class="beforecode">Následně na klientovi vytvoříme klíč: </p>
                 <pre>R2(config)#ntp authentication-key 1 md5 netzwe</pre>
-                <p>pozn. 1 je číslo klíče, které jej identifikuje</p>
+                <p>pozn. 1 je číslo klíče, které jej identifikuje.</p>
                 <p class="beforecode">Nyní na klientovi specifikujeme, jakým klíčům bude zařízení důvěřovat a s kterým NTP serverem bude synchronizovat čas: </p>
                 <pre>R2(config)#ntp trusted-key 1
 R2(config)#ntp server 1.1.1.1</pre>
-                <p>pozn. V případě, že máme pouze 1 klíč pro jeden či vícero serverů, použijeme příkaz <i>ntp trusted-key</i>. Jakmile je ale klíčů víc, příkaz <i>ntp trusted-key</i> nepoužíváme a místo toho každému serveru přidělíme vlastní klíč pomocí příkazu --> <i>ntp server 1.2.3.4 key 1</i></p>
+                <p>pozn. V případě, že máme pouze 1 klíč pro jeden či vícero serverů, použijeme příkaz <i>ntp trusted-key</i>. Jakmile je ale klíčů víc, příkaz <i>ntp trusted-key</i> nepoužíváme a místo toho každému serveru přidělíme vlastní klíč pomocí příkazu --> <i>ntp server 1.2.3.4 key 1</i>.</p>
                 <p class="beforecode">Na NTP serveru (R1) poté nastavíme authentication-key: </p>
                 <pre>R1(config)#ntp authentication-key 1 md5 netzwe</pre>
                 <p>Konfiguraci NTP včetně autentizace si můžete zkusit <a href="../Labs/NTP/NTP.pka">zde</a>.</p>
@@ -192,7 +192,7 @@ R2(config)#ntp server 1.1.1.1</pre>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>clock set {hod}:{min}:{sek} {den} {měsíc - slovy} {rok}</th>
+                        <td>clock set {hod}:{min}:{sek} {den} {měsíc - slovy} {rok}</td>
                         <td>Manuálně nastaví čas softwarových hodin</td>
                         <td>Priviledged EXEC</td>
                     </tr>

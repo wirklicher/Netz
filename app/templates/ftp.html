@@ -28,20 +28,20 @@
     <section id="PrincipFTP">
         <h3>Princip FTP</h3>
         <p>FTP je založené na principu <b>klient/server</b>.</p>
-        <p>Klient a server spolu navazují dva typy spojení - datové (Data connection) a ovládací (Control connection). Datové slouží k přenosu dat mezi serverem a klientem. Ovládací zas k zasílání FTP příkazů na server.</p>
-        <p>Celkově funguje FTP tak, že:</p>
+        <p>Klient a server spolu navazují dva typy spojení - <b>datové</b> (Data connection) a <b>ovládací</b> (Control connection). Datové slouží k přenosu dat mezi serverem a klientem. Ovládací zas k zasílání FTP příkazů na server.</p>
+        <p>Celkově FTP funguje tak, že:</p>
         <ul>
-            <li class="ordered">Mezi klientem a FTP serverem proběhne <b>TCP 3-Way handshake</b></li>
-            <li class="ordered">Pokud to není anonymní, bude třeba se ověřit pomocí uživatelského jména a hesla.</li>
-            <li class="ordered">Jestliže autorizace proběhne v pořádku, je <b>navázáno ovládací spojení</b>. V rámci ovládacího spojení používá FTP server <b>TCP port 21</b>. Pomocí ovládacího spojení může oprávněný uživatel <b>vytvářet, mazat, procházet, upravovat či přenášet soubory a složky</b> na FTP serveru.</li>
-            <li class="ordered">Při přenášení souboru se pak dle nastavení módu <b>naváže datové spojení</b>, které slouží k přenosu samotného souboru.</li>
+            <li class="ordered">Mezi klientem a FTP serverem proběhne tzv. <b>TCP 3-Way handshake</b>.</li>
+            <li class="ordered">Pokud to není anonymní, bude třeba se přihlásit na FTP server pomocí uživatelského jména a hesla.</li>
+            <li class="ordered">Jestliže autorizace proběhne v pořádku, je <b>navázáno ovládací spojení</b>. V rámci ovládacího spojení používá FTP server <b>TCP port 21</b>. Pomocí ovládacího spojení může oprávněný uživatel <b>vytvářet, mazat, stahovat, procházet, upravovat či přenášet soubory a složky</b> na FTP serveru.</li>
+            <li class="ordered">Při stahování souboru se pak dle nastavení módu <b>naváže datové spojení</b>, které slouží k přenosu samotného souboru.</li>
         </ul>
         <p>Veškerá komunikace klasického FTP protokolu <b>není žádným způsobem zašifrovaná</b> - veškerý přenos je v plaintextu (včetně FTP autentizace).</p>
     </section>
     <section id="FTPModes" class="subSection">
         <h3>Typy datového spojení</h3>
         <ul>
-            <li class="req"><b>Aktivní</b> - Server na žádost klienta naváže datové spojení na portu 20 - používá se výhradně v LAN (Firewall a NAT by nedovolí serveru inicializovat přenos dat.)</li>
+            <li class="req"><b>Aktivní</b> - Server na žádost klienta naváže datové spojení na portu 20 - používá se výhradně v LAN (Firewall a NAT nedovolí serveru inicializovat přenos dat.)</li>
             <li class="req"><b>Pasivní</b> - Klient naváže datové spojení - používá se na přenos mezi klientem a FTP serverem přes Internet</li>
         </ul>
     </section>
@@ -56,20 +56,20 @@
 R1(config)#ip ftp password admin123</pre>
         <p class="beforecode">Ještě předtím než stáhneme IOS z FTP serveru, je dobré si tam nahrát stávající verzi IOSu, to uděláme pomocí příkazu:</p>
         <pre>R1#copy flash: ftp:</pre>
-        <p>Následně se nás systém zeptá, na IP adresu ftp serveru a na soubor, který tam chceme poslat, případně také jak se soubor bude na FTP serveru nazývat.</p>
+        <p>Následně se nás systém zeptá, na IP adresu FTP serveru a na soubor, který tam chceme poslat, případně jak se bude přenesený soubor na FTP serveru nazývat.</p>
         <p class="beforecode">Nyní přetáhneme novou verzi z FTP serveru - </p>
         <pre>R1#copy ftp: flash:</pre>
-        <p>Tímto příkazem se nás systém opět zeptá na IP adresu FTP serveru a na soubor, který chceme přetáhnout, případně také jak se bude soubor u nás nazývat.</p>
+        <p>Tímto příkazem se nás systém opět zeptá na IP adresu FTP serveru a na soubor, který chceme přetáhnout, případně také jak se bude u nás stažený soubor jmenovat.</p>
         <p class="beforecode">Novou verzi pak stačí pouze nabootovat a restartovat systém - </p>
         <pre>R1(config)#boot system flash:c2900-universalk9-mz.SPA.157-3.M8.bin
 R1#reload</pre>
-        <p class="beforecode">Nyní by se R1 mělo nabootovat s novou verzí - to koneckonců můžeme po nabootování zkontrolovat - </p>
+        <p class="beforecode">Nyní by R1 mělo nabootovat novou verzi - což koneckonců můžeme po nabootování zkontrolovat - </p>
         <pre>R1#show version</pre>
     </section>
     <section id="TFTP">
         <h3>TFTP</h3>
         <p>TFTP byl vyvinut po FTP a je určený k pouhému přenosům dat, čili neumožňuje například mazání obsahu, procházení obsahu atd.</p>
-        <p>TFTP používá <b>UDP port 69</b>. Použití UDP by vám mělo naznačit, že protokol nebude spolehlivý, nicméně TFTP zaručí spolehlivost svým způsobem. K tomu, aby TFTP byl spolehlivý využívá techniku potvrzování zpráv, kdy zařízení pošle ACK zprávu po tom, co obdrželo daná data od druhého zařízení. Zařízení má na odpověď určitý čas, pokud ten čas vypršel, tak druhé zařízení posílá danou zprávu znova.</p>
+        <p>TFTP používá <b>UDP port 69</b>. Použití UDP by vám mělo naznačit, že protokol nebude spolehlivý, nicméně TFTP dokáže zaručit spolehlivost svým vlastním způsobem. K tomu, aby TFTP byl spolehlivý využívá techniku potvrzování zpráv, kdy zařízení pošle ACK zprávu po tom, co obdrželo daná data od druhého zařízení. Zařízení má na odpověď určitý čas, pokud ten čas vypršel, tak druhé zařízení posílá danou zprávu znova.</p>
         <section id="TFTPKonfigurace" class="subSection">
             <h4>Zálohování configů pomocí TFTP protokolu:</h4>
             <p>Minule jsme FTP použili k aktualizaci IOSu, nyní si ukážeme další využití této skupiny protokolů - Zálohování configu:</p>
@@ -78,7 +78,6 @@ R1#reload</pre>
             <p>Příkaz nás potom dále vyzve k zadání IP adresy TFTP serveru a k pojmenování přetáhnutého souboru. Poté tam přesune samotný soubor.</p>
             <p class="beforecode">Kdybychom chtěli config poslat zpátky na router, tak bychom pouze obrátili startup-config a tftp:</p>
             <pre>R1#copy tftp: startup-config</pre>
-            <p>Při použití příkazu bychom pak byli vyzváni, kromě zadání IP adresy, ke specifikaci souboru k odeslání.</p>
             <p>Konfiguraci FTP a TFTP si můžete vyzkoušet <a href="../Labs/FTP/FTP.pka">zde</a>.</p>
         </section>
     </section>
@@ -87,7 +86,7 @@ R1#reload</pre>
         <p>Za tu dobu, co FTP existuje, vzniklo mnoho dalších variant, které vylepšují zabezpečení:</p>
         <ul>
             <li class="req"><b>FTPS</b> - FTP Secure - Šifrovaná FTP varianta pomocí TLS</li>
-            <li class="req"><b>SFTP</b> - SSH File Transfer Protocol - Šifrovaný FTP pomocí SSH</li>
+            <li class="req"><b>SFTP</b> - SSH File Transfer Protocol - Šifrovaná varianta FTP pomocí SSH</li>
         </ul>
     </section>
     <section id="prehledPrikazu">
@@ -137,9 +136,9 @@ R1#reload</pre>
     <section id="zaver">
         <h3>Závěr</h3>
         <p>FTP a protokoly na něm založené slouží k přenosu dat.</p>
-        <p>Síťařům většinou tento protokol slouží k nahrání nové verze na zařízení či k zálohování configů.</p>
+        <p>Síťařům většinou tento protokol pomáhá nahrávat nové verze IOSu na zařízení či zálohovat configy.</p>
         <p>FTP funguje na principu otevření dvou spojení - datového, ovládacího. Přes datové se posílají data a přes ovládací uživatel zadává příkazy FTP serveru.</p>
-        <p>Existují další, bezpečnější (FTPS, SFTP) či jednodušší (TFTP) verze FTP</p>
+        <p>Existují další, bezpečnější (FTPS, SFTP) či jednodušší (TFTP) verze FTP.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

@@ -20,9 +20,9 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Každá webová stránka, internetová služba je dostupná pomocí své IP adresy. </p>
+        <p>Každá webová stránka či internetová služba je dostupná pomocí své IP adresy. </p>
         <p>Problém však je, že IP adresy jsou těžko zapamatovatelné a jejich užití není tak uživatelsky přívětivé.</p>
-        <p>Tento problém právě řeší DNS (Domain Name System) protokol. Ten totiž překládá IP adresy na lidsky snadno zapamatovatelná doménová jména, která tím pádem půjdou použít k přístupu na webové stránky či služby.</p>
+        <p>Tento problém právě řeší DNS (Domain Name System) protokol. Ten totiž překládá IP adresy na lidsky snadno zapamatovatelná doménová jména, která tím pádem půjdou použít k přístupu na webové stránky či internetové služby.</p>
     </section>
     <section id="PrincipDNS">
         <h3>Princip DNS</h3>
@@ -30,12 +30,12 @@
         <p>Jako příklad zde nyní můžu uvést situaci, kdy na počítači v naší lokální síti nastavíme, že IP adresa "192.168.0.1" je také označená doménovým jménem "router". Kdybychom poté chtěli ten router pingnout, tak by se nám naskytla příležitost k tomu použít místo IP adresy jeho doménové jméno.</p>
         <p>Na Internetu je však již tento proces poněkud složitější a vyžaduje součinnost několika specifických DNS serverů.</p>
         <p>Příklad:</p>
-        <p>PC1 se chce dostat na stránky "www.google.com"</p>
+        <p>PC1 se chce dostat na stránky "www.google.com".</p>
         <p><i>Jak PC1 tedy zjistí IP adresu stránek Googlu?</i></p>
-        <p>Za předpokladu, že PC1 nemá k doménovému jménu manuálně přiřazenou IP adresu a v poslední době na googlu nebyl (DNS Cache na PC1), se stane následujicí.</p>
+        <p>Za předpokladu, že PC1 nemá k doménovému jménu manuálně přiřazenou IP adresu a v poslední době na googlu nebylo (DNS Cache na PC1), se stane následujicí.</p>
         <ul>
-            <li class="ordered">PC1 kontaktuje svého DNS Resolvera (což povětšinou bývá ISP), s dotazem, jestli neví, kde je IP adresa googlu. Jestliže žádný host připojený k tomuto DNS Resolverovi v poslední době na googlu nebyl, tak se DNS Resolver obrátí se stejným dotazem (DNS Query) na Root Name Server.</li>
-            <li class="ordered">Root Name Server odkáže DNS Resolver na TLD (Top Level Domain) server. Root Name Servery mají k dispozici informace o všech možných doménách (.com, .net, .org, .cz atd.)</li>
+            <li class="ordered">PC1 kontaktuje svého DNS Resolvera (což povětšinou bývá ISP), s dotazem, jestli neví, kde je IP adresa Googlu. Jestliže žádný host připojený k tomuto DNS Resolverovi v poslední době na googlu nebyl, tak se DNS Resolver obrátí se stejným dotazem (DNS Query) na Root Name Server.</li>
+            <li class="ordered">Root Name Server odkáže DNS Resolver na TLD (Top Level Domain) server. Root Name Servery mají k dispozici informace o všech možných doménách (.com, .net, .org, .cz atd.).</li>
             <li class="ordered">TLD server nás zas odkáže na IP adresu Autoritativního serveru. TLD server obsahuje informace o autoritativních serverech pod danou doménou.</li>
             <li class="ordered">Nakonec DNS Resolver tedy kontaktuje autoritativní server, který již zná IP adresu přiřazenou k domenovému jménu "google.com"</li>
             <li class="ordered">DNS Resolver si pak do své cache dočasně uloží překlad toho doménového jména na IP adresu a samotnou IP adresu poskytne PC1, který tím pádem bude moci navštívit samotnou stránku. Stejně jako DNS Resolver si daný "překlad" ukládá dočasně do své cache.</li>
@@ -45,10 +45,10 @@
             <h4>Shrnutí DNS Terminologie</h4>
             <ul>
                 <li class="req"><b>DNS Query</b> - zpráva, kterou host/DHCP Resolver žádá o IP adresu přidělenou k doménovému jménu.</li>
-                <li class="req"><b>DNS Resolver</b> - DNS server na který uživatel posílá DNS Query, pokud doménu nemá ve vlastní cache, tak se po IP adrese ptá dál Root serveru, většinou ISP.</li>
-                <li class="req"><b>Root server</b> - Nejvýše postavený server v celé DNS hierarchii, většinou poskytují IP adresu TLD serveru. Celkově jich je na světě 13.</li>
+                <li class="req"><b>DNS Resolver</b> - DNS server, na který uživatel posílá DNS Query, pokud doménu nemá ve vlastní cache, tak se po IP adrese ptá dál Root serveru.</li>
+                <li class="req"><b>Root server</b> - Nejvýše postavený server v celé DNS hierarchii, většinou poskytuje IP adresu TLD serveru. Celkově jich je na světě 13.</li>
                 <li class="req"><b>TLD server</b> - Server, který obsahuje data všech doménových jmen v rámci jedné domény.</li>
-                <li class="req"><b>Autoritativní server</b> - Server, jež má aktuální a nejbližší informaci o specifickém doménovém jméně</li>
+                <li class="req"><b>Autoritativní server</b> - Server, jež má aktuální a nejbližší informaci o specifickém doménovém jméně.</li>
             </ul>
         </section>
     </section>
@@ -56,12 +56,12 @@
         <h3>Konfigurace DNS</h3>
         <p>Příklad: </p>
         <img src="../static/styles/images/DNS/DNS_Configuration.png" alt="DNS Configuration" class="configImage">
-        <p>Zprovozni v síti DNS:</p>
-        <p class="beforecode">Nejdříve na routeru zprovozníme DNS (povětšinou automaticky zapnuté):</p>
+        <p>Zprovozni v síti používání doménových jmen:</p>
+        <p class="beforecode">Nejdříve na routeru zprovozníme DNS (většinou automaticky zapnuté):</p>
         <pre>R1(config)#ip domain-lookup</pre>
         <p class="beforecode">Dále manuálně na R1 specifikujeme, jakou IP adresu má DNS Resolver:</p>
         <pre>R1(config)#ip name-server 178.241.36.2</pre>
-        <p class="beforecode">Nyní nastavíme routeru doménové jméno (to se automaticky připíná k hostname bez domény ping H1 --> ping H1.R1): </p>
+        <p class="beforecode">Nyní nastavíme routeru doménové jméno (to se automaticky připíná k hostname bez domény, například z našeho klasického "ping H1" bude "ping H1.R1"): </p>
         <pre>R1(config)#ip domain-name R1</pre>
         <p class="beforecode">A na konec si lokálně namapujeme IP adresy hostů 1-3 na doménová jména:</p>
         <pre>R1(config)#ip host H1 192.168.0.2
@@ -71,9 +71,9 @@ R1(config)#ip host H2 192.168.0.3</pre>
     <section id="Security">
         <h3>DNS a bezpečnostní hrozby</h3>
             <ul>
-                <li class="req"><b>DNS Spoofing</b> - Útočník upraví záznamy v DNS Cache. Útok pak může přenést oběť na falešnou kopii stránky, která se vydává za pravou stránku. Prevencí může být například používání DNS Security Extensions.</li>
+                <li class="req"><b>DNS Spoofing</b> - Útočník upraví záznamy v DNS Cache. Útočník tím pak může přenést oběť na falešnou kopii stránky, která se vydává za pravou stránku. Prevencí může být například používání DNS Security Extensions.</li>
                 <li class="req"><b>DNS Amplification</b> - Útočník zahltí DNS Server dotazy pod IP adresou oběti. Zatížená oběť pak nemůže zpracovávat ostatní požadavky.</li>
-                <li class="req"><b>DNS Tunneling</b> - Útočník využije DNS zprávu k poslání škodlivého kódu či dokonce programu. Vzhledem k tomu, že DNS je běžnou součástí každodenního používání Internetu, tak je možný že jej firewall bez potíží propustí dál do sít.</li>
+                <li class="req"><b>DNS Tunneling</b> - Útočník využije DNS zprávy k posílání škodlivého kódu či dokonce programů. Využívá to, že DNS je běžnou součástí každodenního používání Internetu, tak je možný že jej firewall bez potíží propustí dál do sítě.</li>
             </ul>
     </section>
     <section id="prehledPrikazu">
@@ -117,7 +117,7 @@ R1(config)#ip host H2 192.168.0.3</pre>
     <section id="zaver">
         <h3>Závěr</h3>
         <p>DNS nebo-li Domain Name System protokol je jeden z důležitějších protokolů. Slouží k překladu lidsky nečitelných IP adres na lidsky čitelná domenová jména.</p>
-        <p>DNS funguje na tom principu že uživatel posílá dotazy (DNS Query) DNS Serveru, zda neví která IP adresa pasuje k danému doménovému jménu.</p>
+        <p>Funguje na tom principu že uživatel posílá dotazy (DNS Query) DNS Serveru, zda neví která IP adresa pasuje k danému doménovému jménu.</p>
         <p>DNS používá jak TCP tak UDP porty. Když je DNS Query menší jak 512 bytů, použije UDP 53. Jakmile je však větší než 512 bytů použije TCP 53.</p>
     </section>
     <div class="height_spacer"></div>
