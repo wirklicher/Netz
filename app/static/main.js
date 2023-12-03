@@ -15,6 +15,8 @@ let dns = document.querySelector('#dns');
 let ftp = document.querySelector('#ftp');
 let syslog = document.querySelector('#syslog');
 let sshTelnet = document.querySelector('#sshtelnet');
+let acl = document.querySelector('#acl');
+let portsec = document.querySelector('#portsec');
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
 let adress = "";
@@ -35,8 +37,8 @@ hamburger.addEventListener("click", () => {
 })
 
 vlan.addEventListener('click', () => {
-   $('#main').load('vlan.html');
-   name_of_page = 'vlan';
+    $('#main').load('vlan.html');
+    name_of_page = 'vlan';
 })
 
 sshTelnet.addEventListener('click', () => {
@@ -100,51 +102,59 @@ syslog.addEventListener('click', () => {
     $('main').load('syslog.html');
     name_of_page = 'syslog';
 })
+acl.addEventListener('click', () => {
+    $('main').load('acl.html');
+    name_of_page = 'acl';
+})
+portsec.addEventListener('click', () => {
+    $('main').load('portsec.html');
+    name_of_page = 'portsec';
+})
 
 let stpArray = document.querySelectorAll(".stp");
 
 
 
-stpArray.forEach(function(stp){
+stpArray.forEach(function (stp) {
     stp.addEventListener('click', () => {
         $('main').load('stp.html');
         name_of_page = 'stp';
     })
 })
-window.onload = function() {
+window.onload = function () {
     var a = $(location).attr('hash');
     a = a.replace('#', '');
     if (a == "stp_uvod" || a == "STA" || a == "rstp" || a == "Etherchannel") {
         a = "stp";
     }
-    if  (a == "vlan_uvod" || a == "zakladniKonfiguraceSection" || a == "trunking" || a == "DTPVTP"){
+    if (a == "vlan_uvod" || a == "zakladniKonfiguraceSection" || a == "trunking" || a == "DTPVTP") {
         a = "vlan";
     }
-    if  (a == "rip"){
+    if (a == "rip") {
         adress = "/templates/RoutingProtocols/";
         a = "rip";
     }
-    if  (a == "eigrp"){
+    if (a == "eigrp") {
         adress = "/app/templates/RoutingProtocols/";
         a = "eigrp";
     }
-    if  (a == "ospf"){
+    if (a == "ospf") {
         adress = "/app/templates/RoutingProtocols/";
         a = "ospf";
     }
-    if  (a == "bgp"){
+    if (a == "bgp") {
         adress = "/app/templates/RoutingProtocols/";
         a = "bgp";
     }
     $('main').load(`${adress}${a}.html`);
     name_of_page = a;
     console.log(localStorage.getItem('mode'));
-    if (localStorage.getItem('mode') === 'true'){
+    if (localStorage.getItem('mode') === 'true') {
         console.log('ola');
         document.documentElement.classList.add('dark_mode');
         switcher.checked = true;
         switcher2.checked = switcher.checked;
-        
+
 
     } else {
         console.log('ula');
@@ -158,7 +168,7 @@ window.onload = function() {
 
 function dark_mode() {
     document.documentElement.classList.toggle('dark_mode');
-    if (document.documentElement.classList.contains('dark_mode')){
+    if (document.documentElement.classList.contains('dark_mode')) {
         document.getElementById("dark_aware").src = "../static/styles/images/NTP/NTP_Hierarchy_dark.png"
     }
     else {
@@ -177,11 +187,11 @@ switcher2.addEventListener('click', () => {
     switcher.checked = switcher2.checked;
 })
 
-if (!document.documentElement.classList.contains('dark_mode')){
+if (!document.documentElement.classList.contains('dark_mode')) {
     console.log("True rlly is");
 }
 
-$(window).resize(function(){
+$(window).resize(function () {
     if ($(window).width() >= 600) {
         hamburger.classList.remove("active");
         navmenu.classList.remove("active");
