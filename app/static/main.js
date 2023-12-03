@@ -168,12 +168,6 @@ window.onload = function () {
 
 function dark_mode() {
     document.documentElement.classList.toggle('dark_mode');
-    if (document.documentElement.classList.contains('dark_mode')) {
-        document.getElementById("dark_aware").src = "../static/styles/images/NTP/NTP_Hierarchy_dark.png"
-    }
-    else {
-        document.getElementById("dark_aware").src = "../static/styles/images/NTP/NTP_Hierarchy.png"
-    }
     localStorage.setItem('mode', document.documentElement.classList.contains('dark_mode'));
     console.log(localStorage.getItem('mode'));
 }

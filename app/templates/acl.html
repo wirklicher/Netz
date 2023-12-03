@@ -20,8 +20,41 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Při konfiguraci sítě byste zcela jistě mohli narazit na to, že budete potřebovat nějakým způsobem identifikovat určitou skupinu paketů či segmentů.</p>
-        <p>O to, jak identifikovat pakety/segmety, se stará tzv. <b>"Access Control List"</b>.</p>
+        <p>Síťový administrátor má za úkol nastavit topologii (viz obrázek níže) dle následujicích pravidel - </p>
+        <ul>
+            <li class="req">Host-5 může komunikovat pouze se zařízeními v síti 192.168.0.0/24</li>
+            <li class="req">Host-1 může komunikovat se všemi zařízeními v topologii</li>
+            <li class="req">Host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru</li>
+            <li class="req">Všechna ostatní zařízení, která se později přidají do topologie nebudou moci komunikovat s nikým kromě zařízení ve stejné subnetě</li>
+        </ul>
+        <img src="../static/styles/images/ACL/ACL_Intro.png" alt="ACL_Intro" class="configImage">
+        <p><i>Pomocí čeho by to měl síťový administrátor nastavit?</i></p>
+        <p>Možná vás napadlo, vyřešit pár těchto požadavků pomocí VLAN. Ty jsou však bez nějaké větší změny topologie absolutně k ničemu. K tomu, abychom tohle mohli nakonfigurovat, potřebujeme něco, co nám umožní identifikovat pakety jednotlivých zařízení. Přičemž díky identifikaci paketů by se pak mohlo například pomocí zdrojové IP adresy rozhodnout, zda paket poputuje dál nebo bude zahozený.</p>
+        <p>Přesně toto nám umožňuje tzv. <b>Access Control List</b>.</p>
+
+        <p><b>Access Control List (ACL)</b> je obecně řečeno set pravidel, jež nám pomáhají identifikovat pakety a segmenty na základě různých parametrů (zdrojová IP adresa, IP adresa příjemce, porty atd.)</p>
+        <p>Tyto sety různých pravidel se poté dají aplikovat na:</p>
+        <ul>
+            <li class="req"><b>Interface</b> - za účelem filtrace (takový "stateless firewall")</li>
+            <li class="req"><b>NAT</b> - za účelem určení paketů, jež budou přeloženy</li>
+            <li class="req"><b>QoS</b> - k prioritizaci určitých paketů</li>
+            <li class="req"><b>VPN</b> - k zašifrování daných paketů</li>
+        </ul>
+        <p><b>V rámci této kapitoly se budeme bavit pouze o aplikaci na interface.</b></p>
+        <section id="versions">
+            <h4>Typy ACL</h4>
+            <p>Jsou 2 různé typy ACL. Každý typ se od toho druhého odlišuje hlavně tím, že umožňuje vytvářet pravidlo na základě jiných parametrů. - </p>
+            <ul>
+                <li class="req"><b>Standard</b> - typ ACL, jež nám umožní vytvářet pravidla na základě pouze zdrojové IP adresy</li>
+                <li class="req"><b>Extended</b> - typ ACL, jež nám umožní vytvářet pravidla na základě zdrojové IP adresy, IP adresy příjemce, zdrojového portu, portu příjemce a typu užitého IP protokolu (IPv4 či IPv6).</li>
+            </ul>
+            <p>Oba typy ACL můžeme definovat pomocí čísla (<b>Numbered ACL</b>) či pomocí jména (<b>Named ACL</b>).</p>
+        </section>
+        <section id="Functioning">
+            <h4>Filtrace Paketů/Segmentů pomocí ACL</h4>
+            <p>Jestliže aplikujeme ACL na interface, budeme moci na základě námi definovaných pravidel filtrovat pakety/segmenty, čímž si z routeru uděláme takový  "stateless firewall".</p>
+            <p>Demonstrativní příklad - Vyfiltruj </p>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
