@@ -11,7 +11,7 @@
 <body>
     <h1>Access Control List</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní znalost Packet Traceru, IPv4, IPv6</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -25,19 +25,18 @@
             <li class="req">Host-5 může komunikovat pouze se zařízeními v síti 192.168.0.0/24</li>
             <li class="req">Host-1 může komunikovat se všemi zařízeními v topologii</li>
             <li class="req">Host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru</li>
-            <li class="req">Všechni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým než se zařízeními ve stejné subnetě</li>
+            <li class="req">Všichni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým jiným než se zařízeními ve stejné subnetě</li>
         </ul>
         <img src="../static/styles/images/ACL/ACL_Intro.png" alt="ACL_Intro" class="configImage">
         <p><i>Pomocí čeho by to měl síťový administrátor nastavit?</i></p>
         <p>K tomu, abychom tohle mohli nakonfigurovat, potřebujeme něco, co nám umožní identifikovat pakety jednotlivých zařízení. Přičemž díky identifikaci paketů by se pak mohlo například pomocí zdrojové IP adresy rozhodnout, zda paket poputuje dál nebo bude zahozen.</p>
         <p>A přesně tohle nám umožňuje tzv. <b>Access Control List</b>.</p>
         <p><b>Access Control List (ACL)</b> je, obecně řečeno, seznam pravidel, jež nám pomáhá identifikovat pakety podle určitých parametrů jako zdrojové IP adresy, IP adresy příjemce, L4 portů atd.</p>
-        <p>ACL jako takové má mnoho využití a velmi záleží na tom kam jej aplikujeme, pro CCNA stačí vědět, že jej můžeme obecně aplikovat na:</p>
+        <p>ACL jako takové má mnoho využití a velmi záleží na tom, kam jej aplikujeme, pro CCNA stačí vědět, že jej můžeme obecně aplikovat na:</p>
         <ul>
             <li class="req"><b>Interface</b> - za účelem filtrace (takový "stateless firewall")</li>
             <li class="req"><b>NAT</b> - k určení paketů, jež budou přeloženy</li>
             <li class="req"><b>QoS</b> - k prioritizaci určitých paketů</li>
-            <li class="req"><b>VPN</b> - k zašifrování daných paketů</li>
         </ul>
         <p><b>V rámci této kapitoly se budeme bavit <b>pouze</b> o aplikaci na interface.</b></p>
     </section>
@@ -56,20 +55,20 @@
                 <li class="req"><b>MAC</b> - typ ACL, jež nám umožní vytvářet pravidla na základě L2 informací.</li>
             </ul>
             <p>Typy ACL můžeme definovat pomocí čísla (<b>Numbered ACL</b>) či pomocí jména (<b>Named ACL</b>).</p>
-            <p>Při definici ACL pomocí čísla si musíme pamatovat, že pro standard ACL jsou vyhrazena čísla <b>1-99</b> a <b>1300-1900</b> (Rozsah 1300-1900 byl ke standard ACL přidělený až později, proto je tam taková odchylka). K Extended ACL zas byla přidělená čísla 100-199 a 2000-2699 (rozsah 2000-2699 byl opět přidán později).</p>
+            <p>Při definici ACL pomocí čísla si musíme pamatovat, že pro standard ACL jsou vyhrazená čísla <b>1-99</b> a <b>1300-1999</b> (Rozsah 1300-1999 byl ke standard ACL přidělený až později, proto je tam taková odchylka). K Extended ACL zas byla přidělená čísla 100-199 a 2000-2699 (rozsah 2000-2699 byl opět přidán později).</p>
             <p>Při konfiguraci ACL spíš doporučuji konfigurovat ACL pomocí jména. Konfigurace ACL pomocí jména nám oproti ACL konfigurované pomoci čísla umožní <b>přeřadit jednotlivé ACE</b>, <b>vložit ACE mezi již existujicí ACE</b> a <b>celkově nakonfigurovat více ACL</b>.</p>
         </section>
         <section id="ACESEQ" class="subSection">
             <h4>Důležitost pořadí jednotlivých pravidel v rámci ACL</h4>
-            <p>Další věcí, co je třeba si promyslet, je pořadí jednotlivých pravidel v rámci jedné ACL. ACL totiž fungují na tom principu, že se při filtraci kontrolují pravidla od 1. do posledního zadaného. Pokud se během toho procesu podaří najít takový paket, který splňuje pravidlo, tak se další ACE v ACL <b>nekontrolují</b>.</p>
+            <p>Další věcí, co je třeba si promyslet, je pořadí jednotlivých pravidel v rámci jedné ACL. ACL totiž fungují na tom principu, že se při filtraci kontrolují pravidla od 1. do toho, který byl zadaný jako poslední. Pokud se během toho procesu podaří najít takový paket, který splňuje pravidlo, tak se další ACE v ACL <b>nekontrolují</b>.</p>
             <p>Na tohle je velmi nutné dávat si pozor, důležitost správného pořadí ACE si dokážeme na příkladu - </p>
             <p>Máme nastavit to, že všechny pakety z 192.168.0.0/24 budou kromě 192.168.0.58 zahozeny.</p>
-            <p>My jsme tedy vytvořili ACL v tomto pořadí - </p>
+            <p>Vytvořili jsme si tedy ACL v tomto pořadí - </p>
             <ul>
                 <li class="req">1. Zahoď všechny pakety z 192.168.0.0/24</li>
                 <li class="req">2. Přijmi 192.168.0.58</li>
             </ul>
-            <p>Kdybychom to nastavili v tomto pořadí, tak by se nám stalo, že paket se zdrojovou IP adresou 192.168.0.58 by byl stejně zahozen, protože 1. pravidlo by bylo naplněno a druhé by tím pádem bylo ignorováno. Proto by v tomto případě bylo správným řešením prohodit pořadí těchto pravidel.</p>
+            <p>Kdybychom to však nastavili v tomto pořadí, tak by se nám stalo, že paket se zdrojovou IP adresou 192.168.0.58 by byl stejně zahozen, protože 1. pravidlo by bylo naplněno a druhé by tím pádem bylo ignorováno. Proto by v tomto případě bylo správným řešením prohodit pořadí těchto pravidel.</p>
             <ul>
                 <li class="req">1. Přijmi 192.168.0.58</li>
                 <li class="req">2. Zahoď všechny pakety z 192.168.0.0/24</li>
@@ -90,11 +89,11 @@
             </ul>
             <p>Interface má 2 směry - </p>
             <ul>
-                <li class="req">Směr dovnitř - aneb když paket vstupuje do zařízení</li>
-                <li class="req">Směr ven - aneb když paket vystupuje ze zařízení</li>
+                <li class="req">Směr <b>dovnitř (in)</b> - aneb když paket vstupuje do zařízení</li>
+                <li class="req">Směr <b>ven (out)</b> - aneb když paket vystupuje ze zařízení</li>
             </ul>
-            <p><b>Pouze 1 ACL lze uplatnit v jednom směru!</b> Pokud bychom se pokusili aplikovat ve stejném směru vícero ACL, tak by došlo k nahrazení té dosavadní ACL, která ve směru dosavaď fungovala.</p>
-            <p><b>Obecně platí, že ACL aplikujeme, co nejblíže k příjemci - </b></p>
+            <p><b>Pouze 1 ACL lze uplatnit v jednom směru!</b> Pokud bychom se pokusili aplikovat ve stejném směru vícero ACL, tak by došlo k nahrazení té dosavadní ACL.</p>
+            <p><b>Obecně platí, že standard ACL aplikujeme, co nejblíže k příjemci - </b></p>
             <img src="../static/styles/images/ACL/ACL_Rule.png" alt="ACL_Intro" class="configImage">
             <p>Pokud bychom měli topologii ukázanou výše a měli bychom nastavit, že Host-1 nebude moci pingnout Hosta-3, tak bychom použitím té rady věděli, že ACL s takovým pravidlem uplatníme na R3 interfacu, který směřuje k Hostovi-3 ve směru ven z interfacu.</p>
         </section>
@@ -103,25 +102,24 @@
             <p>Nyní se pokusíme aplikovat výše uvedené znalosti na příklad z úvodu - </p>
             <p>Pro zopakování máme následujicí topologii - </p>
             <img src="../static/styles/images/ACL/ACL_Intro2.png" alt="ACL_Intro" class="configImage">
-            <p>Jako síťař máme v této topologii máme nastavit to, že</p>
+            <p>Jako síťař máme v této topologii máme nastavit to, že:</p>
             <ul>
                 <li class="req">P1: Host-5 může komunikovat pouze se zařízeními v síti 192.168.0.0/24</li>
                 <li class="req">P2: Host-1 může komunikovat se všemi zařízeními v topologii</li>
                 <li class="req">P3: Host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru</li>
-                <li class="req">P4: Všechni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým než se zařízeními ve stejné subnetě</li>
+                <li class="req">P4: Všichni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým jiným než se zařízeními ve stejné subnetě</li>
             </ul>
             <p>Nejdříve je třeba se rozhodnout, jaký typ ACL použijeme. V našem případě bude úplně bohatě stačit standard ACL, avšak i výběrem Extended bychom nic nezkazili.</p>
             <p>Dál je třeba se zamyslet nad zařízením, interfacem a směrem, kam jednotlivé ACL uplatníme.</p>
-            <p>1. pravidlo (P1), že host-5 bude moci komunikovat pouze se zařízeními v síti 192.168.0.0/24, může být poněkud záludné, protože nám nedává žádného specifického příjemce, ke kterému by se takový paket nemohl dostat. Nicméně víme, že paket nemá komunikovat s nikým jiným než se zařízeními v subnetě 192.168.0.0/24. Tím pádem by nás mělo napadnout, že nejlepší možností bude ACL aplikovat na R1.</p>
-            <p>R1 má aktuálně v provozu tři interfaci - g0/0, g0/1 a g0/2. Aplikace ACL na interface g0/0 ve směru dovnitř by se mohla na první pohled zdát jako úplně nejlepší možnost, protože to, že se paket nedostane na router by nám zcela zaručilo, že paket nebude poslaný někam dál než na 192.168.0.0/24. Toto řešení je však zcela špatné, protože nenaplňuje podmínku - host-5 by totiž tím pádem nemohl posílat pakety na 192.168.0.1, který je v subnetě 192.168.0.0/24.</p>
+            <p><b>1. pravidlo</b> (P1), že host-5 bude moci komunikovat pouze se zařízeními v síti 192.168.0.0/24, může být poněkud záludné, protože nám nedává žádného specifického příjemce, ke kterému by se takový paket nemohl dostat. Nicméně víme, že paket nemá komunikovat s nikým jiným než se zařízeními v subnetě 192.168.0.0/24. Tím pádem by nás mělo napadnout, že nejlepší možností bude ACL aplikovat na R1.</p>
+            <p>R1 má aktuálně v provozu tři interfaci - g0/0, g0/1 a g0/2. Aplikace ACL na interface g0/0 ve směru dovnitř by se mohla na první pohled zdát jako úplně nejlepší možnost, protože to, že se paket nedostane na router by nám zcela zaručilo, že paket nebude poslaný nikam dál než na 192.168.0.0/24. Toto řešení je však zcela špatné, protože nenaplňuje podmínku - host-5 by totiž tím pádem nemohl posílat pakety na 192.168.0.1, který je v subnetě 192.168.0.0/24.</p>
             <p>Tudíž jediným správným nastavením na R1 by bylo to, že bychom ACL s tímto pravidlem aplikovali na g0/1 a g0/2, v obou případech ve směru ven.</p>
-            <p>3. pravidlo (P3), že host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru, nakonfigurujeme podle poučky výše na R2 interfacu g0/0 směrem ven.</p>
-            <p>Nyní se můžeme podívat na 2.pravidlo (P2), které říká, že Host-1 může komunikovat se všemi zařízeními v topologii. Možná si právě teď říkáte, že v tom případě není třeba nic konfigurovat, jenže opak je pravdou a kvůli již existujicím ACL na R1 g0/1, g0/2 a R2 g0/0 je nutné takové pravidlo nakonfigurovat (všude kde je aplikovovaná ACL platí implicitní zákaz.).</p>
-            <p>Tím pádem bude třeba na všech těchto interfacích udělat takové pravidlo, které umožní průchod paketu hosta-1.</p>
+            <p><b>3. pravidlo (P3)</b>, že host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru, nakonfigurujeme podle poučky výše na R2 interfacu g0/0 směrem ven.</p>
+            <p>Nyní se můžeme podívat na <b>2.pravidlo (P2)</b>, které říká, že Host-1 může komunikovat se všemi zařízeními v topologii. Možná si právě teď říkáte, že v tom případě není třeba nic konfigurovat, jenže opak je pravdou a kvůli již existujicím ACL na R1 g0/1, g0/2 a R2 g0/0 je nutné takové pravidlo nakonfigurovat (všude kde je aplikovovaná ACL platí implicitní zákaz.).</p>
+            <p>Tím pádem bude třeba na všech těchto interfacích ve směru ven udělat takové pravidlo, které umožní průchod paketu hosta-1.</p>
             <p>Na interfacích g0/1 a g0/2 ve směru ven budeme muset kvůli pravidlům 1 a 4 (P4) vytvořit pravidlo, které povolí průchod všech paketů hosta-1 a hosta-2. Pokud bychom chtěli být připraveni na moment kdy jeden z kabelů mezi routery selže, tak na R1 int g0/1 ve směru ven povolíme také průchod všech paketů od ClientServeru a na R1 int g0/2 ve směru ven povolíme průchod všech paketů od AdminServeru.</p>
-            <p>Pro to, abychom naplnili P2 budeme muset nastavit na R2 g0/0 ve směru ven pravidlo, že se umožní průchod všech paketů.</p>
             <p>Nyní si tedy shrňme všechna navržená pravidla:</p>
-            <p>Na R1 int gig0/1 ve směru ven</p>
+            <p>Na R1 int gig0/1 ve směru ven:</p>
             <ul>
                 <li class="req">1. znemožni průchod všem paketům od Hosta-5</li>
                 <li class="req">2. umožni průchod všem paketům od Hosta-1</li>
@@ -129,7 +127,7 @@
                 <li class="req">4. umožni průchod všem paketům od ClientServeru</li>
                 <li class="req">5. implicitní zákaz</li>
             </ul>
-            <p>Na R1 int gig0/2 ve směru ven</p>
+            <p>Na R1 int gig0/2 ve směru ven:</p>
             <ul>
                 <li class="req">1. znemožni průchod všem paketům od Hosta-5</li>
                 <li class="req">2. umožni průchod všem paketům od Hosta-1</li>
@@ -137,28 +135,28 @@
                 <li class="req">4. umožni průchod všem paketům od AdminServeru</li>
                 <li class="req">5. implicitní zákaz</li>
             </ul>
-            <p>Na R2 int gig0/0 ve směru ven</p>
+            <p>Na R2 int gig0/0 ve směru ven:</p>
             <ul>
                 <li class="req">1. znemožni průchod všem paketům od Hosta-2</li>
                 <li class="req">2. umožni průchod všem paketům</li>
                 <li class="req">3. implicitní zákaz</li>
             </ul>
             <p>Podíváme-li se na navržená pravidla na R1, tak zjistíme, že pravidlo 1 bychom mohli díky implicitnímu zákazu zcela vynechat. Tudíž by pravidla vypadala nakonec následovně:</p>
-            <p>Na R1 int gig0/1 ve směru ven</p>
+            <p>Na R1 int gig0/1 ve směru ven:</p>
             <ul>
                 <li class="req">1. umožni průchod všem paketům od Hosta-1</li>
                 <li class="req">2. umožni průchod všem paketům od Hosta-2</li>
                 <li class="req">3. umožni průchod všem paketům od ClientServeru</li>
                 <li class="req">4. implicitní zákaz</li>
             </ul>
-            <p>Na R1 int gig0/2 ve směru ven</p>
+            <p>Na R1 int gig0/2 ve směru ven:</p>
             <ul>
                 <li class="req">1. umožni průchod všem paketům od Hosta-1</li>
                 <li class="req">2. umožni průchod všem paketům od Hosta-2</li>
                 <li class="req">3. umožni průchod všem paketům od AdminServeru</li>
                 <li class="req">4. implicitní zákaz</li>
             </ul>
-            <p>Na R2 int gig0/0 ve směru ven</p>
+            <p>Na R2 int gig0/0 ve směru ven:</p>
             <ul>
                 <li class="req">1. znemožni průchod všem paketům od Hosta-2</li>
                 <li class="req">2. umožni průchod všem paketům</li>
@@ -171,15 +169,20 @@
             <p>Za standardní ACL můžeme označit tu ACL, jež má pravidla, která kontrolují pouze zdrojovou IP adresu paketu a pokud je zadaná číselně, tak je označená čísly 1-99 a 1300-1900.</p>
             <p>Pravidla standardní ACL se konfigurují následovně:</p>
             <p class="beforecode">- Tvorba standardní ACL pomocí očíslování</p>
-            <pre>Router(config)#access-list {číslo ACL} {operace} {parametr}</pre>
-            <p>Kdy číslo ACL je číslo v rozmezí 1-99 nebo 1300-1999, operace je buď permit (přijmi), deny (zahoď) nebo okomentuj (remark) a parametr je zdrojová IP adresa nebo skupina zdrojových IP adres.</p>
+            <pre>Router(config)#access-list {číslo ACL} {operace (permit | deny | remark)} {parametr (zdroj)}</pre>
+            <p>Kdy číslo ACL je číslo v rozmezí 1-99 nebo 1300-1999, operace je buď <b>permit (přijmi), deny (zahoď) nebo remark (okomentuj)</b> a parametr je zdrojová IP adresa nebo síť zdrojových IP adres s <b>wildcard maskou</b> (invertovaná subnet maska).</p>
             <p class="beforecode">- Tvorba standardní ACL pomocí jména</p>
-            <pre>Router(config)#ip access-group standard {jméno ACL}
-Router(config-ext-nacl)# {*pořadí pravidla} {operace} {parametr}</pre>
-            <p>Kdy pořadí pravidla je nepovinné, operace je buď permit (přijmi), deny (zahoď) nebo okomentuj (remark) a parametr je zdrojová IP adresa nebo skupina zdrojových IP adres s wildcard maskou.</p>
-            <p>Hotovou standardní ACL poté můžeme aplikovat na interface pomocí příkazu</p>
+            <pre>Router(config)#ip access-list standard {jméno ACL}
+Router(config-std-nacl)# {*pořadí pravidla} {operace (permit | deny | remark)} {parametr (zdroj)}</pre>
+            <p>Kdy pořadí pravidla je nepovinné (bez specifikace, je použit standardní způsob číslování), <b>operace je buď permit (přijmi), deny (zahoď) nebo remark (okomentuj)</b> a parametr je zdrojová IP adresa nebo síť zdrojových IP adres s <b>wildcard maskou</b> (invertovaná subnet maska).</p>
+            <p class="beforecode">Hotovou standardní ACL poté můžeme aplikovat na interface pomocí příkazu -</p>
             <pre>ip access-group {číslo | jméno ACL} {směr}</pre>
             <p>Kdy směr je buď <b>in (dovnitř)</b> nebo <b>out (ven)</b></p>
+            <p class="beforecode">- ukázka standardní ACL</p>
+            <pre>Router(config)#access-list 1 remark ## Prijeti vsech paketu mimo tech ze subnety 192.168.15.0/24 a hosta-8 (192.168.16.8) ##
+Router(config)#access-list 1 deny 192.168.15.0 0.0.0.255
+Router(config)#access-list 1 deny host 192.168.16.8
+Router(config)#access-list 1 permit any</pre>
             <section id="StandardACLConf"class="subSection">
                 <h5>Ukázková konfigurace Standardní ACL</h5>
                 <p>Pro demonstrativní ukázku konfigurace standardní ACL použijeme příklad z úvodu - </p>
@@ -188,47 +191,76 @@ Router(config-ext-nacl)# {*pořadí pravidla} {operace} {parametr}</pre>
                     <li class="req">Host-5 může komunikovat pouze se zařízeními v síti 192.168.0.0/24</li>
                     <li class="req">Host-1 může komunikovat se všemi zařízeními v topologii</li>
                     <li class="req">Host-2 může komunikovat se všemi zařízeními v topologii kromě AdminServeru</li>
-                    <li class="req">P4: Všechni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým než se zařízeními ve stejné subnetě</li>
+                    <li class="req">P4: Všichni ostatní hosti, kteří se později přidají do subnety 192.168.0.0/24, nebudou moci komunikovat s nikým jiným než se zařízeními ve stejné subnetě</li>
                 </ul>
                 <img src="../static/styles/images/ACL/ACL_Intro2.png" alt="ACL_Intro" class="configImage">
                 <p>Z rozboru v části "Praktická ukázka ACL" již známe všechno, co potřebujeme vědět ke konfiguraci.</p>
                 <p>Začněme tedy konfigurací ACL na R1.</p>
                 <p class="beforecode">Nejdříve vytvoříme standard ACL pro interface g1/0 - </p>
-                <pre>R1(config)#ip access-group INTG10
-R1(config-ext-nacl)#remark ## Povolí výstup z interfacum IP adrese 192.168.0.2, 192.168.0.4 a 192.168.1.2 ##
-R1(config-ext-nacl)#1 permit 192.168.0.2 0.0.0.0
-R1(config-ext-nacl)#2 permit host 192.168.0.4
-R1(config-ext-nacl)#3 permit 192.168.1.2</pre>
-                <p>Tady na tom příkladu lze vidět způsoby jakými lze v ACL definovat IP adresu. Pro různé subnety se klasicky používá tzv. <b>wildcard mask</b> (invertovaná subnet maska), pro hosta lze pak ještě použít před definicí samotné ip adresy slovíčko host nebo wildcard masku můžeme totálně vynechat.</p>
+                <pre>R1(config)#ip access-list standard INTG10
+R1(config-std-nacl)#remark ## Povolí výstup z interfacum IP adrese 192.168.0.2, 192.168.0.4 a 192.168.1.2 ##
+R1(config-std-nacl)#permit 192.168.0.2 0.0.0.0
+R1(config-std-nacl)#permit host 192.168.0.4
+R1(config-std-nacl)#permit 192.168.1.2</pre>
+                <p>Tady na tom příkladu lze vidět způsoby jakými lze v ACL definovat IP adresu. Pro různé subnety se klasicky používá tzv. <b>wildcard mask</b> (invertovaná subnet maska), pro hosta lze pak ještě použít před definicí samotné ip adresy slovíčko host nebo wildcard masku můžeme totálně vynechat (pouze při konfiguraci STANDARD ACL).</p>
                 <p class="beforecode">Vytvořenou ACL můžeme ihned aplikovat na interface g1/0 pomocí příkazu - </p>
                 <pre>R1(config-if)#ip access-group INTG10 out</pre>
                 <p class="beforecode">Dál nakonfigurujeme standardní ACL pro interface g2/0 - </p>
-                <pre>R1(config)#ip access-group INTG20
-R1(config-ext-nacl)#1 permit host 192.168.0.2
-R1(config-ext-nacl)#2 permit host 192.168.0.4
-R1(config-ext-nacl)#3 permit host 192.168.2.2
-R1(config-ext-nacl)interface g2/0
+                <pre>R1(config)#ip access-list standard INTG20
+R1(config-std-nacl)#1 permit host 192.168.0.2
+R1(config-std-nacl)#2 permit host 192.168.0.4
+R1(config-std-nacl)#3 permit host 192.168.2.2
+R1(config-std-nacl)interface g2/0
 R1(config-if)ip access-group INTG20 out</pre>
+                <p class="beforecode">Pokud bychom potřebovali mezi jednotlivá pravidla vnořit další, je možné acl přečíslit - </p>
+                <pre>R1(config)#ip access-list resequence INTG20 10 5</pre>
+                <p class="beforecode">Tento příkaz způsobí přečíslení pořadí jednotlivých pravidel na - </p>
+                <pre>10 permit host 192.168.0.2
+15 permit host 192.168.0.4
+20 permit host 192.168.2.2</pre>
                 <p class="beforecode">A na konec nakonfigurujeme interface g0/0 na R2 -</p>
                 <pre>R2(config)#access-list 1 deny host 192.168.0.4
 R2(config)#access-list 1 permit any
 R2(config)#interface g0/0
 R2(config-if)#ip access-group 1 out</pre>
                 <p>Zde si všimněte že pro označení všech IP adres lze použít klíčové slovíčko any, jehož ekvivalentem je 0.0.0.0 255.255.255.255.</p>
+                <p class="beforecode">Jestliže bychom si chtěli konfiguraci ACL zkontrolovat, tak použijeme příkaz - </p>
+                <pre>R2#show access-list</pre>
                 <p>Tímto jsme tedy splnili zadání a ukázali si konfiguraci standardní ACL.</p>
             </section>
         </section>
         <section id="Extended ACL">
             <h4>Extended ACL</h4>
             <p>Za Extended ACL můžeme označit ty ACL, které jsou schopny filtrovat pakety podle zdrojové IP adresy, IP adresy příjemce, L4 portů a protokolu (IP, ICMP, TCP, UDP atd.).</p>
-            <p>Pakliže definujeme extended ACL pomocí čísla, tak používáme čísla v rozmezí 200-299 a 2000-2699.</p>
+            <p>Pakliže definujeme extended ACL pomocí čísla, tak používáme čísla v rozmezí <b>200-299</b> a <b>2000-2699</b>.</p>
             <p class="beforecode">Syntax k vytvoření extended ACL pomocí čísla je následovný - </p>
-            <pre>Router(config)#access-list {číslo ACL} {operace} {protokol} {zdroj} {cíl}</pre>
+            <pre>Router(config)#access-list {číslo ACL} {permit | deny | remark} {protokol} {zdroj} {cíl}</pre>
             <p class="beforecode">Syntax k vytvoření extended ACL pomocí jména je následovný - </p>
-            <pre>Router(config)#ip access-list {jméno}
-Router(config-ext-nacl)#{*pořadí} {operace} {protokol} {zdroj} {cíl}</pre>
+            <pre>Router(config)#ip access-list extended {jméno}
+Router(config-ext-nacl)#{*pořadí} {permit | deny | remark} {protokol} {zdroj} {cíl}</pre>
             <section id="ExtendedACLConf" class="subSection">
                 <h5>Ukázka konfigurace Extended ACL</h5>
+                <p>Máme tuto topologii - </p>
+                <img src="../static/styles/images/ACL/ExtendedACL_CONF.png" alt="Extended ACL" class="configImage">
+                <p>Máme v ní pomocí ACL zajistit následujicí -</p>
+                <ul>
+                    <li class="req">P1: Guest má přístup pouze ke své subnetě a k HTTPS na Serveru</li>
+                    <li class="req">P2: Na server dojít žádný telnet paket</li>
+                </ul>
+                <p>Nejdříve si opět rozmyslíme, kam budeme tato pravidla aplikovat.</p>
+                <p class="beforecode">Protože Guest počítače mají mít přístup pouze ke své subnetě a k HTTP serveru, tak nejvhodnější bude toto pravidlo uplatnit na R3 interfacu g0/1 ve směru ven.</p>
+                <pre>R3(config)#ip access-list extended R1G01
+R3(config-ext-nacl)#permit tcp 192.168.0.0 0.0.0.255 host 192.168.164.2 eq 443
+R3(config-ext-nacl)#deny ip 192.168.0.0 0.0.0.255 any any
+R3(config-ext-nacl)#permit ip any any
+R3(config-ext-nacl)#interface g0/1
+R3(config-if)ip access-group R1G01 out</pre>
+                <p class="beforecode">Dále máme pravidlo, které říká, že na server nesmí dojít žádný telnet paket. To bude zřejmě nejvhodnější uplatnit na R1 interface g0/0 ve směru ven.</p>
+                <pre>R1(config)#ip access-list 2158 deny ip any host 192.168.164.2 eq 23
+R1(config)#ip access-list 2158 permit ip any any
+R1(config)#interface g0/0
+R1(config-if)#ip access-group 2158 out</pre>
+                <p>Pokud chceme označit všechny protokoly (tcp, udp, icmp, pim atd.), použijeme slovíčko <b>ip</b>.</p>
             </section>
         </section>
         <section id="IPv6ACL">
@@ -237,8 +269,43 @@ Router(config-ext-nacl)#{*pořadí} {operace} {protokol} {zdroj} {cíl}</pre>
             <p class="beforecode">Syntax pro vytvoření extended name ACL je následovný - </p>
             <pre>Router(config)#ipv6 access-list {název}
 Router(config-ipv6-acl)#seq {pořadí} {permit | deny | remark} {protokol} {zdroj} {cíl}</pre>
+            <p>Seq {pořadí} může být vynecháno.</p>
+            <p class="beforecode">Pro aplikaci IPv6 ACL na interface se používá příkaz - </p>
+            <pre>Router(config-if)#ipv6 traffic-filter {Název_IPv6_ACL} {in | out}</pre>
             <section id="ÍPv6ACLConf" class="subSection">
                 <h5>Ukázková konfigurace IPv6 ACL</h5>
+                <p>Nastav v této síti ACL s následujicími pravidly - </p>
+                <ul>
+                    <li class="req">Host-1 bude moci pouze pingnout server 2, na server 1 bude mít plný přístup</li>
+                    <li class="req">Host-2 nebude moci komunikovat se serverem 1, se serverem 2 bude moci komunikovat pouze přes https protokol</li>
+                </ul>
+                <img src="../static/styles/images/ACL/IPv6ACL.png" alt="IPv6 ACL" class="configImage">
+                <p>Nejdříve si tedy určíme, kam by bylo nejlepší uplatnit jednotlivá pravidla.</p>
+                <p>Pravidlo, které říká, že host bude moci pouze pingnout server 2 uplatníme na R2 interface g0/2 ve směru ven.</p>
+                <p>Pravidlo říkajíc, že host-2 nebude moci komunikovat se serverem 2 (vyjma https paketu), nastavíme na R2 interface g0/2 ve směru ven.</p>
+                <p>To, že host-2 nebude moci komunikovat se serverem 1 nastavíme na R2 interface g0/0 ve směru ven. </p>
+                <p>Pokud jsme na R2 interfacu g0/0 ve směru ven uplatnili nějakou ACL, bude nutné do ní přidat pravidlo, že má povolit veškeré pakety od Hosta 1. Tím pádem se o pravidlo, že Host-2 nebude moci komunikovat se serverem 1 postará implicitní zákaz.</p>
+                <p>Když si to tedy shrneme tak nastavíme 2 ACL - jednu na g0/0 ve směru ven a druhou na g0/1 ve směru ven - </p>
+                <p>ACL na g0/0:</p>
+                <ul>
+                    <li class="req">1. Povol všechnu komunikaci paketům od Hosta 1</li>
+                </ul>
+                <p>ACL na g0/2:</p>
+                <ul>
+                    <li class="req">1. Povol přístup všem pignům od Hosta 1</li>
+                    <li class="req">2. Povol přístup všem paketům, které od Hosta 2 míří do HTTPS portu</li>
+                </ul>
+                <p class="beforecode">Pojďme to tedy nakonfigurovat!</p>
+                <pre>R2(config)#ipv6 access-list R2G00
+R2(config-ipv6-acl)#permit ip host 2001::2 any
+R2(config-ipv6-acl)#interface g0/0
+R2(config-if)#ipv6 traffic-filter R2G00 out
+R2(config-if)#exit
+R2(config)#ipv6 access-list R2G02
+R2(config-ipv6-acl)#seq 1 permit icmp host 2001::2 any
+R2(config-ipv6-acl)#seq 2 permit ip host 2001::3 any eq 443
+R2(config-ipv6-acl)#interface g0/2
+R2(config-if)#ipv6 traffic-filter R2G02 out</pre>
             </section>
         </section>
     </section>
@@ -252,73 +319,63 @@ Router(config-ipv6-acl)#seq {pořadí} {permit | deny | remark} {protokol} {zdro
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>access-list {číslo (od 1 do 99 nebo od 1300 do 1999)} {permit | deny | remark} {IPv4_adresa} {Wildcard_maska}</td>
+                        <td>Vytvoří standardní ACL</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>ip access-list standard {název_ACL}</td>
+                        <td>Vytvoří standard ACL a přepne nás do acl módu</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
+                        <td>{*pořadí} {permit | deny | remark} {IPv4_adresa} {Wildcard_maska}</td>
+                        <td>Vytvoří standard ACE, *uvádět pořadí je nepovinné</td>
+                        <td>ACL mód</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
+                        <td>access-list {číslo (od 100 do 199 nebo od 2000 do 2699)} {permit | deny | remark} {protokol} {zdroj} {cíl}</td>
+                        <td>Vytvoří extended ACL</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
+                        <td>ip access-list extended {název_ACL}</td>
+                        <td>Vytvoří extended ACL a přepne nás do acl módu</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
+                        <td>{*pořadí} {permit | deny | remark} {protokol} {zdroj} {cíl}</td>
+                        <td>Vytvoří extended ACE, *uvádět pořadí je nepovinné</td>
+                        <td>ACL mód</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
+                        <td>ipv6 access-list {název_ACL}</td>
+                        <td>Vytvoří IPv6 ACL a přepne nás do acl módu</td>
+                        <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
+                        <td>*seq {pořadí} {permit | deny | remark} {protokol} {zdroj} {cíl}</td>
+                        <td>Vytvoří ACE, *seq {pořadí} je nepovinné</td>
+                        <td>ACL mód</th>
+                    </tr>
+                    <tr>
+                        <td>ip access-group {číslo_ACL | název_ACL} {in | out}</td>
+                        <td>Aplikuje ACL na interface</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>ipv6 traffic-filter {název_ACL} {in | out}</td>
+                        <td>Aplikuje IPv6 ACL na interface</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>ip access-list resequence {číslo_ACL | název_ACL} {začínající_pořadové_číslo} {inkrement}</td>
+                        <td>Přeřadí jednotlivé ACE ve specifické ACL</td>
+                        <td>Global Config</td>
+                    </tr>
+                    <tr>
+                        <td>show access-list</td>
+                        <td>Zobrazí jednotlivé ACL</td>
                         <td>EXEC</td>
                     </tr>
                 </table>
@@ -329,13 +386,12 @@ Router(config-ipv6-acl)#seq {pořadí} {permit | deny | remark} {protokol} {zdro
         <h3>Závěr</h3>
         <p>ACL, Access Control List dokáže pomocí tzv. ACE (pravidel) identifikovat pakety.</p>
         <p>Na chování ACL má vliv to, kam jí aplikujeme.</p>
-        <p>Aplikování ACL na interface nám umožní filtrovat pakety na základě parametrů.</p>
+        <p>Aplikování ACL na interface nám umožní <b>filtrovat pakety</b> na základě parametrů.</p>
         <p>Na to, dle jakých parametrů můžeme filtrovat pakety, má vliv typ ACL.</p>
-        <p>Pro CCNA úroveň nám stačí vědět to, že je tzv. Standard ACL a Extended ACL.</p>
-        <p>Standard ACL je ACL, která nám umožní identifikovat pakety pouze pomocí zdrojové IP adresy.</p>
-        <p>Extended ACL je poté ACL, která nám umožní identifikovat pakety podle protokolu, zdrojové IP adresy, IP adresy příjemce a L4 portů.</p>
-        <p>ACL můžeme nakonfigurovat 2 způsoby - pomocí čísla či pomocí jména.</p>
-        <p>Konfigurací ACL pomocí jména můžeme jednotlivým pravidlům změnit pořadí.</p>
+        <p>Pro CCNA úroveň nám stačí vědět to, že je tzv. <b>Standard ACL</b> a <b>Extended ACL</b>.</p>
+        <p>Standard ACL je ACL, která nám umožní identifikovat pakety <b>pouze pomocí zdrojové IP adresy</b>.</p>
+        <p>Extended ACL je poté ACL, která nám umožní identifikovat pakety podle <b>protokolu, zdrojové IP adresy, IP adresy příjemce a L4 portů</b>.</p>
+        <p>ACL můžeme nakonfigurovat 2 způsoby - pomocí <b>čísla</b> (numbered ACL) či pomocí <b>jména</b> (Named ACL).</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
