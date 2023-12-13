@@ -11,7 +11,7 @@
 <body>
     <h1>Port Security</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základní znalost Packet Traceru, fungování L2, DTP</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -20,10 +20,47 @@
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
-        <p>Představte si, že jste síťař a zabezpečujete jeden podnik ve kterém jsou stolní počítače, které jsou pomocí síťového kabelu připojeny ke switchi. Vašim cílem je nastavit to, že při přepojení síťového kabelu do jiného zařízení se daný interface vypne.</p>
-        <p><i>Pomocí čeho byste toto nastavili?</i></p>
+        <p>Představte si, že jste síťař a zabezpečujete jeden podnik, ve kterém jsou stolní počítače, jež jsou pomocí síťového kabelu připojeny ke switchi. Vašim cílem je nastavit to, že při přepojení síťového kabelu do jiného zařízení se daný interface vypne.</p>
+        <p><i>Pomocí čeho byste toho dosáhli?</i></p>
         <p>Jestliže jste měli na mysli port security, tak máte pravdu!</p>
-        <p>Port Security je utilitka, která nám dokáže omezit MAC adresy na port. Jinými slovy port security přidělí portu určitou/určité MAC adresy. Pokud se stane, že je k tomu portu připojené zařízení s neznámou MAC adresou, je port vypnut a další postup záleží na dalším nastavení.</p>
+        <p>Port Security je jedno z nastavení, které nám dokáže limitovat MAC adresy na port. Pokud se stane, že se k portu s nastevenou port security připojí zařízení s nepovolenou MAC adresou, je port standardně <b>vypnut</b>.</p>
+    </section>
+    <section id="PSecModes">
+        <h3>Port Security módy</h3>
+        <p>Na to, jak se port security zachová po tom, co se připojí zařízení s nepovolenou MAC adresou, má vliv mód port security.</p>
+        <p>Port Security má celkově 3 módy: </p>
+        <ul>
+            <li class="req"><b>Shutdown</b> - nejpřísnější a <b>standardně nastavený mód</b>, port se po připojení zařízení s nepovolenou MAC adresou zcela vypne a incident je zaznamenán v logu</li>
+            <li class="req"><b>Restrict</b> - blokuje veškeré rámce od zařízení s nepovolenou MAC adresou, <b>port však nevypíná</b> (po znovupřipojení zařízení s povolenou MAC adresou bude port zcela normálně fungovat), incident zaznamená v logu</li>
+            <li class="req"><b>Protect</b> - stejně jako restrict mód blokuje všechny rámce od zařízení s nepovolenou MAC adresou, port nevypíná, incident nějak <b>nezaznemenává</b>.</li>
+        </ul>
+    </section>
+    <section id="PSecConfiguration">
+        <h3>Konfigurace port security</h3>
+        <p>Před nastavením port security je nutné si ověřit, zda port nemá zapnuté DTP (dynamic auto, dynamic desirable).</p>
+        <p class="beforecode">To zjistíme pomocí příkazu: </p>
+        <pre>Switch#show interfaces switchport {port}</pre>
+        <p>Pokud je tedy administrative mode nastavený na "static access" nebo "trunk", tak je vše v pořádku a můžeme nakonfigurovat port security.</p>
+        <p class="beforecode">Port security zapneme tak, že se přepneme na vybraný interface a napíšeme příkaz - </p>
+        <pre>Switch(config-if)#switchport port-security</pre>
+        <p>Konfigurací tohoto příkazu jsme tak aktivovali port security se standardním nastavením (1 dynamicky naučená MAC adresa, shutdown mód)</p>
+        <p>U port security můžeme dále změnit -</p>
+        <ul>
+            <li class="req">mód</li>
+            <li class="req">počet povolených MAC adres na portu</li>
+            <li class="req">přidávání MAC adres na port (staticky, dynamicky, sticky)</li>
+            <li class="req">automatické znovuzapnutí portu</li>
+            <li class="req">expiraci MAC adres</li>
+        </ul>
+        <p class="beforecode">Mód port security specifikujeme pomocí příkazu: </p>
+        <pre>Switch(config-if)#switchport port-security violation {shutdown | restrict | protect}</pre>
+        <p class="beforecode">Počet povolených MAC adres na portu upravíme použitím příkazu: </p>
+        <pre>Switch(config-if)#switchport port-security maximum {1-132}</pre>
+        <p class="beforecode">Upravit způsob přidání MAC adres můžeme nakonfigurovat pomocí příkazu: </p>
+        <pre>Switch(config-if)#switchport port-security mac-address *PODIVAT SE JAK TO JE</pre>
+        <p class="beforecode">Expiraci MAC adres nakonfigurujeme použitím příkazu: </p>
+        <pre>Switch(config-if)#switchport port-security aging time {*1-1440}</pre>
+        <p>*čas se zde určuje v minutách!</p>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
