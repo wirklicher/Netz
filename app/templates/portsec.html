@@ -23,44 +23,114 @@
         <p>Představte si, že jste síťař a zabezpečujete jeden podnik, ve kterém jsou stolní počítače, jež jsou pomocí síťového kabelu připojeny ke switchi. Vašim cílem je nastavit to, že při přepojení síťového kabelu do jiného zařízení se daný interface vypne.</p>
         <p><i>Pomocí čeho byste toho dosáhli?</i></p>
         <p>Jestliže jste měli na mysli port security, tak máte pravdu!</p>
-        <p>Port Security je jedno z nastavení, které nám dokáže limitovat MAC adresy na port. Pokud se stane, že se k portu s nastevenou port security připojí zařízení s nepovolenou MAC adresou, je port standardně <b>vypnut</b>.</p>
+        <p>Port Security je jedno z nastavení na switchi, které nám dokáže limitovat MAC adresy na port. Pokud se stane, že se k portu s nastevenou port security připojí zařízení s nepovolenou MAC adresou nebo vícero zařízení než je povoleno, je port standardně <b>vypnut</b>.</p>
     </section>
     <section id="PSecModes">
         <h3>Port Security módy</h3>
         <p>Na to, jak se port security zachová po tom, co se připojí zařízení s nepovolenou MAC adresou, má vliv mód port security.</p>
         <p>Port Security má celkově 3 módy: </p>
         <ul>
-            <li class="req"><b>Shutdown</b> - nejpřísnější a <b>standardně nastavený mód</b>, port se po připojení zařízení s nepovolenou MAC adresou zcela vypne a incident je zaznamenán v logu</li>
-            <li class="req"><b>Restrict</b> - blokuje veškeré rámce od zařízení s nepovolenou MAC adresou, <b>port však nevypíná</b> (po znovupřipojení zařízení s povolenou MAC adresou bude port zcela normálně fungovat), incident zaznamená v logu</li>
+            <li class="req"><b>Shutdown</b> - nejpřísnější a <b>standardně nastavený mód</b>, port se po připojení zařízení s nepovolenou MAC adresou zcela vypne (<b>errdisabled</b> stav portu) a incident je zaznamenán v logu.</li>
+            <li class="req"><b>Restrict</b> - blokuje veškeré rámce od zařízení s nepovolenou MAC adresou, <b>port však nevypíná</b> (po znovupřipojení zařízení s povolenou MAC adresou bude port zcela normálně fungovat), incident zaznamená v logu.</li>
             <li class="req"><b>Protect</b> - stejně jako restrict mód blokuje všechny rámce od zařízení s nepovolenou MAC adresou, port nevypíná, incident nějak <b>nezaznemenává</b>.</li>
         </ul>
     </section>
     <section id="PSecConfiguration">
         <h3>Konfigurace port security</h3>
-        <p>Před nastavením port security je nutné si ověřit, zda port nemá zapnuté DTP (dynamic auto, dynamic desirable).</p>
-        <p class="beforecode">To zjistíme pomocí příkazu: </p>
+        <p>Před nastavením port security je nutné si ověřit, zda na portu <b>není zapnuté DTP</b> (dynamic auto, dynamic desirable).</p>
+        <p class="beforecode">To zjistíme například pomocí příkazu: </p>
         <pre>Switch#show interfaces switchport {port}</pre>
         <p>Pokud je tedy administrative mode nastavený na "static access" nebo "trunk", tak je vše v pořádku a můžeme nakonfigurovat port security.</p>
         <p class="beforecode">Port security zapneme tak, že se přepneme na vybraný interface a napíšeme příkaz - </p>
         <pre>Switch(config-if)#switchport port-security</pre>
-        <p>Konfigurací tohoto příkazu jsme tak aktivovali port security se standardním nastavením (1 dynamicky naučená MAC adresa, shutdown mód)</p>
+        <p>Konfigurací tohoto příkazu jsme tak aktivovali port security se standardním nastavením (1 dynamicky naučená MAC adresa, shutdown mód).</p>
         <p>U port security můžeme dále změnit -</p>
         <ul>
             <li class="req">mód</li>
             <li class="req">počet povolených MAC adres na portu</li>
             <li class="req">přidávání MAC adres na port (staticky, dynamicky, sticky)</li>
-            <li class="req">automatické znovuzapnutí portu</li>
             <li class="req">expiraci MAC adres</li>
+            <li class="req">automatické znovuzapnutí portu (při shutdown módu)</li>
         </ul>
         <p class="beforecode">Mód port security specifikujeme pomocí příkazu: </p>
         <pre>Switch(config-if)#switchport port-security violation {shutdown | restrict | protect}</pre>
         <p class="beforecode">Počet povolených MAC adres na portu upravíme použitím příkazu: </p>
         <pre>Switch(config-if)#switchport port-security maximum {1-132}</pre>
         <p class="beforecode">Upravit způsob přidání MAC adres můžeme nakonfigurovat pomocí příkazu: </p>
-        <pre>Switch(config-if)#switchport port-security mac-address *PODIVAT SE JAK TO JE</pre>
+        <pre>Switch(config-if)#switchport port-security mac-address {MAC adresa | sticky}</pre>
+        <p>Pokud není nějak zvlášť nastaveno, jsou mac adresy přiřazeny k portu <b>dynamicky</b>. Pakliže chceme, aby dynamická MAC adresa zůstala přiřazená k portu i po restartu switche, tak nakonfigurujeme sticky možnost.</p>
         <p class="beforecode">Expiraci MAC adres nakonfigurujeme použitím příkazu: </p>
         <pre>Switch(config-if)#switchport port-security aging time {*1-1440}</pre>
         <p>*čas se zde určuje v minutách!</p>
+        <p>Jestliže máme nakonfigurovaný shutdown mód a připojí se na něj zařízení s nepovolenou MAC adresou, tak se port vypne (errdisabled stav). Jak ho ale zpátky nahodíme?</p>
+        <p>N<b>ejdříve je nutné to zařízení s nepovolenou MAC adresou odpojit.</b></p>
+        <p>Nyní si představíme 2 způsoby, jak interface nahodit -</p>
+        <p class="beforecode">1. je manuální nahození, kdy daný port vypneme a zapneme: </p>
+        <pre>*Dec 14 10:31:40.524: %PORT_SECURITY-2-PSECURE_VIOLATION: Security violation occurred, caused by MAC address 4a0e.c58e.592a on port GigabitEthernet0/0.
+*Dec 14 10:31:42.524: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to down
+Switch(config-if)#shutdown
+Switch(config-if)#no shutdown
+*Dec 14 10:32:16.061: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up</pre>
+        <p class="beforecode">Tím druhým způsobem je automatické nahození portu po nějakém čase: </p>
+        <pre>Switch(config)#errdisable recovery cause psecure-violation
+Switch(config)#errdisable recovery interval {30-86400}</pre>
+        <p>Přičemž prvním příkazem říkáme, že chceme povolit znovuzapnutí portu, pokud byla chyba na portu způsobená port security. Tím druhým pak už jen měníme interval.</p>
+        <section id="PracticalConfiguration" class="subSection">
+            <h4>Praktická konfigurace port security</h4>
+            <p>Zadání: Nakonfiguruj port security na <b>SW2</b> interfacích fa0/1, fa0/2, fa0/3.</p>
+            <img src="../static/styles/images/PortSecurity/PortSecurityConfiguration.png" alt="Port Security" class="configImage">
+            <p>Parametry port security na fa0/1:</p>
+            <ul>
+                <li class="req">1 sticky dynamická MAC adresa</li>
+                <li class="req">bez expirace</li>
+                <li class="req">shutdown mód</li>
+                <li class="req">Automatické znovuzapnutí portu po 5 minutách</li>
+            </ul>
+            <p>Parametry na fa0/2: </p>
+            <ul>
+                <li class="req">10 dynamických MAC adres</li>
+                <li class="req">expirace po dni</li>
+                <li class="req">restrict mód</li>
+            </ul>
+            <p>Parametry na fa0/3: </p>
+            <ul>
+                <li class="req">1 statická MAC adresa routeru (5a0e.c64e.592b)</li>
+                <li class="req">bez expirace</li>
+                <li class="req">restrict mód</li>
+            </ul>
+            <p class="beforecode">Předtím než začneme konfigurovat port security na jednotlivých portech si zkontrolujeme zda jsou všechny porty určené staticky: </p>
+            <pre>SW2#show interfaces switchport</pre>
+            <p>Nyní se vrhneme na konfiguraci parametrů na jednotlivých interfacích, až poté zapneme port security.</p>
+            <p class="beforecode">Konfigurace port security na interfacu fa0/1: </p>
+            <pre>SW2(config)#interface fa0/1
+SW2(config-if)#switchport port-security mac-address sticky
+SW2(config-if)#exit
+SW2(config)#errdisable recovery cause psecure-violation
+SW2(config)#errdisable recovery interval 300
+SW2(config)#interface fa0/1
+SW2(config)#switchport port-security</pre>
+            <p class="beforecode">Konfigurace port security na interfacu fa0/2: </p>
+            <pre>SW2(config-if)#interface fa0/2
+SW2(config-if)#switchport port-security max 10
+SW2(config-if)#switchport port-security aging time 1440
+SW2(config-if)#switchport port-security violation restrict
+SW2(config-of)#switchport port-security</pre>
+            <p class="beforecode">Konfigurace port security na interfacu fa0/3: </p>
+            <pre>SW2(config-if)#interface fa0/3
+SW2(config-if)#switchport port-security mac-address 5a0e.c64e.592b
+SW2(config-if)#switchport port-security violation restrict
+SW2(config-if)switchport port-security</pre>
+            <p class="beforecode">Nyní když máme nakonfigurováno, pojďme si pomocí následujicích příkazu ověřit, že je konfigurace správná:</p>
+            <pre>SW2#show port-security</pre>
+            <p>Tento příkaz nám ukáže nastavení port security (počet možných MAC adres, mód, kolik MAC adres tam je nyní, a kolikrát již bylo k portu připojeno zařízení s neznámou MAC adresou).</p>
+            <p class="beforecode">Pro podrobnější výpis přímo z nastavení daného interfacu můžeme použít příkaz: </p>
+            <pre>SW2#show port-security interface {interface}</pre>
+            <p class="beforecode">Dále si ještě můžeme ověřit to, jaké MAC adresy jsou aktuálně povoleny a jak dlouho jim případně zbývá: </p>
+            <pre>SW2#show port-security address</pre>
+            <p class="beforecode">Ještě si také můžeme zkontrolovat zda jsme správně zapnuli znovuzapnutí interfacu pomocí příkazu: </p>
+            <pre>SW2#show errdisable recovery</pre>
+            <p>To je z tedy ze základů konfigurace port security vše. Konfiguraci port security si sami můžete vyzkoušet <a href="">zde</a>.</p>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -72,74 +142,64 @@
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>switchport port-security</td>
+                        <td>Zapne na interfacu port security</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport port-security mac-address {MAC_adresa | sticky}</td>
+                        <td>Nastaví staticky MAC adresu nebo udělá z dynamické MAC adresy sticky MAC adresu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport port-security violation {shutdown | restrict | protect}</td>
+                        <td>Přepne port security do daného módu</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport port-security aging time {1-1440}</td>
+                        <td>Nastaví pro dynamické MAC adresy expiraci, nastavováno v minutách</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>switchport port-security maximum {1-132}</td>
+                        <td>Nastaví maximální počet MAC adres na port</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>errdisable recovery cause psecure-violation</td>
+                        <td>Nastaví znovuzapnutí portu po tom, co je port vypnut díky port security</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
+                        <td>errdisable recovery interval</td>
+                        <td>Nastaví, za jak dlouho dojde k zapnutí interfacu po tom, co je port nestandardně vypnut</td>
+                        <td>Global Config</th>
                     </tr>
                     <tr>
                         <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>EXEC</td>
+                        <td>Ukáže, zda je port nastaven staticky</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>EXEC</td>
+                        <td>show port-security</td>
+                        <td>Zobrazí základní informace o port security</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>EXEC</td>
+                        <td>show port-security interface {interface}</td>
+                        <td>Zobrazí podrobný výpis o port security z interfacu</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>EXEC</td>
+                        <td>show port-security address</td>
+                        <td>Zobrazí informace o povolených MAC adresách v rámci port security</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show errdisable recovery</td>
+                        <td>Zobrazí informaci o tom, zda se porty, vypnuté kvůli port security, zapnou po nějaké době automaticky</td>
+                        <td>Priviledged EXEC</td>
                     </tr>
                 </table>
             </div>
@@ -147,6 +207,10 @@
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Port security je jedno z nastaveních na switchi, které nám umožňuje limitovat MAC adresy na portu. Pokud dojde k připojení zařízení s nepovolenou MAC adresou, tak standardně dojde k vypnutí portu. Avšak to je možné upravit pomocí konfigurace port security módu.</p>
+        <p>Port security má 3 módy - <b>shutdown</b> (standardní), <b>restrict</b> a <b>protect</b>. Shutdown vypne interface, restrict a protect jej nevypnou, ale znemožní zařízení s nepovolenou MAC adresou posílat jakýkoliv data přes port. Restrict a Protect se pak od sebe liší hlavně tím, že restrict upozorní uživatele pomocí logů, protect ne.</p>
+        <p>Kromě konfigurace módu můžeme na port security dále specifikovat například počet povolených MAC adres na port, MAC adresy a expiraci MAC adres.</p>
+        <p>Díky port security tak můžeme předcházet různým MAC Flooding či DHCP Starvation útokům a zlepšíme tím pádem celkovou bezpečnost sítě.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

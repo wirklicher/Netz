@@ -227,6 +227,7 @@ R2(config-if)#ip access-group 1 out</pre>
                 <p class="beforecode">Jestliže bychom si chtěli konfiguraci ACL zkontrolovat, tak použijeme příkaz - </p>
                 <pre>R2#show access-list</pre>
                 <p>Tímto jsme tedy splnili zadání a ukázali si konfiguraci standardní ACL.</p>
+                <p>Konfiguraci standard ACL si můžete vyzkoušet <a href="../Labs/ACL/StandardACL.pka">zde</a>.</p>
             </section>
         </section>
         <section id="Extended ACL">
@@ -261,6 +262,7 @@ R1(config)#ip access-list 2158 permit ip any any
 R1(config)#interface g0/0
 R1(config-if)#ip access-group 2158 out</pre>
                 <p>Pokud chceme označit všechny protokoly (tcp, udp, icmp, pim atd.), použijeme slovíčko <b>ip</b>.</p>
+                <p>Konfiguraci extended ACL si můžete vyzkoušet <a href="../Labs/ACL/ExtendedACL.pka">zde</a>.</p>
             </section>
         </section>
         <section id="IPv6ACL">
@@ -306,6 +308,7 @@ R2(config-ipv6-acl)#seq 1 permit icmp host 2001::2 any
 R2(config-ipv6-acl)#seq 2 permit ip host 2001::3 any eq 443
 R2(config-ipv6-acl)#interface g0/2
 R2(config-if)#ipv6 traffic-filter R2G02 out</pre>
+                <p>Konfiguraci IPv6 ACL si můžete vyzkoušet <a href="../Labs/ACL/">zde</a>.</p>
             </section>
         </section>
     </section>
