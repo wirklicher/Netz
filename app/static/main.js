@@ -17,6 +17,8 @@ let syslog = document.querySelector('#syslog');
 let sshTelnet = document.querySelector('#sshtelnet');
 let acl = document.querySelector('#acl');
 let portsec = document.querySelector('#portsec');
+let discoveryprotocols = document.querySelector("#discoveryprotocols")
+let fhrp = document.querySelector("#fhrp")
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
 let adress = "";
@@ -109,6 +111,14 @@ acl.addEventListener('click', () => {
 portsec.addEventListener('click', () => {
     $('main').load('portsec.html');
     name_of_page = 'portsec';
+})
+discoveryprotocols.addEventListener('click', () => {
+    $('main').load('discoveryprotocols.html');
+    name_of_page = 'discoveryprotocols';
+})
+fhrp.addEventListener('click', () => {
+    $('main').load('fhrp.html');
+    name_of_page = 'fhrp';
 })
 
 let stpArray = document.querySelectorAll(".stp");
