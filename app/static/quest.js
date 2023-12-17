@@ -601,3 +601,73 @@ if (name_of_page == 'dns') {
     },
     ]
 }
+if (name_of_page == 'acl') {
+    MCQS = [{
+        question: "Aplikací ACL kam způsobíme filtraci paketů?",
+        choice1: "na QoS",
+        choice2: "pomocí ACL nelze filtrovat pakety",
+        choice3: "na NAT",
+        choice4: "na interface",
+        answer: 3,
+    },
+    {
+        question: "Jakého typu ACL je toto pravidlo? deny icmp host 192.168.0.15 any",
+        choice1: "Standard",
+        choice2: "Žádný takový typ ACL neexistuje",
+        choice3: "Extended",
+        choice4: "MAC",
+        answer: 2,
+    },
+    {
+        question: "ACL je číselně označená jako 15478, který typ ACL to je?",
+        choice1: "Žádný takový typ ACL s tímto číslem neexistuje",
+        choice2: "Extended",
+        choice3: "Standard",
+        choice4: "MAC",
+        answer: 0,
+    },
+    {
+        question: "Kam se ACL nedá aplikovat?",
+        choice1: "na port channel",
+        choice2: "na RIP",
+        choice3: "na interface",
+        choice4: "na NAT",
+        answer: 1,
+    },
+    {
+        question: "Jakého typu ACL je toto pravidlo? permit host 192.168.0.16",
+        choice1: "Standard",
+        choice2: "MAC",
+        choice3: "Žádný takový typ ACL neexistuje",
+        choice4: "Extended",
+        answer: 0,
+    },
+    ]
+}
+if (name_of_page == 'portsec') {
+    MCQS = [{
+        question: "Jaký mód port security je standardně nastavený?",
+        choice1: "Shutdown",
+        choice2: "Protect",
+        choice3: "Restrict",
+        choice4: "Shutdown-VLAN",
+        answer: 0,
+    },
+    {
+        question: "Jaký je účel port security ? (Vyber nejlepší odpověď)",
+        choice1: "Chránit MAC adresy",
+        choice2: "Co je to port security?",
+        choice3: "Chránit síť pomocí vypínání portu",
+        choice4: "Limitovat MAC adresy na port a pomocí toho chránit síť",
+        answer: 3,
+    },
+    {
+        question: "Co dělá port s aktivovaným port security v protect módu při vstupu rámce s nepovolenou MAC adresou?",
+        choice1: "Port security nemá protect mód",
+        choice2: "Znemožní zařízení s nepovolenou MAC adresou posílat rámce do sítě, ale nevypne port celkově",
+        choice3: "Pošle log",
+        choice4: "Znemožní zařízení s nepovolenou MAC adresou posílat rámce do sítě, vypnutím portu",
+        answer: 1,
+    },
+    ]
+}

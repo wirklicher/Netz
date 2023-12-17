@@ -75,6 +75,7 @@ Switch(config-if)#no shutdown
         <pre>Switch(config)#errdisable recovery cause psecure-violation
 Switch(config)#errdisable recovery interval {30-86400}</pre>
         <p>Přičemž prvním příkazem říkáme, že chceme povolit znovuzapnutí portu, pokud byla chyba na portu způsobená port security. Tím druhým pak už jen měníme interval.</p>
+        <p><b>Druhý způsob nelze nakonfigurovat v Packet Traceru!</b></p>
         <section id="PracticalConfiguration" class="subSection">
             <h4>Praktická konfigurace port security</h4>
             <p>Zadání: Nakonfiguruj port security na <b>SW2</b> interfacích fa0/1, fa0/2, fa0/3.</p>
@@ -127,9 +128,9 @@ SW2(config-if)switchport port-security</pre>
             <pre>SW2#show port-security interface {interface}</pre>
             <p class="beforecode">Dále si ještě můžeme ověřit to, jaké MAC adresy jsou aktuálně povoleny a jak dlouho jim případně zbývá: </p>
             <pre>SW2#show port-security address</pre>
-            <p class="beforecode">Ještě si také můžeme zkontrolovat zda jsme správně zapnuli znovuzapnutí interfacu pomocí příkazu: </p>
+            <p class="beforecode">Ještě si také můžeme zkontrolovat, zda jsme správně zapnuli znovuzapnutí interfacu pomocí příkazu: </p>
             <pre>SW2#show errdisable recovery</pre>
-            <p>To je z tedy ze základů konfigurace port security vše. Konfiguraci port security si sami můžete vyzkoušet <a href="">zde</a>.</p>
+            <p>To je z tedy ze základů konfigurace port security vše. Konfiguraci port security si sami můžete vyzkoušet <a href="../Labs/PortSecurity/PortSecurity.pka">zde</a>.</p>
         </section>
     </section>
     <section id="prehledPrikazu">
@@ -207,7 +208,7 @@ SW2(config-if)switchport port-security</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
-        <p>Port security je jedno z nastaveních na switchi, které nám umožňuje limitovat MAC adresy na portu. Pokud dojde k připojení zařízení s nepovolenou MAC adresou, tak standardně dojde k vypnutí portu. Avšak to je možné upravit pomocí konfigurace port security módu.</p>
+        <p>Port security je jedno z nastavení na switchi, které nám umožňuje limitovat MAC adresy na portu. Pokud dojde k připojení zařízení s nepovolenou MAC adresou, tak standardně dojde k vypnutí portu. Avšak to je možné upravit pomocí konfigurace port security módu.</p>
         <p>Port security má 3 módy - <b>shutdown</b> (standardní), <b>restrict</b> a <b>protect</b>. Shutdown vypne interface, restrict a protect jej nevypnou, ale znemožní zařízení s nepovolenou MAC adresou posílat jakýkoliv data přes port. Restrict a Protect se pak od sebe liší hlavně tím, že restrict upozorní uživatele pomocí logů, protect ne.</p>
         <p>Kromě konfigurace módu můžeme na port security dále specifikovat například počet povolených MAC adres na port, MAC adresy a expiraci MAC adres.</p>
         <p>Díky port security tak můžeme předcházet různým MAC Flooding či DHCP Starvation útokům a zlepšíme tím pádem celkovou bezpečnost sítě.</p>
