@@ -99,7 +99,7 @@ Switch(config)#errdisable recovery interval {30-86400}</pre>
                 <li class="req">bez expirace</li>
                 <li class="req">restrict mód</li>
             </ul>
-            <p class="beforecode">Předtím než začneme konfigurovat port security na jednotlivých portech si zkontrolujeme zda jsou všechny porty určené staticky: </p>
+            <p class="beforecode">Předtím než začneme konfigurovat port security na jednotlivých portech si zkontrolujeme, zda jsou všechny porty určené staticky: </p>
             <pre>SW2#show interfaces switchport</pre>
             <p>Nyní se vrhneme na konfiguraci parametrů na jednotlivých interfacích, až poté zapneme port security.</p>
             <p class="beforecode">Konfigurace port security na interfacu fa0/1: </p>
@@ -109,7 +109,7 @@ SW2(config-if)#exit
 SW2(config)#errdisable recovery cause psecure-violation
 SW2(config)#errdisable recovery interval 300
 SW2(config)#interface fa0/1
-SW2(config)#switchport port-security</pre>
+SW2(config-if)#switchport port-security</pre>
             <p class="beforecode">Konfigurace port security na interfacu fa0/2: </p>
             <pre>SW2(config-if)#interface fa0/2
 SW2(config-if)#switchport port-security max 10
