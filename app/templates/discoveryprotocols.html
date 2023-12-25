@@ -15,11 +15,61 @@
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
-            <li class="req">1. požadavek...</li>
+            <li class="req">Umět nakonfigurovat a troubleshootovat L2 Discovery protokoly</li>
         </ul>
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Představte si, že nastupujete na novou pracovní pozici jako síťař. Během prvního dne zjistíte, že váš předchůdce vůbec nezdokumentoval síť a vy absolutně netušíte, jak si představit topologii sítě.</p>
+        <p><i>Existuje nějaká skupina protokolů, která by mu alespoň mohla pomoci zmapovat topologii sítě?</i></p>
+        <p>Ano, existuje. Protokoly, které nám dokážou přinést určité informace o síti nazýváme celkově jako <b>Discovery protokoly</b>.</p>
+        <p>Tyto protokoly jsou skvělý v tom, že <b>fungují na L2</b> (Data-link layer), tudíž ke svému fungování <b>nepotřebují IP adresu</b>.</p>
+        <p>V rámci CCNA úrovně se budeme bavit primárně o dvou discovery protokolech, se kterýma se můžete během studia i práce setkat.</p>
+        <p>Těmito protokoly jsou <b>CDP (Cisco Discovery Protocol)</b> a <b>LLDP (Link Layer Discovery Protocol)</b>.</p>
+        <p>Oba tyto protokoly jsou založené na stejných principech a liší se spíše v drobnostech, které si představíme později.</p>
+        <section id="HowDPWorks" class="subSection">
+            <h4>Pricnip discovery protokolů</h4>
+            <p>Jestliže spustíte nově koupený switch od Cisca, tak budete mít standardně zapnutý CDP protokol. Pakliže budete mít těchto switchů více a vzájemně je propojíte, začnou se <b>vždy mezi sousedními zařízeními</b> (pozn. CDP rámec se nepošle dál než na sousední zařízení) posílat periodicky CDP rámce, která nesou určité informace o daném zařízení a konfigurace na něm nastavené.</p>
+            <p>Mezi získané informace může patřit:</p>
+            <ul>
+                <li class="req">Název zařízení</li>
+                <li class="req">Bližší informace o zařízení (např. verzi SW)</li>
+                <li class="req">Informace o HW - Dokáže se zařízení chovat jako Router, Bridge, Switch?</li>
+                <li class="req">IP adresy</li>
+                <li class="req">Názvy portů mezi nimiž probíhá CDP komunikace</li>
+                <li class="req">Informace o VLANách (VTP, Native VLAN ID)</li>
+            </ul>
+            <p>Discovery protokoly <b>nejsou chráněny</b> žádným obraným mechanismem, proto je třeba si dát velký pozor na to, kde jsou nakonfigurovaný. Potenciální útočník by totiž mohl tyto informace získané prostřednictvím discovery protokolů využít v náš neprospěch.</p>
+            <p>Obecně je doporučeno vypínat discovery protokoly na interfacích, které se připojují k hostům či do externí sítě.</p>
+        </section>
+    </section>
+    <section id="CDP">
+        <h3>CDP</h3>
+        <p>CDP nebo-li Cisco Discovery Protocol, je cisco proprietární protokol vytvořený v devadésátých letech minulého století.</p>
+        <p>Jak už je psáno výše, CDP patří do kategorie discovery protokolů, jejichž účelem je sdílet informace mezi sousedními zařízeními.</p>
+        <p>Za celou dobu má CDP pouze 2 verze - </p>
+        <ul>
+            <li class="req">CDPv1 - již zastaralá verze, dnes používá pouze v rámci zpětné kompatibility</li>
+            <li class="req">CDPv2 - nejnovější verze, která nám oproti CDPv1 umožňuje získávat vícero informací jako třeba Native VLAN ID, port duplex</li>
+        </ul>
+        <p>CDP zprávy používají zdrojovou MAC adresu: <b>01:00:0C:CC:CC:CC</b></p>
+        <section id="CDPWireshark" class="subSection">
+            <h4>CDP rámec ve Wiresharku</h4>
+        </section>
+        <section id="CDPConfiguration" class="subSection">
+            <h4>Konfigurace CDP</h4>
+        </section>
+        <section id="CDPSpoofing" class="subSection">
+            <h4>CDP Spoofing</h4>
+            <p>CDP spoofing DoS útok, pomocí kterého můžeme přetížit zařízení na kterém je zapnuté CDP.</p>
+            <p>Princip CDP spoofing útoku je následujicí:</p>
+            <p>Útočník začne na zařízení se zapnutým CDP posílat zprávy s několika vymyšlenýma MAC adresama na MAC adresu příjemce 01:00:0C:CC:CC:CC. Oběť si díky těmto CDP rámců začne budovat CDP tabulku a pod náporem nových CDP zpráv dojde k přetížení oběti systému.</p>
+            <p>Ochranou proti tomuto útoku je mít CDP vypnuté na portech, která jsou připojená k externím zařízením.</p>
+        </section>
+    </section>
+    <section id="LLDP">
+        <h3>LLDP</h3>
+        <section id="LLDPConfiguration"></section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
