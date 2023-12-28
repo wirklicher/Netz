@@ -671,3 +671,30 @@ if (name_of_page == 'portsec') {
     },
     ]
 }
+if (name_of_page == 'discoveryprotocols') {
+    MCQS = [{
+        question: "Jsou vždy CDP zprávy směrovatelné?",
+        choice1: "Jsou",
+        choice2: "Pouze je-li správně nastavený směrovací protokol",
+        choice3: "Jen když je to vysloveně nastaveno",
+        choice4: "CDP zprávy nejsou směrovatelné",
+        answer: 3,
+    },
+    {
+        question: "Kterou z těchto informací klasické LLDP nedokáže zjistit?",
+        choice1: "Duplex",
+        choice2: "Název zařízení",
+        choice3: "MAC adresu zařízení",
+        choice4: "Informace o SW",
+        answer: 0,
+    },
+    {
+        question: "Ve které z těchto věcí se CDP a LLDP liší?",
+        choice1: "V tom, že LLDP posílá zprávy periodicky, CDP ne",
+        choice2: "V tom, že LLDP lze zapnout/vypnout jednotlivě pro přenos a přijimání dat",
+        choice3: "V tom, že CDP posílá zprávy periodicky, LLDP ne",
+        choice4: "V tom, že CDP lze zapnout/vypnout jednotlivě pro přenos a přijimání dat",
+        answer: 1,
+    },
+    ]
+}

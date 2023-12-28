@@ -11,7 +11,7 @@
 <body>
     <h1>Discovery Protocols</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základní znalost PT, VLAN</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -171,73 +171,68 @@ SW#show cdp neighbors detail</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
+                        <td>cdp run</td>
+                        <td>Aktivuje globálně CDP (na všech portech)</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
+                        <td>lldp run</td>
+                        <td>Globálně spustí LLDP (na všech portech)</td>
                         <td>Global Config</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
+                        <td>cdp enable</td>
+                        <td>Zapne na portu CDP</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
+                        <td>lldp transmit</td>
+                        <td>Aktivuje na portu posílání LLDP zpráv</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
+                        <td>lldp receive</td>
+                        <td>Umožní na portu přijímat LLDP zprávy</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
+                        <td>show cdp</td>
+                        <td>Vypsání stavu a atributů CDP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
+                        <td>show lldp</td>
+                        <td>Zobrazení stavu a vlastností LLDP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
+                        <td>show cdp traffic</td>
+                        <td>Vypíše statistiku přenesených CDP zpráv</td>
+                        <td>Priviledged EXEC</th>
+                    </tr>
+                    <tr>
+                        <td>show lldp traffic</td>
+                        <td>Vypíše statistiku přenesených LLDP zpráv</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
+                        <td>show cdp neighbors {*interface} **detail</td>
+                        <td>Vypíše (**podrobně) informace o sousedních (*sousedním) zařízeních zjištěné pomocí CDP</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show lldp neighbors {*interface} **detail</td>
+                        <td>Vypíše (**podrobně) informace o sousedních (*sousedním) zařízeních zjištěné díky LLDP</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show cdp entry {název | *}</td>
+                        <td>Zobrazí základní informace o sousedních zařízeních zjištěné prostřednictvím CDP</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show lldp entry {název | *}</td>
+                        <td>Vypíše základní informace o sousedních zařízeních zjištěné za pomoci LLDP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                 </table>
@@ -246,6 +241,10 @@ SW#show cdp neighbors detail</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Discovery protokoly nám v případě potřeby pomůžou zjistit informace o sousedních zařízeních. Toho se v dnešní době používá při zmapovávání sítě (například v rámci Cisco ACI).</p>
+        <p>Discovery protokoly fungují na L2 a jejich zprávy nejsou směrovatelné. Jsou založeny na tom principu, že na těch interfacích, kde byly nastaveny, jsou periodicky posílané zprávy s informacemi o daném zařízení.</p>
+        <p>Pro CCNA úroveň je důležité znát CDP a LLDP. Ačkoliv jsou si tyto dva protokoly na první pohled podobny, je mezi nima pár významných odlišností jako třeba v podpoře na jednotlivých zařízeních (CDP je Cisco proprietární, tudíž jej hlavně najdeme na Cisco zařízeních X LLDP je IEEE standardizovaný), způsob zapnutí (možnost jednotlivě zapnout/vypnout přenos a přijimání LLDP zpráv X CDP celkové zapínání/vypínání přenosu zpráv) a v jednotlivých informacích (u CDP například můžeme oproti LLDP zjistit informace o VTP doméně, native VLAN a duplexu).</p>
+        <p>Přestože nám discovery protokoly pomáhají, jsou pro nás zároveň i potenciální bezpečnostní hrozbou, proto vždy zvažte, zda je nutné mít tyto protokoly na portu zapnuté.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
