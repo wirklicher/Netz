@@ -15,11 +15,29 @@
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
-            <li class="req">Umět popsat účel, fungování FHRPs</li>
+            <li class="req">Umět popsat účel a fungování FHRPs</li>
         </ul>
     </section>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Enterprise sítě, datová centra atp. může stát každý výpadek připojení k Internetu statisíce, proto je nutné dbát na to, aby takové sítě byly <a href="https://www.sprava-site.eu/redundance/">redundatní</a>.</p>
+        <img src="../static/styles/images/FHRP/NonrendundantNet.png" alt="Non-redundant network example" class="configImage">
+        <p><i>Obr1. Síť, která není redundantní</i></p>
+        <p>Redundantnost na L2 vyřešíme snadno přidáním dalších L2 zařízení a propojení každého L2 zařízení s každým.</p>
+        <img src="../static/styles/images/FHRP/L2RedundantNet.png" alt="L2 redundant network example" class="configImage">
+        <p><i>Obr2. Ukázka sítě, která je redundantní na L2</i></p>
+        <p>Na L3 již začínají být věci poněkud složitější a k řádnému fungování sítě je třeba dodatečná konfigurace.</p>
+        <p>Stejně jako na L2 přidáme další L3 zařízení. To však tentokrát nebude propojené s R1, ale bude připojeno k jednomu ze switchů.</p>
+        <img src="../static/styles/images/FHRP/L3RedundantNet.png" alt="L3 redundant network example" class="configImage">
+        <p>Pakliže bychom síť už takto nechali, stále by nebyla na L3 redundantní. <i>Proč?</i>.</p>
+        <p>Abychom přišli na to, proč taková síť stále není redundantní na L3, musíme si připomenout to, co počítač dělá s neznámým paketem.</p>
+    </section>
+    <section id="FHRP">
+        <h3>FHRP</h3>
+        <p>FHRP, First Hop Redundancy Protocol je skupina protokolů, který řeší problém redundantní L3.</p>
+        <section id="FHRPExplained" class="subSection">
+            <h4>Princip FHRP</h4>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
