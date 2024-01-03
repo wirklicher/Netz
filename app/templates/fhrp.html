@@ -19,18 +19,30 @@
         </ul>
     </section>
     <section id="uvod">
-        <h3 id="problematika">Úvod do problematiky</h3>
+        <h3 id="problematika">Úvod do problematiky - Redundance a výchozí brána</h3>
         <p>Enterprise sítě, datová centra atp. může stát každý výpadek připojení k Internetu statisíce, proto je nutné dbát na to, aby takové sítě byly <a href="https://www.sprava-site.eu/redundance/">redundatní</a>.</p>
+        <p>Za redundantní síť můžeme považovat tu síť, kde při poruše 1 prvku nedojde k většímu omezení, potažmo úplné ztráty připojení k Internetu významné části sítě. Cílem redundantních sítí je právě minimalizovat dopady závad prvků sítě (Platí, že čím méně zařízení je ovlivněno poruchou jednoho prvku, tím lépe => menší ztráta zisku pro firmu).</p>
+        <p>Příkladem sítě, která není redundantní může být tato:</p>
         <img src="../static/styles/images/FHRP/NonrendundantNet.png" alt="Non-redundant network example" class="configImage">
-        <p><i>Obr1. Síť, která není redundantní</i></p>
-        <p>Redundantnost na L2 vyřešíme snadno přidáním dalších L2 zařízení a propojení každého L2 zařízení s každým.</p>
-        <img src="../static/styles/images/FHRP/L2RedundantNet.png" alt="L2 redundant network example" class="configImage">
-        <p><i>Obr2. Ukázka sítě, která je redundantní na L2</i></p>
-        <p>Na L3 již začínají být věci poněkud složitější a k řádnému fungování sítě je třeba dodatečná konfigurace.</p>
-        <p>Stejně jako na L2 přidáme další L3 zařízení. To však tentokrát nebude propojené s R1, ale bude připojeno k jednomu ze switchů.</p>
-        <img src="../static/styles/images/FHRP/L3RedundantNet.png" alt="L3 redundant network example" class="configImage">
-        <p>Pakliže bychom síť už takto nechali, stále by nebyla na L3 redundantní. <i>Proč?</i>.</p>
-        <p>Abychom přišli na to, proč taková síť stále není redundantní na L3, musíme si připomenout to, co počítač dělá s neznámým paketem.</p>
+        <p>Potenciální výpadek R1, SW1 (a médii mezi nimi) totiž ohrozí velkou část sítě a postihne všechny hosty a servery.</p>
+        <p>Naštěstí jsou tyto sítě snadno přeměnitelné na redundantní.</p>
+        <p><i>Ptáte se jak?</i></p>
+        <p>Nejdříve je třeba najít potenciální prvek v síti, jehož výpadkem by byla ohrožená konektivita části sítě.</p>
+        <p>Kdybychom tedy měli takto analyzovat síť z předešlého obrázku, všimli bychom si, že takovými prvky jsou R1 a SW1. SW2 zde v tomto případě za velkou hrozbu nepovažujeme, protože jeho porucha by ohrozila pouze 2 hosty, který by se za předpokladu, že nemají více síťových karet, stejně nedalo moc dělat.</p>
+        <p>Nyní, když máme určené problematická zařízení, si řešení rozdělíme na dvě části.</p>
+        <p>První se bude týkat L2 zařízení. Jestliže je tedy potenciálním prvkem, jehož výpadek by ohrozil značnou část sítě, switch, tak přidáme do sítě další takové zařízení.</p>
+        <p>Při změně na L2 by tedy síť nově vypadala nějak takto: </p>
+        <p>OBRÁZEK!!!!</p>
+        <p>Když v tomto případě přidáme pouze jeden další switch, nějak zvlášť extra si nepomůžeme. Díky této změně se akorát tak změní prvek, kterým se teda tentokrát stál nově přidaný switch (To, jestli se hosti připojí k internetu, totiž bude záležet na novém switchi a R1).</p>
+        <p>Proto přidáme do sítě další switche, tak abychom měli k R1 více cest.</p>
+        <p>Konečná L2 redundantní síť tedy bude vypadat takto: </p>
+        <p>DALŠÍ OBRÁZEK!!!!</p>
+        <p>Nyní, když máme vyřešenou L2 redundaci, se můžeme přesunout na L3 redundanci. Stejně jako v předešlém případě máme problém s tím, že máme pouze jeden router, jehož porucha by pro nás znamenala ztrátu připojení k Internetu. Proto stejně jako v případě switchů přidáme další zařízení.</p>
+        <p>OBRÁZEK!!!</p>
+        <p>Na L3 nám však pouhé přidání dalšího routeru stačit nebude.</p>
+        <p>Proč?</p>
+        <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku musela řučně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
+        <p>Naštěstí pro nás existuje mnohem lepší a efektivnější řešení v podobě First Hop Redundancy protokolů.</p>
     </section>
     <section id="FHRP">
         <h3>FHRP</h3>
