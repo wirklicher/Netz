@@ -41,15 +41,118 @@
         <p>OBRÁZEK!!!</p>
         <p>Na L3 nám však pouhé přidání dalšího routeru stačit nebude.</p>
         <p>Proč?</p>
-        <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku musela řučně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
+        <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku toho "aktivního" routeru musela řučně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
         <p>Naštěstí pro nás existuje mnohem lepší a efektivnější řešení v podobě First Hop Redundancy protokolů.</p>
     </section>
     <section id="FHRP">
         <h3>FHRP</h3>
-        <p>FHRP, First Hop Redundancy Protocol je skupina protokolů, který řeší problém redundantní L3.</p>
-        <section id="FHRPExplained" class="subSection">
+        <p>Jako FHRP, First Hop Redundancy Protocol je označovaná skupina protokolů, které reagují na problematiku redundantní L3.</p>
+        <p>Problematiku redundantní L3 řeší tím, že umožňují skupině dvou či více routerů přidělit jednu společnou virtuální IP adresu.</p>
+        <p>Ta pak slouží jako výchozí brána pro hosty. Díky tomu může jeden router nahradit toho druhého bez toho aniž by se musela změnit síťová konfigurace hostů.</p>
+        <section id="HowFHRPwork" class="subSection">
             <h4>Princip FHRP</h4>
+            <p>Po konfiguraci FHRP na všech routerech, během níž se určí jedna společná IP adresa, si mezi sebou routery určí, který z routerů bude ten <b>aktivní</b> (active) a kdo bude ten <b>záložní</b> (standby).</p>
+            <p>To, podle čeho si to routery mezi sebou určí, přímo záleží na vybraném FHRP.</p>
+            <p>Za aktivního routera považujeme ten router, který se aktivně chová jako výchozí brána a přes který hosti posílají pakety na Internet.</p>
+            <p>Záložní router je pak zas ten router, jež se standardně nechová jako výchozí brána, ale při výpadku aktivního routeru jej dokáže nahradit a stane se aktivním.</p>
+            <p>Jakmile je jasné, kdo je kdo, začnou si mezi sebou routery posílat multicasty (multicast je zpráva, která se pošle vybrané skupině zařízení), aby zjistili zda aktivní router stále běží.</p>
+            <p>Když aktivní router vypadne, přestane komunikovat s druhým routerem a aktivní roli přebírá jeden z dosud záložních routerů.</p>
+            <p>Na to, aby se záložní router stal aktivním routerem, potřebuje změnit MAC adresovou tabulku na switchích. To provede tím, že pošle gratuitous ARP zprávu (Gratuitous ARP zpráva je ARP reply zpráva, která se pošle bez toho aniž by o někdo žádal.</p>
         </section>
+        <section id="PracticalFHRP" class="subSection">
+            <h4>Praktická ukázka fungování FHRP</h4>
+            <p>Máme následujicí síť:</p>
+        </section>
+        <p>Jak již bylo zmíněno na začátku této sekce, FHRP je skupina protokolů, který řeší problematiku redundantní L3.</p>
+        <p>Jmenovitě do FHRP skupiny protokolů patří: </p>
+        <ul>
+            <li class="req"><b>HSRP</b> - Hot Standby Redundancy Protocol</li>
+            <li class="req"><b>GLBP</b> - Gateway Load Balancing Protocol</li>
+            <li class="req"><b>VRRP</b> - Virtual Router Redundancy Protocol</li>
+        </ul>
+        <p>Tyto protokoly se mezi sebou liší například v terminologii (Active/Standby X Master/Backup X AVG/AVF), vývojáři (Cisco propriétární X IETF) a v drobnostech z hlediska fungování (hlavně HSRP x VRRP).</p>
+        <p>Pro CCNA není třeba znát konfigurace.</p>
+    </section>
+    <section id="HSRP">
+        <h3>HSRP</h3>
+        <p>HSRP, Hot Standby Redundancy Protocol je propriétární protokol společnosti Cisco.</p>
+        <p>Aktivní router názývá <b>"Active"</b> a záložní <b>"Standby"</b>.</p>
+        <p>HSRP vybírá aktivní router na základě priority a v případě stejné priority na všech HSRP routerech ve stejné skupině na základě nejvyšší nastavené IP adrese na routeru.</p>
+        <p>HSRP dokáže loadbalancovat provoz pouze v rámci jiných vlan.</p>
+        <p>Tento protokol má 2 verze - HSRPv1 a HSRPv2. Ty se kromě lepší stabilizace od sebe liší napříkald v počtu povolených HSRP skupin, multicastové IP adrese a virtuální MAC adrese.</p>
+        <div class="overflowTable">
+            <table>
+                <tr>
+                    <th>HSRP verze</th>
+                    <th>Multicastová IPv4 adresa</th>
+                    <th>Virtuální MAC adresa</th>
+                    <th>Počet povolených HSRP Skupin</th>
+                </tr>
+                <tr>
+                    <td>HSRPv1</td>
+                    <td>224.0.0.2</td>
+                    <td>0000.0c07.acXX (XX je číslo skupiny)</td>
+                    <td>256</td>
+                </tr>
+                <tr>
+                    <td>HSRPv2</td>
+                    <td>224.0.0.102</td>
+                    <td>0000.0c9f.fXXX (XXX je číslo skupiny)</td>
+                    <td>4096</td>
+                </tr>
+            </table>
+        </div>
+        <section id="HSRPConfiguration" class="subSection">
+            <h4>Konfigurace HSRP</h4>
+        </section>
+    </section>
+    <section id="GLBP">
+        <h3>GLBP</h3>
+        <p>GLBP nebo-li Gateway Load Balancing Protocol je stejně jako HSRP Cisco propriétární protokol.</p>
+        <p>Možná si říkáte, proč by Cisco mělo 2 protokoly, které dělají to samé?</p>
+        <p>GLBP je totiž oproti HSRP zaměřený, jak už z názvu vyplývá, na loadbalancing a dokáže loadbalancovat provoz i v rámci jedné podsítě.</p>
+        <p>Mezi routery se volí AVG (Active Virtual Gateway), ostatní jsou AVF (Active Virtual Forwarder).</p>
+        <p>AVG může být zároveň i AVF</p>
+        <p>Pro posílání IPv4 multicastových zpráv používá adresu: 224.0.0.102 (Ano, stejnou jako HSRP).</p>
+        <p>Jako virtuální MAC adresu používají: 0007.6400.XXYY, kdy XX je číslo GLBP skupiny a YY je číslo AVF.</p>
+        <section id="HowGLBPworks" class="subSection">
+            <h4>Jak GLBP funguje?</h4>
+            <p>Routery si mezi ve skupině zvolí AVG - Active Virtual Gateway. Až 4 routery se stanou AVF - Active Virtual Forwarder, zbytek bude záložní.</p>
+            <p>Když host pošle ARP zprávu aby získal MAC adresu výchozí brány, dostane se na AVG, které hostovi přidělí MAC adresu jedné z aktivní AVF. Host poté bude všechny zprávy mimo síť posílat na danou AVF.</p>
+            <p>Zkusme si to ilustrovat na příkladu - </p>
+            <p>Máme tuto síť:</p>
+            <img src="../static/styles/images/FHRP/GLBP_Explain1.png" alt="GLBP Explain 1" class="configImage">
+            <p>V síti nastavíme GLBP (ve skupině 15), kdy R1 bude AVG (a zároveň AVF) a ostatní pouze AVF.</p>
+            <p>Virtuální IP adresa bude 192.168.0.253</p>
+            <p>Pokud se host 1 bude snažit poslat něco přes výchozí bránu, bude potřebovat zjistit MAC adresu výchozí brány. Na ARP request odpoví R1.</p>
+            <p>R1 přidělí hostu 1 samo sebe jako AVF, pošle mu MAC adresu 0007.6400.0F01 Host 1 bude tedy brát R1 jako svoji výchozí bránu.</p>
+            <p>Když se host 2 bude snažit poslat něco přes výchozí bránu, zeptá se stejně jako host 1 AVG, jakou MAC adresu má výchozí brána, AVG mu pošle MAC adresu R2 (0007.6400.0F02).</p>
+            <p>Jestliže by se stalo, že by R2 selhalo, tak by jej nahradilo R3 či případně R1. Pokud by selhalo AVG, zvolí se nový AVG a síť bude fungovat dál.</p>
+        </section>
+        <section id="GLBPConfiguration" class="subSection">
+            <h4>Konfigurace GLBP</h4>
+            <p>Aktivuj v následujicí síti 192.168.0.0/24 GLBP na routerech R1, R2 a R3.</p>
+            <p>Udělej z R1 AVG.</p>
+            <p>Virtuální IP adresa bude 192.168.0.253</p>
+            <img src="../static/styles/images/FHRP/GLBP1.png" alt="GLBP Configuration" class="configImage">
+            <p class="beforecode">Začněme tím, že vytvoříme glbp skupinu 15 na R1:</p>
+            <pre>R1(config)#interface gig0/0
+R1(config-if)#glbp 15 ip 192.168.0.253</pre>
+            <p class="beforecode">Vzhledem k tomu, že chceme, aby glbp bylo AVG, nastavíme i prioritu, platí zde pravidlo, že čím vyšší priorita, tím větší šance, že se router stane AVG, standardní priorita je jinak 100.</p>
+            <pre>R1(config-if)#glbp 15 priority 255</pre>
+            <p class="beforecode">Poté ještě na R1 nastavíme to, že pokud náhodou selže a jiný router převezme roli AVG, tak R1 se po nahození automaticky znovu stane AVG.</p>
+            <pre>R1(config-if)#glbp 15 preempt</pre>
+            <p class="beforecode">Pro kontrolu konfigurace glbp můžeme použít příkaz - </p>
+            <pre>R1#show glbp</pre>
+            <p class="beforecode">Na R2 a R3 pak nastavíme:</p>
+            <pre>R2(config)#interface g0/0
+R2(config-if)#glbp 15 ip 192.168.0.253
+R3(config)#interface g0/0
+R3(config-if)#glbp 15 ip 192.168.0.253</pre>
+        </section>
+    </section>
+    <section id="VRRP">
+        <h3>VRRP</h3>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
