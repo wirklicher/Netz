@@ -11,7 +11,7 @@
 <body>
     <h1>FHRP</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základní znalost PT, STP & Etherchannel, základy IPv4</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
@@ -21,7 +21,7 @@
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky - Redundance a výchozí brána</h3>
         <p>Enterprise sítě, datová centra atp. může stát každý výpadek připojení k Internetu statisíce, proto je nutné dbát na to, aby takové sítě byly <a href="https://www.sprava-site.eu/redundance/">redundatní</a>.</p>
-        <p>Za redundantní síť můžeme považovat tu síť, kde při poruše 1 prvku nedojde k většímu omezení, potažmo úplné ztráty připojení k Internetu významné části sítě. Cílem redundantních sítí je právě minimalizovat dopady závad prvků sítě (Platí, že čím méně zařízení je ovlivněno poruchou jednoho prvku, tím lépe => menší ztráta zisku pro firmu).</p>
+        <p>Za redundantní síť můžeme považovat tu síť, kde při poruše 1 prvku nedojde k většímu omezení, potažmo úplné ztráty připojení k Internetu, významné části sítě. Cílem redundantních sítí je právě minimalizovat dopady závad prvků sítě (Platí, že čím méně zařízení je ovlivněno poruchou jednoho prvku, tím lépe => menší ztráta zisku pro firmu).</p>
         <p>Příkladem sítě, která není redundantní může být tato:</p>
         <img src="../static/styles/images/FHRP/NonrendundantNet.png" alt="Non-redundant network example" class="configImage">
         <p>Potenciální výpadek R1, SW1 (a médii mezi nimi) totiž ohrozí velkou část sítě a postihne všechny hosty a servery.</p>
@@ -32,13 +32,10 @@
         <p>Nyní, když máme určené problematická zařízení, si řešení rozdělíme na dvě části.</p>
         <p>První se bude týkat L2 zařízení. Jestliže je tedy potenciálním prvkem, jehož výpadek by ohrozil značnou část sítě, switch, tak přidáme do sítě další takové zařízení.</p>
         <p>Při změně na L2 by tedy síť nově vypadala nějak takto: </p>
-        <p>OBRÁZEK!!!!</p>
+        <img src="../static/styles/images/FHRP/L2RedundantNet1.png" alt="L2 Redundant network" class="configImage">
         <p>Když v tomto případě přidáme pouze jeden další switch, nějak zvlášť extra si nepomůžeme. Díky této změně se akorát tak změní prvek, kterým se teda tentokrát stál nově přidaný switch (To, jestli se hosti připojí k internetu, totiž bude záležet na novém switchi a R1).</p>
-        <p>Proto přidáme do sítě další switche, tak abychom měli k R1 více cest.</p>
-        <p>Konečná L2 redundantní síť tedy bude vypadat takto: </p>
-        <p>DALŠÍ OBRÁZEK!!!!</p>
-        <p>Nyní, když máme vyřešenou L2 redundaci, se můžeme přesunout na L3 redundanci. Stejně jako v předešlém případě máme problém s tím, že máme pouze jeden router, jehož porucha by pro nás znamenala ztrátu připojení k Internetu. Proto stejně jako v případě switchů přidáme další zařízení.</p>
-        <p>OBRÁZEK!!!</p>
+        <p>Proto přidáme do sítě další switche, které tentokrát budou odkazovat k dalšímu L3 zařízení.</p>
+        <img src="../static/styles/images/FHRP/L3RedundantNet.png" alt="L3 Redundant network" class="configImage">
         <p>Na L3 nám však pouhé přidání dalšího routeru stačit nebude.</p>
         <p>Proč?</p>
         <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku toho "aktivního" routeru musela řučně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
@@ -62,6 +59,16 @@
         <section id="PracticalFHRP" class="subSection">
             <h4>Praktická ukázka fungování FHRP</h4>
             <p>Máme následujicí síť:</p>
+            <img src="../static/styles/images/FHRP/FHRP1.png" alt="FHRP1" class="configImage">
+            <p>Všichni hosti mají nastavený jako výchozí bránu R1 (192.168.0.1).</p>
+            <p>Pokud nastavíme FHRP, nastane nejdříve volba aktivního routeru (Active, Master, AVG) a záložního routeru (Standby, Backup, AVF).</p>
+            <p>V našem případě se stane aktivním routerem R2 a záložním routerem R1. Tyto dva routery budou mít společnou virtuální IPv4 adresu - 192.168.0.253. U hosté také nezapomeňme ručně změnit výchozí bránu (ať už staticky či přes změnu konfigurace DHCP).</p>
+            <img src="../static/styles/images/FHRP/FHRP2.png" alt="FHRP2" class="configImage">
+            <p>Nyní si mezi sebou až do výpadu budou vyměňovat pakety, kterýma si ověřují, že stále ještě jeden a ten druhý "žije".</p>
+            <p>Při výpadku aktivního routeru (R2) R1 pozná, že R2 je "kaput" a posláním Gratuitous ARPu informuje switche o tom, že on je teď nyní aktivním routerem a že používá IP adresu 192.168.0.253.</p>
+            <img src="../static/styles/images/FHRP/FHRP3.png" alt="FHRP3" class="configImage">
+            <p>Jestliže dojde k vzpamatování R2, stane se záložním routerem.</p>
+            <img src="../static/styles/images/FHRP/FHRP4.png" alt="FHRP4" class="configImage">
         </section>
         <p>Jak již bylo zmíněno na začátku této sekce, FHRP je skupina protokolů, který řeší problematiku redundantní L3.</p>
         <p>Jmenovitě do FHRP skupiny protokolů patří: </p>
@@ -70,7 +77,7 @@
             <li class="req"><b>GLBP</b> - Gateway Load Balancing Protocol</li>
             <li class="req"><b>VRRP</b> - Virtual Router Redundancy Protocol</li>
         </ul>
-        <p>Tyto protokoly se mezi sebou liší například v terminologii (Active/Standby X Master/Backup X AVG/AVF), vývojáři (Cisco propriétární X IETF) a v drobnostech z hlediska fungování (hlavně HSRP x VRRP).</p>
+        <p>Tyto protokoly se mezi sebou liší například v terminologii (Active/Standby X Master/Backup X AVG/AVF), vývojáři (Cisco propriétární X IETF) a v drobnostech z hlediska fungování (hlavně HSRP, VRRP X GLBP).</p>
         <p>Pro CCNA není třeba znát konfigurace.</p>
     </section>
     <section id="HSRP">
@@ -78,7 +85,8 @@
         <p>HSRP, Hot Standby Redundancy Protocol je propriétární protokol společnosti Cisco.</p>
         <p>Aktivní router názývá <b>"Active"</b> a záložní <b>"Standby"</b>.</p>
         <p>HSRP vybírá aktivní router na základě priority a v případě stejné priority na všech HSRP routerech ve stejné skupině na základě nejvyšší nastavené IP adrese na routeru.</p>
-        <p>HSRP dokáže loadbalancovat provoz pouze v rámci jiných vlan.</p>
+        <p>HSRP dokáže loadbalancovat provoz pouze v rámci vlan.</p>
+        <p>HSRP <b>nemůže</b> použít IP adresu, kterou má router nakonfigurovanou na svém interfacu.</p>
         <p>Tento protokol má 2 verze - HSRPv1 a HSRPv2. Ty se kromě lepší stabilizace od sebe liší napříkald v počtu povolených HSRP skupin, multicastové IP adrese a virtuální MAC adrese.</p>
         <div class="overflowTable">
             <table>
@@ -102,8 +110,44 @@
                 </tr>
             </table>
         </div>
+        <p>HSRP funguje tak, jak bychom od FHRP čekali - </p>
+        <ul>
+            <li class="ordered">Nejdříve se za pomoci priority či nejvyšší IP adresy routeru určí Active a Standby router.</li>
+            <li class="ordered">Active router bude používat virtuální IP a MAC adresu, standby router bude trpělivě čekati, než active router vypadne.</li>
+            <li class="ordered">V pozadí si mezi sebou active a standby router periodicky posílají HSRP hello zprávy. Těmito zprávami si říkají, že stále ještě fungují.</li>
+            <li class="ordered">Při výpadku aktivního routeru přestane posílat HSRP hello zprávy a dojde k vypršení tzv. holdtime časovače. Pokud dojde k vypršení holdtime časovače, standby router přebírá roli aktivního routera.</li>
+            <li class="ordered">Aby standby router přebral roli aktivního routera, musí do sítě vyslat Gratuitous ARP, pomocí něhož řekne switchům, že mají aktualizovat své MAC adres tabulky, tak aby k němu mohly dojít pakety od hostů.</li>
+            <li class="ordered">Pozn. je možné nastavit to, aby bývalý aktivní router po znovunahození přebral roli aktivního routera - preemptive nastavení.</li>
+        </ul>
         <section id="HSRPConfiguration" class="subSection">
             <h4>Konfigurace HSRP</h4>
+            <p>Příklad: Aktivuj na routerech R1, R2, R3 HSRP s následujicími pravidly - </p>
+            <p>Číslo skupiny bude 24.</p>
+            <p>Bude se používat HSRPv2.</p>
+            <p>Virtuální IP adresa bude 192.168.0.253.</p>
+            <p>R2 bude aktivní router a v případě opravy poruchy se vždy znovu zhostí aktivní role.</p>
+            <img src="../static/styles/images/FHRP/HSRP1.png" alt="HSRP Konfigurace" class="configImage">
+            <p class="beforecode">Prvně nastavíme verzi HSRP, na všech routerech musí být verze stejná - </p>
+            <pre>R1(config)#interface g0/0
+R1(config-if)#standby version 2
+R2(config)#interface g0/0
+R2(config-if)#standby version 2
+R3(config)#interface g0/0
+R3(config-if)#standby version 2</pre>
+            <p class="beforecode">Dále budeme s konfigurací pokračovat na R2, kde nejdříve povolíme HSRP - </p>
+            <pre>R2(config-if)#standby 24 ip 192.168.0.253</pre>
+            <p class="beforecode">Poté nakonfigurujeme prioritu k tomu, aby se z R2 stal aktivní router (Platí, že čím vyšší priorita, tím větší šance, že R2 bude aktivní router) - </p>
+            <pre>R2(config-if)#standby 24 priority 255</pre>
+            <p class="beforecode">Nakonec na R2 nakonfigurujeme to, že se v případě opravy poruchy stane R2 znovu aktivním routerem -</p>
+            <pre>R2(config-if)#standby 24 preempt</pre>
+            <p class="beforecode">Nyní nakonfigurujeme R1 a R3, kde pouze povolíme HSRP - </p>
+            <pre>R1(config-if)#standby 24 ip 192.168.0.253
+R2(config-if)#standby 24 ip 192.168.0.253</pre>
+            <p class="beforecode">Ověření toho, zda jsme HSRP nakonfigurovali správně provedeme pomocí příkazů - </p>
+            <pre>R2#show standby
+R2#show standby brief</pre>
+            <p>Kdy příkaz <i>show standby</i> nám ukáže konfiguraci HSRP více dopodrobna zatímco <i>show standby brief</i> nám ukáže z dané konfigurace to nejpodstatnější.</p>
+            <p>Konfiguraci HSRP si můžete vyzkoušet <a href="../Labs/">zde</a>.</p>
         </section>
     </section>
     <section id="GLBP">
@@ -131,6 +175,7 @@
         </section>
         <section id="GLBPConfiguration" class="subSection">
             <h4>Konfigurace GLBP</h4>
+            <p>Upozornění: GLBP nejde nastavit v Packet Traceru!</p>
             <p>Aktivuj v následujicí síti 192.168.0.0/24 GLBP na routerech R1, R2 a R3.</p>
             <p>Udělej z R1 AVG.</p>
             <p>Virtuální IP adresa bude 192.168.0.253</p>
@@ -153,6 +198,38 @@ R3(config-if)#glbp 15 ip 192.168.0.253</pre>
     </section>
     <section id="VRRP">
         <h3>VRRP</h3>
+        <p>VRRP, také jako Virtual Router Redundancy Protocol, je protokol od IETF (Internet Engineering Task Force) - není proprietární.</p>
+        <p>Funguje na velmi podobném principu jako HSRP.</p>
+        <p>Aktivní router VRRP označuje klíčovým slovem "Master", jako záložní router "Backup".</p>
+        <p>VRRP určuje master router podle priority a nejvyšší nakonfigurované IP adresy na routeru (čím vyšší, tím lepší).</p>
+        <p>Jako multicastovou IP adresu používá: <b>224.0.0.18</b>.</p>
+        <p>Jeho virtuální MAC adresa je: 0000.5E00.01XX, kdy XX značí VRRP skupinu.</p>
+        <p>Dalším rozdíl oproti HSRP je ten, že VRRP nám umožňuje použít jako virtuální IP adresu i tu, která již je nakonfigurovaná na interfacu jednoho z routerů.</p>
+        <p>VRRP má automaticky zapnuto to, že se porouchaný aktivní router při znovunasazení ujme své role aktivního routeru.</p>
+        <p>Loadbalancuje provoz pouze v rámci VLAN.</p>
+        <section id="VRRPConfiguration">
+            <h4>Konfigurace VRRP</h4>
+            <p>Upozornění: VRRP nejde nastavit v Packet Traceru!</p>
+            <p>Příklad: Nakonfiguruj v této síti VRRP s následujicími pravidly - </p>
+            <p>Číslo VRRP skupiny bude 10.</p>
+            <p>Virtuální IP adresa bude IP adresa R1 (192.168.0.1)</p>
+            <p>Master router bude R1.</p>
+            <img src="../static/styles/images/FHRP/VRRP1.png" alt="VRRP Configuration" class="configImage">
+            <p class="beforecode">Prvně VRRP zapneme nakonfigurujeme R1 - </p>
+            <pre>R1(config)#interface g0/0
+R1(config-if)#vrrp 10 ip 192.168.0.1</pre>
+            <p class="beforecode">Dále na R1 nakonfigurujeme prioritu - </p>
+            <pre>R1(config-if)#vrrp 10 priority 255</pre>
+            <p class="beforecode">Teď VRRP nastavíme na R2 a R3 - </p>
+            <pre>R2(config)#interface g0/0
+R2(config-if)#vrrp 10 ip 192.168.0.1
+R3(config)#interface g0/0
+R3(config-if)#vrrp 10 ip 192.168.0.1</pre>
+            <p class="beforecode">Konfiguraci VRRP si můžeme zkontrolovat pomocí příkazů - </p>
+            <pre>R1#show vrrp
+R1#show vrrp brief</pre>
+            <p>Příkaz <i>show vrrp</i> nám zobrazí konfiguraci VRRP dopodrobna, oproti tomu <i>show vrrp brief</i> pouze to nejpodstatnější.</p>
+        </section>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
@@ -164,73 +241,83 @@ R3(config-if)#glbp 15 ip 192.168.0.253</pre>
                         <th>Mód</th>
                     </tr>
                     <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
+                        <td>standby {skupina} ip {virtuální IP adresa}</td>
+                        <td>Zapne HSRP</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
+                        <td>standby version {1,2}</td>
+                        <td>Přepne na danou verzi HSRP</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
+                        <td>standby {skupina} priority {0-255}</td>
+                        <td>Určí prioritu routeru</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
+                        <td>standby {skupina} preempt</td>
+                        <td>Aktivuje to, že bývalý aktivní router se po opravě znovu stane aktivním</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
+                        <td>glbp {skupina} ip {virtuální IP adresa}</td>
+                        <td>Zapne GLBP</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>glbp {skupina} priority {0-255}</td>
+                        <td>Určí prioritu routeru</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>glbp {skupina} preempt</td>
+                        <td>Aktivuje to, že bývalý aktivní router se po opravě znovu stane aktivním</td>
+                        <td>Interface</td>
+                    </tr>
+                    <tr>
+                        <td>vrrp {skupina} ip {virtuální IP adresa}</td>
+                        <td>Zapne VRRP</td>
                         <td>Interface</th>
                     </tr>
                     <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
+                        <td>vrrp {skupina} priority {0-255}</td>
+                        <td>Určí priortu routeru</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
+                        <td>vrrp {skupina} preempt</td>
+                        <td>Aktivuje to, že bývalý aktivní router se po opravě znovu stane aktivním</td>
+                        <td>Interface</td>
                     </tr>
                     <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
+                        <td>show hsrp</td>
+                        <td>Zobrazí podrobně infromace o HSRP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
+                        <td>show hsrp brief</td>
+                        <td>Zobrazí zkráceně informace o HSRP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
+                        <td>show glbp</td>
+                        <td>Zobrazí podrobně infromace o GLBP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                     <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
+                        <td>show glbp brief</td>
+                        <td>Zobrazí zkráceně informace o GLBP</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vrrp</td>
+                        <td>Zobrazí podrobně infromace o VRRP</td>
+                        <td>Priviledged EXEC</td>
+                    </tr>
+                    <tr>
+                        <td>show vrrp brief</td>
+                        <td>Zobrazí zkráceně informace o VRRP</td>
                         <td>Priviledged EXEC</td>
                     </tr>
                 </table>
@@ -239,6 +326,15 @@ R3(config-if)#glbp 15 ip 192.168.0.253</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Redundantnost je velmi důležitý prvek sítě, do kterého bychom měli v případě plánovaní enterprise sítě či datového centra investovat. Zaručí nám to, že porucha jednoho zařízení v sítí nám nezpůsobí kolaps velké části sítě.</p>
+        <p>Síť uděláme redundantní tím, že tyto zařízení, které by svoji poruchou omezeli velkou část sítě, identifikujeme a přidáme další zařízení, která budou moci být v případě kolapsu původních zařízení využita.</p>
+        <p>Na L3 nám ale nastává problém, protože hosti mají jako router nakonfigurovanou výchozí bránu, která nemůže být bez nějaké další konfigurace jen tak lehce při poruše změněna (bez manuálního zásahu, který by nebyl ve větších sítích výkonně možný).</p>
+        <p>Tento problém výchozí brány se dá ale snadno obejít pomocí FHRP - First Hop Redundancy Protokolů.</p>
+        <p>Tyto protokoly nám umožní udělat skupinu routerů, která bude používat jednu společnou virtuální IP a MAC adresu. Jeden router bude tuto virtuální IP & MAC adresu využívat, zatímco ti ostatní budou bedlivě čekat na to, až se aktivnímu routeru něco přihodí a budou moci převzít jeho roli.</p>
+        <p>Pro CCNA úroveň je třeba znát alespoň jménem 3 protokoly - HSRP, GLBP a VRRP.</p>
+        <p>HSRP, také označován jako Hot Standby Redundancy Protocol, je protokol od společnosti Cisco. V terminologii používá výrazy Active/Standby.</p>
+        <p>GLBP, Gateway Load Balancing Protocol, je Cisco propriétární protokol, oproti HSRP je více zaměřený na loadbalancing a je schopný loadbalancovat provoz i v rámci jedné podsítě. Používá výrazy AVG/AVF.</p>
+        <p>VRRP, nebo-li Virtual Router Redundancy Protocol, ve srovnání s HSRP a GLBP není proprietární. Je velmi podobný HSRP a liší se od toho protokolu v drobnostech - používá termíny Master/Backup a je schopný použít nakonfigurovanou IP adresu na interfacu jednoho z routerů jako virtuální IP adresu.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
