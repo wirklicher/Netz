@@ -698,3 +698,46 @@ if (name_of_page == 'discoveryprotocols') {
     },
     ]
 }
+if (name_of_page == 'fhrp') {
+    MCQS = [{
+        question: "Který z těchto FHRP se zaměřuje na loadbalancing v rámci jedné podsítě?",
+        choice1: "Žádný z nich",
+        choice2: "HSRP",
+        choice3: "GLBP",
+        choice4: "VRRP",
+        answer: 2,
+    },
+    {
+        question: "Které z těchto FHRP používá termíny Master/Backup?",
+        choice1: "HSRP",
+        choice2: "VRRP",
+        choice3: "Žádné z nich",
+        choice4: "GLBP",
+        answer: 1,
+    },
+    {
+        question: "Kterého z těchto FHRP je multicastová IP adresa 224.0.0.2?",
+        choice1: "HSRPv1",
+        choice2: "GLBP",
+        choice3: "HSRPv2",
+        choice4: "VRRP",
+        answer: 0,
+    },
+    {
+        question: "Co je to standby router?",
+        choice1: "Aktivní router",
+        choice2: "Router, který nefunguje",
+        choice3: "Záložní router",
+        choice4: "Takový označení pro router není",
+        answer: 2,
+    },
+    {
+        question: "Kterého z těchto FHRP je multicastová IP adresa 224.0.0.18?",
+        choice1: "HSRPv2",
+        choice2: "HSRPv1",
+        choice3: "GLBP",
+        choice4: "VRRP",
+        answer: 3,
+    },
+    ]
+}
