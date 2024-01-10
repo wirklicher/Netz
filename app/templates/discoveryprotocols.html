@@ -22,24 +22,24 @@
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>Představte si, že nastupujete na novou pracovní pozici jako síťař. Během prvního dne zjistíte, že váš předchůdce vůbec nezdokumentoval síť a vy absolutně nemáte ponětí, jak si máte představit topologii sítě.</p>
         <p><i>Existuje nějaká skupina protokolů, která by vám alespoň mohla pomoci zmapovat topologii sítě?</i></p>
-        <p>Ano, existuje. Protokoly, které nám dokážou přinést určité informace o síti nazýváme celkově jako <b>Discovery protokoly</b>.</p>
+        <p>Ano, existuje. Protokoly, které nám dokážou přinést určité informace o síti souhrnně označujeme jako <b>Discovery protokoly</b>.</p>
         <p>Tyto protokoly jsou skvělý v tom, že <b>fungují na L2</b> (Data-link layer), tudíž ke svému fungování <b>nepotřebují IP adresu</b>.</p>
-        <p>V rámci CCNA úrovně se budeme bavit primárně o dvou discovery protokolech, se kterýma se můžete během studia i práce setkat.</p>
+        <p>V rámci CCNA úrovně se budeme bavit primárně o dvou discovery protokolech, se kterými se můžete během studia i práce setkat.</p>
         <p>Těmito protokoly jsou <b>CDP (Cisco Discovery Protocol)</b> a <b>LLDP (Link Layer Discovery Protocol)</b>.</p>
         <p>Oba tyto protokoly jsou založené na stejných principech a liší se spíše v drobnostech, které si představíme později.</p>
         <section id="HowDPWorks" class="subSection">
-            <h4>Pricnip discovery protokolů</h4>
-            <p>Jestliže spustíte nově koupený switch od Cisca, tak budete mít standardně zapnutý CDP protokol. Pakliže budete mít těchto switchů více a vzájemně je propojíte, začnou se <b>vždy mezi sousedními zařízeními</b> (pozn. CDP rámec se nepošle dál než na sousední zařízení) posílat periodicky CDP rámce, která nesou určité informace o daném zařízení a konfigurace na něm nastavené.</p>
+            <h4>Princip discovery protokolů</h4>
+            <p>Jestliže spustíte nově koupený switch od Cisca, budete mít standardně zapnutý CDP protokol. Pakliže budete mít těchto switchů více a vzájemně je propojíte, začnou se <b>vždy mezi sousedními zařízeními</b> (pozn. CDP rámec se nepošle dál než na sousední zařízení) posílat periodicky CDP rámce, která nesou určité informace o daném zařízení a konfiguraci na něm nastavené.</p>
             <p>Mezi získané informace může patřit:</p>
             <ul>
                 <li class="req">Název zařízení</li>
-                <li class="req">Bližší informace o zařízení (např. verzi SW)</li>
+                <li class="req">Bližší informace o zařízení (např. verze SW)</li>
                 <li class="req">Informace o HW - Dokáže se zařízení chovat jako Router, Bridge, Switch?</li>
                 <li class="req">IP adresy</li>
                 <li class="req">Názvy portů mezi nimiž probíhá CDP komunikace</li>
                 <li class="req">Informace o VLANách (VTP, Native VLAN ID)</li>
             </ul>
-            <p>Discovery protokoly <b>nejsou chráněny</b> žádným obraným mechanismem, proto je třeba si dát velký pozor na to, kde jsou nakonfigurovaný. Potenciální útočník by totiž mohl tyto informace získané prostřednictvím discovery protokolů využít v náš neprospěch.</p>
+            <p>Discovery protokoly <b>nejsou chráněny</b> žádným obranným mechanismem, proto je třeba si dát velký pozor na to, kde jsou nakonfigurované. Potenciální útočník by totiž mohl informace získané prostřednictvím discovery protokolů využít v náš neprospěch.</p>
             <p>Obecně je doporučeno vypínat discovery protokoly na interfacích, které se připojují k hostům či do externí sítě.</p>
         </section>
     </section>
@@ -73,9 +73,9 @@
         </section>
         <section id="CDPConfiguration" class="subSection">
             <h4>Konfigurace CDP</h4>
-            <p class="beforecode">CDP je na cisco zařízeních standardně zapnuto na všech portech. Kdyby se nám však stalo, že by bylo z nějakého důvodu vyplé, můžeme jej globálně povolit na všech portech pomocí příkazu:</p>
+            <p class="beforecode">CDP je na Cisco zařízeních standardně zapnuto na všech portech. Kdyby se nám však stalo, že by bylo z nějakého důvodu vyplé, můžeme jej globálně povolit na všech portech pomocí příkazu:</p>
             <pre>SW(config)#cdp run</pre>
-            <p class="beforecode">Budeme-li pak chtít individuálně zapnout/vypnout CDP na vybraném portu, uděláme to pomocí příkazu:</p>
+            <p class="beforecode">Budeme-li pak chtít individuálně zapnout/vypnout CDP na vybraném portu (CDP ale stejně musí být předtím globálně povoleno), uděláme to pomocí příkazu:</p>
             <pre>SW(config-if)#no cdp enable</pre>
             <p class="beforecode">Budeme-li si chtít zkontrolovat nastavení CDP (to zda běží, verzi, interval posílání zpráv, holdtime - za jak dlouho se budou informáce bez další výměny zpráv vymazány), použijeme příkaz:</p>
             <pre>SW#show cdp
@@ -99,23 +99,23 @@ SW#show cdp neighbors detail</pre>
             <p>Oba tyto příkazy mají stejný výstup.</p>
             <p class="beforecode">Budeme-li pak potřebovat zjistit informace pouze o jednom sousedovi, tak můžeme použít příkaz: </p>
             <pre>SW#show cdp neighbors {interface}</pre>
-            <p class="beforecode">Nakonec tu máme ještě jeden takový techničtější příkaz, který nám umožní zjistit, kolik cdp paketů jsme poslali, kolik jsme jich obdrželi a jaké verze CDP používáme - </p>
+            <p class="beforecode">Nakonec tu máme ještě jeden takový techničtější příkaz, který nám umožní zjistit, kolik CDP rámců se poslalo, kolik se jich obdrželo a jaká verze CDP se používá - </p>
             <pre>SW#show cdp traffic</pre>
             <p>Užití CDP si můžete vyzkoušet <a href="../Labs/L2DP/CDP.pka">zde</a>.</p>
         </section>
         <section id="CDPSpoofing" class="subSection">
             <h4>CDP Spoofing</h4>
-            <p>CDP spoofing DoS útok, pomocí kterého můžeme přetížit zařízení na kterém je zapnuté CDP.</p>
+            <p>CDP spoofing je DoS útok, pomocí kterého můžeme přetížit zařízení na kterém je zapnuté CDP.</p>
             <p>Princip CDP spoofing útoku je následujicí:</p>
-            <p>Útočník začne na zařízení se zapnutým CDP posílat zprávy s několika vymyšlenýma MAC adresama na MAC adresu příjemce 01:00:0C:CC:CC:CC. Oběť si díky těmto CDP rámců začne budovat CDP tabulku a pod náporem nových CDP zpráv dojde k přetížení oběti systému.</p>
-            <p>Ochranou proti tomuto útoku je mít CDP vypnuté na portech, která jsou připojená k externím zařízením.</p>
+            <p>Útočník začne na zařízení se zapnutým CDP posílat zprávy s několika vymyšlenýma MAC adresama na MAC adresu příjemce - 01:00:0C:CC:CC:CC. Oběť si díky těmto CDP rámcům začne budovat CDP tabulku a pod náporem nových CDP zpráv dojde k přetížení systému oběti.</p>
+            <p>Ochranou proti tomuto útoku je mít CDP vypnuté na portech, která jsou připojená k externím zařízením a hostům.</p>
         </section>
     </section>
     <section id="LLDP">
         <h3>LLDP</h3>
-        <p>LLDP (Link Layer Discovery Protocol) je IEEE standardizovaný protokol (802.1AB), který umožní zařízení sdílet informace o sobě svým sousedům.</p>
-        <p>Funguje podobně jako CDP. Jedna z největších změn oproti CDP je ta, že LLDP nám umožňuje povolit sdílení informací pouze v jednom směru (to znamená, že zařízení bude moci například pouze přijímat informace o sousedních zařízení, ale samo je nikam sdílet nebude.).</p>
-        <p>LLDP se pak dále s CDP dále liší zejména ve výstupu.</p>
+        <p>LLDP (Link Layer Discovery Protocol) je IEEE standardizovaný protokol (802.1AB), který zařízení umožní sdílet informace o sobě svým sousedům.</p>
+        <p>Funguje podobně jako CDP. Jedna z největších změn oproti CDP je ta, že LLDP nám umožňuje povolit sdílení informací pouze v jednom směru (to znamená, že zařízení bude moci například pouze přijímat informace o sousedních zařízení, ale samo je nikam sdílet nebude).</p>
+        <p>LLDP se pak v porovnání s CDP liší dále zejména ve výstupu.</p>
         <p>LLDP se posílá na cílovou MAC adresu <b>01:80:C2:00:00:0E</b>.</p>
         <section id="LLDPMED" class="subSection">
             <h4>LLDP MED</h4>
@@ -131,10 +131,10 @@ SW#show cdp neighbors detail</pre>
                 <li class="req">portu (název)</li>
                 <li class="req">TTL</li>
                 <li class="req">názvu zařízení</li>
-                <li class="req">informace o SW, HW - čeho je zařízení způsobilé, *co z toho aktuálně provozuje?</li>
+                <li class="req">informacích o SW, HW - čeho je zařízení způsobilé, *co z toho aktuálně provozuje?</li>
                 <li class="req">IP adrese</li>
             </ul>
-            <p>*V porovnání s CDP dostáváme od LLDP kromě té informace, čeho je zařízení způsobilé (aneb co může dělat), také tu informaci co z toho aktuálně dělá, viz. obrázek níže.</p>
+            <p>*V porovnání s CDP dostáváme od LLDP kromě té informace, čeho je zařízení způsobilé (aneb co může dělat), také tu informaci, co z toho aktuálně dělá, viz. obrázek níže.</p>
             <img src="../static/styles/images/L2DP/LLDPCapabilities.png" alt="LLDP capabilities" class="configImage">
             <p>Pro porovnání s klasickou LLDP zprávou sem také pro ukázku dávám LLDP-MED zprávu. Ta oproti klasické zprávě obsahuje i <i>Telecommunication Industry Association TR Comittie</i> informace.</p>
             <img src="../static/styles/images/L2DP/LLDP-MED_FRAME.png" alt="LLDP-MED frame" class="configImage">
@@ -143,11 +143,10 @@ SW#show cdp neighbors detail</pre>
             <h4>Konfigurace LLDP</h4>
             <p class="beforecode">To zda je LLDP standardně vypnuto či zapnuto záleží na daném zařízení. Pro to abychom zjistili zda je LLDP na zařízení vypnuté či zapnuté použijeme příkaz: </p>
             <pre>SW#show lldp</pre>
-            <p>Jestliže LLDP zapnuté není, můžeme jej aktivovat buď globálně nebo individuálně na jednotlivých portech - </p>
-            <p class="beforecode">Pro zapnutí LLDP globálně použijeme příkaz:</p>
+            <p class="beforecode">Jestliže LLDP zapnuté není, můžeme jej aktivovat globálně, čímž jej i zároveň povolíme na všech portech jednotlivých portech:</p>
             <pre>SW(config)#lldp run</pre>
             <p class="beforecode">Pro umožnění posílání a přijetí LLDP zpráv použijeme příkaz:</p>
-            <pre>SW(config)#lldp {transmit | receive }</pre>
+            <pre>SW(config-if)#lldp {transmit | receive }</pre>
             <p>Nyní když již máme LLDP nasteveno, se můžeme podívat na informace o sousedních zařízeních!</p>
             <p>Stejně jako u CDP máme příkazy s obecnými a s podrobnějšími informacemi.</p>
             <p class="beforecode">Pro obecný informace o sousedech využijeme příkaz:</p>
@@ -184,7 +183,7 @@ SW#show cdp neighbors detail</pre>
                     </tr>
                     <tr>
                         <td>cdp enable</td>
-                        <td>Zapne na portu CDP</td>
+                        <td>Povolí na portu přijímání/odesílání CDP zpráv</td>
                         <td>Interface</td>
                     </tr>
                     <tr>
@@ -245,7 +244,7 @@ SW#show cdp neighbors detail</pre>
         <h3>Závěr</h3>
         <p>Discovery protokoly nám v případě potřeby pomůžou zjistit informace o sousedních zařízeních. Toho se v dnešní době používá při zmapovávání sítě (například v rámci Cisco ACI).</p>
         <p>Discovery protokoly fungují na L2 a jejich zprávy nejsou směrovatelné. Jsou založeny na tom principu, že na těch interfacích, kde byly nastaveny, jsou periodicky posílané zprávy s informacemi o daném zařízení.</p>
-        <p>Pro CCNA úroveň je důležité znát CDP a LLDP. Ačkoliv jsou si tyto dva protokoly na první pohled podobny, je mezi nima pár významných odlišností jako třeba v podpoře na jednotlivých zařízeních (CDP je Cisco proprietární, tudíž jej hlavně najdeme na Cisco zařízeních X LLDP je IEEE standardizovaný), způsob zapnutí (možnost jednotlivě zapnout/vypnout přenos a přijimání LLDP zpráv X CDP celkové zapínání/vypínání přenosu zpráv) a v jednotlivých informacích (u CDP například můžeme oproti LLDP zjistit informace o VTP doméně, native VLAN a duplexu).</p>
+        <p>Pro CCNA úroveň je důležité znát CDP a LLDP. Ačkoliv jsou si tyto dva protokoly na první pohled podobné, je mezi nima pár významných odlišností jako například v podpoře na jednotlivých zařízeních (CDP je Cisco proprietární, tudíž jej hlavně najdeme na Cisco zařízeních X LLDP je IEEE standardizovaný), způsob zapnutí (možnost jednotlivě zapnout/vypnout přenos a přijimání LLDP zpráv X CDP celkové zapínání/vypínání přenosu zpráv) a v jednotlivých informacích (u CDP například můžeme oproti LLDP zjistit informace o VTP doméně, native VLAN a duplexu).</p>
         <p>Přestože nám discovery protokoly pomáhají, jsou pro nás zároveň i potenciální bezpečnostní hrozbou, proto vždy zvažte, zda je nutné mít tyto protokoly na portu zapnuté.</p>
     </section>
     <div class="height_spacer"></div>

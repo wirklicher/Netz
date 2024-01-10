@@ -28,7 +28,7 @@
         <p>Naštěstí jsou tyto sítě snadno přeměnitelné na redundantní.</p>
         <p><i>Ptáte se jak?</i></p>
         <p>Nejdříve je třeba najít potenciální prvek v síti, jehož výpadkem by byla ohrožená konektivita části sítě.</p>
-        <p>Kdybychom tedy měli takto analyzovat síť z předešlého obrázku, všimli bychom si, že takovými prvky jsou R1 a SW1. SW2 zde v tomto případě za velkou hrozbu nepovažujeme, protože jeho porucha by ohrozila pouze 2 hosty, který by se za předpokladu, že nemají více síťových karet, stejně nedalo moc dělat.</p>
+        <p>Kdybychom tedy měli takto analyzovat síť z předešlého obrázku, všimli bychom si, že takovými prvky jsou R1 a SW1. SW2 zde v tomto případě za velkou hrozbu nepovažujeme, protože jeho porucha by ohrozila pouze 2 hosty, se kterými by se za předpokladu, že nemají více síťových karet, stejně nedalo moc dělat.</p>
         <p>Nyní, když máme určené problematická zařízení, si řešení rozdělíme na dvě části.</p>
         <p>První se bude týkat L2 zařízení. Jestliže je tedy potenciálním prvkem, jehož výpadek by ohrozil značnou část sítě, switch, tak přidáme do sítě další takové zařízení.</p>
         <p>Při změně na L2 by tedy síť nově vypadala nějak takto: </p>
@@ -38,7 +38,7 @@
         <img src="../static/styles/images/FHRP/L3RedundantNet.png" alt="L3 Redundant network" class="configImage">
         <p>Na L3 nám však pouhé přidání dalšího routeru stačit nebude.</p>
         <p>Proč?</p>
-        <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku toho "aktivního" routeru musela řučně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
+        <p>Pokud chceme posílat data na Internet, musí mít zařízení nakonfigurovanou adresu výchozí brány. Ta se dá bohužel nakonfigurovat pouze jedna, tudíž by se při výpadku toho "aktivního" routeru musela ručně obejít všechna zařízení či by se musela upravit konfigurace DHCP.</p>
         <p>Naštěstí pro nás existuje mnohem lepší a efektivnější řešení v podobě First Hop Redundancy protokolů.</p>
     </section>
     <section id="FHRP">
@@ -48,24 +48,24 @@
         <p>Ta pak slouží jako výchozí brána pro hosty. Díky tomu může jeden router nahradit toho druhého bez toho aniž by se musela změnit síťová konfigurace hostů.</p>
         <section id="HowFHRPwork" class="subSection">
             <h4>Princip FHRP</h4>
-            <p>Po konfiguraci FHRP na všech routerech, během níž se určí jedna společná IP adresa, si mezi sebou routery určí, který z routerů bude ten <b>aktivní</b> (active) a kdo bude ten <b>záložní</b> (standby).</p>
+            <p>Po konfiguraci FHRP na všech routerech, během níž se určí jedna společná IP adresa, si mezi sebou routery určí, který z routerů bude ten <b>aktivní</b> (active) a který zas bude ten <b>záložní</b> (standby).</p>
             <p>To, podle čeho si to routery mezi sebou určí, přímo záleží na vybraném FHRP.</p>
             <p>Za aktivního routera považujeme ten router, který se aktivně chová jako výchozí brána a přes který hosti posílají pakety na Internet.</p>
             <p>Záložní router je pak zas ten router, jež se standardně nechová jako výchozí brána, ale při výpadku aktivního routeru jej dokáže nahradit a stane se aktivním.</p>
             <p>Jakmile je jasné, kdo je kdo, začnou si mezi sebou routery posílat multicasty (multicast je zpráva, která se pošle vybrané skupině zařízení), aby zjistili zda aktivní router stále běží.</p>
             <p>Když aktivní router vypadne, přestane komunikovat s druhým routerem a aktivní roli přebírá jeden z dosud záložních routerů.</p>
-            <p>Na to, aby se záložní router stal aktivním routerem, potřebuje změnit MAC adresovou tabulku na switchích. To provede tím, že pošle gratuitous ARP zprávu (Gratuitous ARP zpráva je ARP reply zpráva, která se pošle bez toho aniž by o někdo žádal.</p>
+            <p>Na to, aby se záložní router stal aktivním routerem, potřebuje změnit MAC adresovou tabulku na switchích. To provede tím, že pošle <b>gratuitous ARP</b> zprávu (Gratuitous ARP zpráva je ARP reply zpráva, která se pošle bez toho aniž by o někdo žádal).</p>
         </section>
         <section id="PracticalFHRP" class="subSection">
             <h4>Praktická ukázka fungování FHRP</h4>
             <p>Máme následujicí síť:</p>
             <img src="../static/styles/images/FHRP/FHRP1.png" alt="FHRP1" class="configImage">
-            <p>Všichni hosti mají nastavený jako výchozí bránu R1 (192.168.0.1).</p>
+            <p>Všichni hosti mají nastavenou jako výchozí bránu R1 (192.168.0.1).</p>
             <p>Pokud nastavíme FHRP, nastane nejdříve volba aktivního routeru (Active, Master, AVG) a záložního routeru (Standby, Backup, AVF).</p>
-            <p>V našem případě se stane aktivním routerem R2 a záložním routerem R1. Tyto dva routery budou mít společnou virtuální IPv4 adresu - 192.168.0.253. U hosté také nezapomeňme ručně změnit výchozí bránu (ať už staticky či přes změnu konfigurace DHCP).</p>
+            <p>V našem případě se stane aktivním routerem R2 a záložním routerem R1. Tyto dva routery budou mít společnou virtuální IPv4 adresu - 192.168.0.253. U hostů také nezapomeňme ručně změnit výchozí bránu (ať už staticky či přes změnu konfigurace DHCP).</p>
             <img src="../static/styles/images/FHRP/FHRP2.png" alt="FHRP2" class="configImage">
             <p>Nyní si mezi sebou až do výpadu budou vyměňovat pakety, kterýma si ověřují, že stále ještě jeden a ten druhý "žije".</p>
-            <p>Při výpadku aktivního routeru (R2) R1 pozná, že R2 je "kaput" a posláním Gratuitous ARPu informuje switche o tom, že on je teď nyní aktivním routerem a že používá IP adresu 192.168.0.253.</p>
+            <p>Při výpadku aktivního routeru (R2) R1 pozná, že R2 je "kaput" a posláním Gratuitous ARPu informuje switche o tom, že on je teď nyní aktivním routerem a že se k dosažení virtuální MAC adresy změnila cesta.</p>
             <img src="../static/styles/images/FHRP/FHRP3.png" alt="FHRP3" class="configImage">
             <p>Jestliže dojde k vzpamatování R2, stane se záložním routerem.</p>
             <img src="../static/styles/images/FHRP/FHRP4.png" alt="FHRP4" class="configImage">
@@ -110,6 +110,7 @@
                 </tr>
             </table>
         </div>
+        <br>
         <p>HSRP funguje tak, jak bychom od FHRP čekali - </p>
         <ul>
             <li class="ordered">Nejdříve se za pomoci priority či nejvyšší IP adresy routeru určí Active a Standby router.</li>
@@ -155,8 +156,8 @@ R2#show standby brief</pre>
         <p>GLBP nebo-li Gateway Load Balancing Protocol je stejně jako HSRP Cisco propriétární protokol.</p>
         <p>Možná si říkáte, proč by Cisco mělo 2 protokoly, které dělají to samé?</p>
         <p>GLBP je totiž oproti HSRP zaměřený, jak už z názvu vyplývá, na loadbalancing a dokáže loadbalancovat provoz i v rámci jedné podsítě.</p>
-        <p>Mezi routery se volí AVG (Active Virtual Gateway), ostatní jsou AVF (Active Virtual Forwarder).</p>
-        <p>AVG může být zároveň i AVF</p>
+        <p>Mezi routery se volí <b>AVG</b> (Active Virtual Gateway), ostatní jsou <b>AVF</b> (Active Virtual Forwarder).</p>
+        <p>AVG může být zároveň i AVF.</p>
         <p>Pro posílání IPv4 multicastových zpráv používá adresu: 224.0.0.102 (Ano, stejnou jako HSRP).</p>
         <p>Jako virtuální MAC adresu používají: 0007.6400.XXYY, kdy XX je číslo GLBP skupiny a YY je číslo AVF.</p>
         <section id="HowGLBPworks" class="subSection">
@@ -178,12 +179,12 @@ R2#show standby brief</pre>
             <p>Upozornění: GLBP nejde nastavit v Packet Traceru!</p>
             <p>Aktivuj v následujicí síti 192.168.0.0/24 GLBP na routerech R1, R2 a R3.</p>
             <p>Udělej z R1 AVG.</p>
-            <p>Virtuální IP adresa bude 192.168.0.253</p>
+            <p>Virtuální IP adresa bude 192.168.0.253.</p>
             <img src="../static/styles/images/FHRP/GLBP1.png" alt="GLBP Configuration" class="configImage">
             <p class="beforecode">Začněme tím, že vytvoříme glbp skupinu 15 na R1:</p>
             <pre>R1(config)#interface gig0/0
 R1(config-if)#glbp 15 ip 192.168.0.253</pre>
-            <p class="beforecode">Vzhledem k tomu, že chceme, aby glbp bylo AVG, nastavíme i prioritu, platí zde pravidlo, že čím vyšší priorita, tím větší šance, že se router stane AVG, standardní priorita je jinak 100.</p>
+            <p class="beforecode">Vzhledem k tomu, že chceme, aby R1 bylo AVG, nastavíme i prioritu, platí zde pravidlo, že čím vyšší priorita, tím větší šance, že se router stane AVG, standardní priorita je jinak 100.</p>
             <pre>R1(config-if)#glbp 15 priority 255</pre>
             <p class="beforecode">Poté ještě na R1 nastavíme to, že pokud náhodou selže a jiný router převezme roli AVG, tak R1 se po nahození automaticky znovu stane AVG.</p>
             <pre>R1(config-if)#glbp 15 preempt</pre>
@@ -198,7 +199,7 @@ R3(config-if)#glbp 15 ip 192.168.0.253</pre>
     </section>
     <section id="VRRP">
         <h3>VRRP</h3>
-        <p>VRRP, také jako Virtual Router Redundancy Protocol, je protokol od IETF (Internet Engineering Task Force) - není proprietární.</p>
+        <p>VRRP, označovaný také jako Virtual Router Redundancy Protocol, je protokol od IETF (Internet Engineering Task Force) - není proprietární.</p>
         <p>Funguje na velmi podobném principu jako HSRP.</p>
         <p>Aktivní router VRRP označuje klíčovým slovem "Master", jako záložní router "Backup".</p>
         <p>VRRP určuje master router podle priority a nejvyšší nakonfigurované IP adresy na routeru (čím vyšší, tím lepší).</p>
@@ -326,7 +327,7 @@ R1#show vrrp brief</pre>
     <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
-        <p>Redundantnost je velmi důležitý prvek sítě, do kterého bychom měli v případě plánovaní enterprise sítě či datového centra investovat. Zaručí nám to, že porucha jednoho zařízení v sítí nám nezpůsobí kolaps velké části sítě.</p>
+        <p>Redundance je velmi důležitý prvek sítě, do kterého bychom měli v případě plánovaní enterprise sítě či datového centra investovat. Zaručí nám to, že porucha jednoho zařízení v sítí nám nezpůsobí kolaps velké části sítě.</p>
         <p>Síť uděláme redundantní tím, že tyto zařízení, které by svoji poruchou omezeli velkou část sítě, identifikujeme a přidáme další zařízení, která budou moci být v případě kolapsu původních zařízení využita.</p>
         <p>Na L3 nám ale nastává problém, protože hosti mají jako router nakonfigurovanou výchozí bránu, která nemůže být bez nějaké další konfigurace jen tak lehce při poruše změněna (bez manuálního zásahu, který by nebyl ve větších sítích výkonně možný).</p>
         <p>Tento problém výchozí brány se dá ale snadno obejít pomocí FHRP - First Hop Redundancy Protokolů.</p>
