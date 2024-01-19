@@ -8,17 +8,35 @@ let eigrp = document.querySelector('#eigrp');
 let ospf = document.querySelector('#ospf');
 let bgp = document.querySelector('#bgp');
 let ipv6 = document.querySelector('#ipv6');
+let sshTelnet = document.querySelector('#sshtelnet');
+// MAP 
+//1. výstup
+
+
 let nat = document.querySelector('#nat');
 let ntpptp = document.querySelector('#ntpptp');
 let dhcp = document.querySelector('#dhcp');
 let dns = document.querySelector('#dns');
 let ftp = document.querySelector('#ftp');
 let syslog = document.querySelector('#syslog');
-let sshTelnet = document.querySelector('#sshtelnet');
+
+
+//2. výstup
 let acl = document.querySelector('#acl');
 let portsec = document.querySelector('#portsec');
+
+//3. výstup
+
 let discoveryprotocols = document.querySelector("#discoveryprotocols")
 let fhrp = document.querySelector("#fhrp")
+
+// 4. výstup 
+
+let NA_Basics = document.querySelector("#NA_Basics");
+let NA_Ansible = document.querySelector("#NA_Ansible");
+let NA_Terraform = document.querySelector("#NA_Terraform");
+let NA_Python = document.querySelector("#NA_Python");
+
 let switcher = document.getElementById('switcher');
 let switcher2 = document.getElementById('switcher2');
 let adress = "";
@@ -119,6 +137,26 @@ discoveryprotocols.addEventListener('click', () => {
 fhrp.addEventListener('click', () => {
     $('main').load('fhrp.html');
     name_of_page = 'fhrp';
+})
+
+NA_Basics.addEventListener('click', () => {
+    $('main').load('NA_Basics.html');
+    name_of_page = 'NA_Basics';
+})
+
+NA_Ansible.addEventListener('click', () => {
+    $('main').load('NA_Ansible.html');
+    name_of_page = 'NA_Ansible';
+})
+
+NA_Terraform.addEventListener('click', () => {
+    $('main').load('NA_Terraform.html');
+    name_of_page = 'NA_Terraform';
+})
+
+NA_Python.addEventListener('click', () => {
+    $('main').load('NA_Python.html');
+    name_of_page = 'NA_Python';
 })
 
 let stpArray = document.querySelectorAll(".stp");
