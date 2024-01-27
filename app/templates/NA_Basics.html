@@ -18,7 +18,7 @@
             <li class="req">Umět vysvětlit, jaké dopady má automatizace na síť</li>
             <li class="req">Být schopen/schopna porovnat tradiční síť se sítí, která je spravována z jednoho prvku</li>
             <li class="req">Rozumět "controller-based" a software defined architekturám (pojmy: Overlay, Underlay, Fabric, data plane, control plane, north-bound a south-bound API)</li>
-            <li class="req">Porovnat tradiční správu "kampusové" sítě se správou sítě pomocí Cisco DNA centra</li>
+            <li class="req">Porovnat tradiční správu "kampusové" sítě se správou sítě pomocí Cisco DNAC</li>
             <li class="req">Být schopen/schopna charakterizovat REST-based API (CRUD, HTTP metody, JSON/XML)</li>
             <li class="req">Znát možnosti jednotlivých konfiguračních nástrojů - Puppet, Chef, Ansible</li>
             <li class="req">Umět pracovat s daty v JSON formátu</li>
@@ -27,90 +27,46 @@
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
         <p>Představte si, že jste byli vybráni na pozici síťaře, jehož úkolem bude vytvořit novou síť. V této nové síti bude velký počet routerů, switchů a dalších síťových zařízení, které bude potřeba správně nakonfigurovat. Ruční konfigurací všech těchto zařízení byste strávili několik dní, přičemž by hrozilo, že byste v procesu mohli udělat pár chyb a do budoucna byste museli každé zařízení spravovat samostatně.</p>
+        <p>Nicméně v dnešní době se lze tomuto vyvarovat tím, že síť zautomatizujeme, což nám právě dokáže:</p>
+        <ul>
+            <li class="req">ušetřit čas</li>
+            <li class="req">ulehčit aplikaci různých QoS a zabezpečovacích politik</li>
+            <li class="req">zjednodušit správu síťových zařízení</li>
+            <li class="req">snížit pravděpodobnost lidské chyby při konfiguraci zařízení</li>
+        </ul>
+        <p></p>
+        <section id="Planes" class="subSection">
+            <h4>Rozdělení funkčnosti síťových zařízení</h4>
+            <p>Předtím než hupsneme do samotného vysvětlování automatizace sítě si musíme představit tři různé části funkčnosti zařízení (tzv. "planes"), který nám dají širší představu o tom, co se v síti vlastně automatizuje.</p>
+            <section id="DataPlane" class="subSection">
+                <h5>Data Plane</h5>
+                <p>Pojmem "data plane" označujeme tu funkci zařízení, která dělá vše k tomu, aby doručila data.</p>
+                <p>To zahrnuje vše od přijimutí dat, přes zpracování až po odeslání.</p>
+                <p>Příklad data plane funkce u switche: Switch dostane unicastový rámec, koukne se do své mac adresové tabulky a podle ní pošle rámec dál...</p>
+                <p>Další příklady data plane činností:</p>
+                <ul>
+                    <li class="req">zahazování zpráv</li>
+                    <li class="req">zapouzdřování a rozbalování zpráv</li>
+                    <li class="req">změna IP adresy (NAT)</li>
+                </ul>
+            </section>
+            <section id="ControlPlane" class="subSection">
+                <h5>Control Plane</h5>
+                <p>"Mozek" síťových zařízení</p>
+                <p>Za "control plane" označujeme tu funkčnost zařízení, která zařizuje to, co data plane potřebuje k tomu, aby bylo schopné odesílat data.</p>
+                <p>A vlastně dokáže řídit to, podle čeho se data plane rozhoduje.</p>
+                <p>Většina procesů control plane na základě různých algoritmů a logického rozhodování tvoří "tabulky" (např. směrovací tabulku)</p>
+            </section>
+            <section id="ManagementPlane" class="subSection">
+                <h5>Management Plane</h5>
+                <p>Management plane nám umožňuje spravovat zařízení.</p>
+                <p>Mezi protokoly, které patří pod management plane patří: SNMP, SSH, Telnet, Syslog</p>
+            </section>
+        </section>
     </section>
-    <section id="prehledPrikazu">
-        <h3>Přehled příkazů (PT)</h3>
-            <div class="overflowTable">
-                <table>
-                    <tr>
-                        <th>Příkazy</th>
-                        <th>Popis</th>
-                        <th>Mód</th>
-                    </tr>
-                    <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                </table>
-            </div>
+    <section id="SDN">
+        <h3>SDN</h3>
     </section>
-    <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
     </section>
