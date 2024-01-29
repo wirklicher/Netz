@@ -34,10 +34,9 @@
             <li class="req">zjednodušit správu síťových zařízení</li>
             <li class="req">snížit pravděpodobnost lidské chyby při konfiguraci zařízení</li>
         </ul>
-        <p></p>
         <section id="Planes" class="subSection">
             <h4>Rozdělení funkčnosti síťových zařízení</h4>
-            <p>Předtím než hupsneme do samotného vysvětlování automatizace sítě si musíme představit tři různé části funkčnosti zařízení (tzv. "planes"), který nám dají širší představu o tom, co se v síti vlastně automatizuje.</p>
+            <p>Předtím než hupsneme do samotného vysvětlování automatizace sítí se musíme seznámit se třemi různými vrstvami zařízení (tzv. "planes"), které nám dají širší představu o tom, co se v síti vlastně automatizuje.</p>
             <section id="DataPlane" class="subSection">
                 <h5>Data Plane</h5>
                 <p>Pojmem "data plane" označujeme tu funkci zařízení, která dělá vše k tomu, aby doručila data.</p>
@@ -47,8 +46,9 @@
                 <ul>
                     <li class="req">zahazování zpráv</li>
                     <li class="req">zapouzdřování a rozbalování zpráv</li>
-                    <li class="req">změna IP adresy (NAT)</li>
+                    <li class="req">změna zdrojové IP adresy (NAT)</li>
                 </ul>
+                <p>Ještě poznamenám, že kromě "data plane" názvu se můžete setkat ještě s označením "forwarding plane".</p>
             </section>
             <section id="ControlPlane" class="subSection">
                 <h5>Control Plane</h5>
@@ -56,16 +56,24 @@
                 <p>Za "control plane" označujeme tu funkčnost zařízení, která zařizuje to, co data plane potřebuje k tomu, aby bylo schopné odesílat data.</p>
                 <p>A vlastně dokáže řídit to, podle čeho se data plane rozhoduje.</p>
                 <p>Většina procesů control plane na základě různých algoritmů a logického rozhodování tvoří "tabulky" (např. směrovací tabulku)</p>
+                <p>Control plane využívá směrovací protokoly, ARP, STP a jiné protokoly.</p>
+                <p>Control plane si můžeme ukázat na Spanning Tree Protokolu, STP jako takové nemá vliv na doručování dat, avšak upozorňuje data plane na to, kterými porty lze data přenášet, aby nevznikla broadcastová bouře.</p>
             </section>
             <section id="ManagementPlane" class="subSection">
                 <h5>Management Plane</h5>
                 <p>Management plane nám umožňuje spravovat zařízení.</p>
                 <p>Mezi protokoly, které patří pod management plane patří: SNMP, SSH, Telnet, Syslog</p>
             </section>
+            <img src="../static/styles/images/NA/Planes.png" alt="Planes" class="configImage">
         </section>
     </section>
     <section id="SDN">
         <h3>SDN</h3>
+        <p>Jednu z možností, jak lze zautomatizovat síť nám definuje SDN (Software Defined Networking).</p>
+        <p>SDN nám představuje koncept centralizovaného řízení sítě, kdy ze síťových zařízení vyjmeme "control plane" a její činnost (případně část činnosti) přenecháme centralizovanému ovladači (tzv. Controller).</p>
+        <p>Centralizovaný ovladač vykoná dané algoritmy (např. OSPF, STP, ARP), které by jinak udělalo dané síťové zařízení, jejich výsledky zpracuje a řekne "data plane" jednotlivých zařízení, co mají dělat k tomu, aby byla schopna doručovat data.</p>
+        <p>Centralizovaný ovladač komunikuje se síťovými zařízeními přes tzv. "Southbound Interface - SBI".</p>
+        <img src="../static/styles/images/NA/SDN_Controller.png" alt="Controller" class="configImage">
     </section>
     <section id="zaver">
         <h3>Závěr</h3>
