@@ -69,11 +69,183 @@
     </section>
     <section id="SDN">
         <h3>SDN</h3>
-        <p>Jednu z možností, jak lze zautomatizovat síť nám definuje SDN (Software Defined Networking).</p>
-        <p>SDN nám představuje koncept centralizovaného řízení sítě, kdy ze síťových zařízení vyjmeme "control plane" a její činnost (případně část činnosti) přenecháme centralizovanému ovladači (tzv. Controller).</p>
-        <p>Centralizovaný ovladač vykoná dané algoritmy (např. OSPF, STP, ARP), které by jinak udělalo dané síťové zařízení, jejich výsledky zpracuje a řekne "data plane" jednotlivých zařízení, co mají dělat k tomu, aby byla schopna doručovat data.</p>
-        <p>Centralizovaný ovladač komunikuje se síťovými zařízeními přes tzv. "Southbound Interface - SBI".</p>
+        <p>Jednu z možností, jak lze zautomatizovat síť nám definuje <b>SDN</b> (Software Defined Networking).</p>
+        <p>SDN nám představuje koncept centralizovaného řízení sítě, kdy ze síťových zařízení vyjmeme "control plane" a její činnost (případně část činnosti - závisí na centrálnímu ovladači) přenecháme centralizovanému ovladači (tzv. Controller).</p>
+        <p>Například - Centralizovaný ovladač vykoná dané algoritmy (např. OSPF, STP, ARP), které by jinak udělalo dané síťové zařízení, jejich výsledky zpracuje a řekne "data plane" jednotlivých zařízení, co mají dělat k tomu, aby byla schopna doručovat data.</p>
+        <p>Centralizovaný ovladač komunikuje se síťovými zařízeními prostřednictvím tzv. "<b>Southbound Interface - SBI</b>". Pojem "SBI" označuje softwarový interface, nikoliv fyzický!</p>
+        <p>SBI se skládá z protokolu a <b>API</b> (Application Programming Interface), API je metoda pomocí které spolu aplikace můžou komunikovat.</p>
+        <p>Mezi SBI patří - </p>
+        <ul>
+            <li class="req">OpenFlow</li>
+            <li class="req">OpFlex</li>
+            <li class="req">NETCONF</li>
+        </ul>
         <img src="../static/styles/images/NA/SDN_Controller.png" alt="Controller" class="configImage">
+        <p>Centralizovaný ovladač dále komunikuje s aplikacemi třetích stran pomocí tzv. Northbound Interface - NBI. Pomocí aplikacích třetích stran můžeme získávat data ze sítě, případně síť můžeme pomocí nich konfigurovat.</p>
+        <img src="../static/styles/images/NA/SDN_Controller2.png" alt="Controller" class="configImage">
+        <p>Ke komunikaci používá NBI <b>REST APIs</b>.</p>
+        <section id="RESTAPI" class="subSection">
+            <h4>REST API</h4>
+            <p>REST API, nebo-li Representational State Transfer API nám definuje pravidla, podle nichž probíhá komunikace mezi aplikacemi.</p>
+            <p>REST APIs povětšinou používají HTTP(s) protokol pomocí něhož můžou žádat a číst data.</p>
+            <p>Základní HTTP(s) metody nám pomáhá si zapamatovat zkratka <b>CRUD</b> (Create, Read, Update, Delete).</p>
+            <section id="HTTPMethods">
+                <h5>CRUD a HTTP(s) metody</h5>
+                    <div class="overflowTable">
+                        <table>
+                            <tr>
+                                <th>CRUD</th>
+                                <th>HTTP metoda</th>
+                                <th>Co například dělá?</th>
+                            </tr>
+                            <tr>
+                                <td>Create</td>
+                                <td>POST</td>
+                                <td>Vytvoří proměnnou</td>
+                            </tr>
+                            <tr>
+                                <td>Read</td>
+                                <td>GET</td>
+                                <td>Získá proměnnou</td>
+                            </tr>
+                            <tr>
+                                <td>Update</td>
+                                <td>PUT, PATCH</td>
+                                <td>Změní hodnotu proměnné</td>
+                            </tr>
+                            <tr>
+                                <td>Remove</td>
+                                <td>REMOVE</td>
+                                <td>Odstraní proměnnou</td>
+                            </tr>
+                        </table>
+                    </div>
+            </section>
+            <div class="height_spacer"></div>
+            <p>K práci s REST APIs byste měli být schopni porozumět HTTP kódům, ty dělíme do 5 kategorií -</p>
+            <section id="HTTPMethods">
+                <h5>CRUD a HTTP(s) metody</h5>
+                    <div class="overflowTable">
+                        <table>
+                            <tr>
+                                <th>Číslo Kategorie</th>
+                                <th>Název Kategorie</th>
+                                <th>Příklad</th>
+                            </tr>
+                            <tr>
+                                <td>1xx</td>
+                                <td>Informační</td>
+                                <td>102 - Processing</td>
+                            </tr>
+                            <tr>
+                                <td>2xx</td>
+                                <td>Úspěch</td>
+                                <td>200 - OK</td>
+                            </tr>
+                            <tr>
+                                <td>3xx</td>
+                                <td>Přesunutí</td>
+                                <td>301 - Moved Pernamently</td>
+                            </tr>
+                            <tr>
+                                <td>4xx</td>
+                                <td>Client-Error</td>
+                                <td>404 - Not found</td>
+                            </tr>
+                            <tr>
+                                <td>5xx</td>
+                                <td>Server-Error</td>
+                                <td>500 - Internal Server Error</td>
+                            </tr>
+                        </table>
+                    </div>
+            </section>
+            <div class="height_spacer"></div>
+            <p>Pomocí aplikace třetí strany si například přes NBI můžeme nechat vypsat status všech interfaců. K tomu aby nám centralizovaný ovladač mohl tato data poskytnout se musí vytvořit HTTP(s) žádost (request).</p>
+            <p>HTTP(s) žádost se skládá z HTTP metody, URI (Uniform Resource Identifier).</p>
+            <p class="beforecode">Příklad HTTPS žádosti můžete vidět níže - </p>
+            <pre>GET https://10.17.16.15/api/mit/topology/pod-1/node-1/sys/cphys.json</pre>
+            <p>Na tuto HTTPS žádost nám centralizovaný ovladač odpoví prostřednictvím HTTPS odpovědi, ta je povětšinou v <b>JSON</b> či <b>XML</b> formátu.</p>
+            <section id="DataFormats">
+                <h5>Datové formáty</h5>
+                <p>V rámci síťové automatizace se pravděpodobně setkáte s jedním z těchto datových formátů:</p>
+                <ul>
+                    <li class="req"><b>JSON</b> - Javascript Object Notation</li>
+                    <li class="req"><b>XML</b> - Extensible Markup Language</li>
+                    <li class="req"><b>YAML</b> - YAML Ain't Markup Language - používá Ansible</li>
+                </ul>
+                <section id="JSON" class="subSection">
+                    <h5>JSON</h5>
+                    <p>JSON nebo-li Javascript Object Notation je datový typ se kterým se setkáte asi nejvíce. Pracuje s ním řada programovacích jazyků a REST APIs a vyznačuje se svou čitelností.</p>
+                    <p>CCNA po vás vyžaduje jej znát a umět s ním pracovat.</p>
+                    <p>Není citlivý na mezery.</p>
+                    <p>Syntax JSONu je ve tvaru - key:value, kdy key je vždy v <b>uvozovkách</b>.</p>
+                    <p>JSON uznává tyto datové typy - string, číslo, boolean, pole, null a objekt.</p>
+                    <ul>
+                        <li class="req"><b>String</b> - textový řetězec, který se značí uvozovkami, např. {"Hostname":"R1"}</li>
+                        <li class="req"><b>Číslo</b> - numerická hodnota, např. {"Numberofrouters":2}</li>
+                        <li class="req"><b>Boolean</b> - logický datový typ skládajicí se ze dvou hodnot - pravdy a nepravdy - pravdu a nepravdu, např. {"isEnabled":false}</li>
+                        <li class="req"><b>Pole</b> - sezařený list hodnot v [], např. {"interface_list":["FastEthernet0/1", "FastEthernet0/2", "FastEthernet0/3", "FastEthernet0/4", "vlan1", "vlan2"]}</li>
+                        <li class="req"><b>Null</b> - vyjadřuje nám, že daný název k sobě nemá hodnotu, např. {"default_gateway":null}</li>
+                        <li class="req"><b>Objekt</b> - nesezařený list key-value párů v {}, key je vždy string, value je jeden z datových typů, např. {"Switch1":{"hostname":"SW1", "default_gateway":"192.168.0.1", "interface_list":["FastEthernet0/1", "FastEthernet0/2", "FastEthernet0/3", "FastEthernet0/4", "vlan1", "vlan2"]}}</li>
+                    </ul>
+                    <p class="beforecode">Ukázka JSONu:</p>
+                    <pre>"IPInterface":{
+    "interface_name":"FastEthernet0/1",
+    "ip_address": "192.168.0.54",
+    "netmask": "255.255.252.0",
+    "speed":1000,
+    "isEnabled":true
+}</pre>
+                </section>
+                <section id="XML" class="subSection">
+                    <h5>XML</h5>
+                    <p>XML - Extensible Markup Language je další datový typ, který taktéž používají REST APIs, oproti JSON formátu je méně čitelný.</p>
+                    <p>XML není citlivý na mezery.</p>
+                    <p>Píše se ve formátu &lt;key&gt;value&lt;/key&gt;.</p>
+                    <p class="beforecode">Ukázka XML:</p>
+                    <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;ShowIpInterfaceBrief xmlns="ODM://built-in//show_ip_interface_brief"&gt;
+        &lt;SpecVersion&gt;built-in&lt;/SpecVersion&gt;
+        &lt;IPInterfaces&gt;
+            &lt;entry&gt;
+                &lt;Interface&gt;FastEthernet0/0&lt;/Interface&gt;
+                &lt;OK&gt;YES&lt;/OK&gt;
+                &lt;Method&gt;unset&lt;/Method&gt;
+                &lt;Status&gt;administratively down&lt;/Status&gt;
+                &lt;Protocol&gt;down&lt;/Protocol&gt;
+            &lt;/entry&gt;
+        &lt;/IPInterfaces&gt;
+    &lt;/ShowIpInterfaceBrief&gt;
+</pre>
+                </section>
+                <section id="YAML" class="subSection">
+                    <h5>YAML</h5>
+                    <p>YAML - YAML Ain't Markup Language je datový typ, jež je používán konfiguračním nástrojem <b>Ansible</b>, o kterém si budeme povídat později.</p>
+                    <p>Stejně jako JSON je lidsky čitelný.</p>
+                    <p>YAML poznáme tak, že vždy začíná třemi pomlčkami.</p>
+                    <p>Je citlivý na mezery.</p>
+                    <p class="beforecode">Ukázka YAML:</p>
+                    <pre>
+---
+
+IPInterface:
+- interface_name: "FastEthernet0/1"
+  ip_address: 192.168.0.54
+  mask: 255.255.252.0
+  speed: 1000
+  isEnabled: true
+</pre>
+                </section>
+            </section>
+        </section>
+        <section id="SDNArch">
+            <h3>Architektury SDN</h3>
+        </section>
+        <section id="ConfigurationTools">
+            <h3>Konfigurační nástroje</h3>
+        </section>
     </section>
     <section id="zaver">
         <h3>Závěr</h3>
