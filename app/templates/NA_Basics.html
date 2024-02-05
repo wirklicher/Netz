@@ -18,7 +18,7 @@
             <li class="req">Umět vysvětlit, jaké dopady má automatizace na síť</li>
             <li class="req">Být schopen/schopna porovnat tradiční síť se sítí, která je spravována z jednoho prvku</li>
             <li class="req">Rozumět "controller-based" a software defined architekturám (pojmy: Overlay, Underlay, Fabric, data plane, control plane, north-bound a south-bound API)</li>
-            <li class="req">Porovnat tradiční správu "kampusové" sítě se správou sítě pomocí Cisco DNAC</li>
+            <li class="req">Porovnat tradiční správu "kampusové" sítě se správou sítě pomocí Cisco DNA Center</li>
             <li class="req">Být schopen/schopna charakterizovat REST-based API (CRUD, HTTP metody, JSON/XML)</li>
             <li class="req">Znát možnosti jednotlivých konfiguračních nástrojů - Puppet, Chef, Ansible</li>
             <li class="req">Umět pracovat s daty v JSON formátu</li>
@@ -241,10 +241,39 @@ IPInterface:
             </section>
         </section>
         <section id="SDNArch">
-            <h3>Architektury SDN</h3>
+            <h3>SDN architektury</h3>
+            <p>Jak už to tak v sítích bývá pro každý typ sítě potřebujeme použít trochu jinou architekturu pro to abychom zajistili její optimální fungování.</p>
+            <p>Se vznikem SDN Cisco vytvořilo tři základní SDN architektury - </p>
+            <ul>
+                <li class="req"><b>SD-Access</b> - SDN řešení pro kampusové sítě, pro CCNA nejpodstatnější</li>
+                <li class="req"><b>SD-WAN</b> - SDN řešení pro WAN sítě</li>
+                <li class="req"><b>ACI</b> - SDN řešení pro datová centra</li>
+            </ul>
+            <p>Každé z těchto řešení funguje trochu jinak a pro potřeby CCNA není potřeba je znát do hloubky, avšak je nutné v souvislosti s těmito architekturami znát tyto pojmy:</p>
+            <ul>
+                <li class="req"><b>Underlay</b> - všechna síťová zařízení, včetně jejich konfigurace, která nám zajišťují IP konektivitu po celé "fabrice", tvoří základ pro fungování overlay</li>
+                <li class="req"><b>Overlay</b> - virtuální síť, která je založená na tunelech (VXLAN), běží na underlay</li>
+                <li class="req"><b>Fabric</b> - označuje kombinaci underlay a overlay</li>
+                <li class="req"><b>VXLAN</b> - Virtual Extensible LAN je protokol, který se používá k tvorbě tunelů</li>
+                <li class="req"><b>Intent-based networking</b> - spravování sítě tak, že ovladači vyjádříme to, čeho chceme dosáhnout a on to za nás zařídí co nejvíce vhodným způsobem, např. nechci, aby host A komunikoval s hostem B, to vyjádřím ovladači, který vybere nejlepší možný způsob, jak toho dosáhnout a provede jej.</li>
+            </ul>
+            <section id="SDA" class="subSection">
+                <h4>SD-Access</h4>
+                <p>SD-Access je SDN přístup Cisca určený pro "kampusové" sítě.</p>
+                <p>Je založené na principech, které jsme si představili předtím - má ovladač, který v závislosti na možnostech ovládá control plane síťových zařízení, a také má underlay a overlay.</p>
+                <p>Jako ovladač je zde použit tzv. Cisco DNA Centrum (DNA = Digital Network Architecture). DNA Centrum je aplikace nainstalovaná na Cisco UCS serveru.</p>
+                <p>DNA Centrum může být implementováno i do již fungujicí sítě, nevýhodou této pozdní implementace je, že nedokáže přenastavit underlay síťových zařízení a tím pádem je tohle na nás a DNA Center v této situaci slouží zejména k tomu, aby nám síť dokumentoval a sledoval její stav.</p>
+                <p>DNA Centrum se dá ovládat pomocí GUI nebo pomocí různých skript.</p>
+                <p>Velkou výhodou DNA Centra je to, že při tvorbě nové sítě (s hardwarem, který to podporuje) za nás vytvoří a nakonfiguruje celou "fabriku", což nám oproti tradičnímu způsobu dokáže ulehčit spoustu práce.</p>
+                <p>Další výhodou DNA Centra může být i to, že <b>podporuje "intent-based networking"</b>.</p>
+                <p>Práci s SD-Access si můžete vyzkoušet <a href="https://developer.cisco.com/learning/">zde</a>.</p>
+            </section>
         </section>
         <section id="ConfigurationTools">
             <h3>Konfigurační nástroje</h3>
+            <p>Konfigurační nástroje jsou takovým mezikrokem mezi tradiční správou sítě a mezi plnohodnotnou SDN.</p>
+            <p>Tyto nástroje nám pomáhají s automatizací sítě tím, že za nás dokážou konfigurovat a spravovat síť.</p>
+            <p>Mezi tyto nástroje patří - Ansible, Puppet a Chef.</p>
         </section>
     </section>
     <section id="zaver">
