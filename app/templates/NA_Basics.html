@@ -274,6 +274,32 @@ IPInterface:
             <p>Konfigurační nástroje jsou takovým mezikrokem mezi tradiční správou sítě a mezi plnohodnotnou SDN.</p>
             <p>Tyto nástroje nám pomáhají s automatizací sítě tím, že za nás dokážou konfigurovat a spravovat síť.</p>
             <p>Mezi tyto nástroje patří - Ansible, Puppet a Chef.</p>
+            <section id="Ansible" class="subSection">
+                <h4>Ansible</h4>
+                <p>Ansible je open-source konfigurační nástroj napsaný v Pythonu.</p>
+                <p>Je tzv. "<b>agentless</b>", to znamená, že si jej pouze stačí nainstalovat na vaše zařízení bez nutnosti jej ještě instalovat na samotná síťová zařízení.</p>
+                <p>Na zařízení, kde máte Ansible nainstalovaný nastavíte vše potřebné a poté vybraným síťovým zařízením pošlete danou konfiguraci ("pull model"), to se stane prostřednictvím SSH či případně NETCONFu.</p>
+                <p>Ansible pracuje s několika soubory, mezi ty základní patří Playbook a Inventory.</p>
+                <p>Pomocí playbook definujeme to, co chceme na vybraných síťových zařízení provést, playbook je psán v YAML.</p>
+                <p>Inventory nám definuje jednotlivá síťová zařízení.</p>
+                <p>Ansible funguje na "rozkazovacím" principu, kdy my přes playbook definujeme přesně to, co se má provést, než abychom pouze definovali konečný stav, jak to bývá u deklaritivního způsobu.</p>
+            </section>
+            <section id="Puppet" class="subSection">
+                <h4>Puppet</h4>
+                <p>Puppet je konfigurační nástroj napsaný v Ruby.</p>
+                <p>Oproti Ansible je tzv "agent-based" - to znamená, že je nutné jej mít nainstalovaný, kromě linuxového serveru, i na samotném síťovém zařízení, které chceme konfigurovat/spravovat. To může být na některých starších zařízení problém, lze to však obejít tím, že mezi síťové zařízení a puppet mastera dáme proxy server, který bude komunikovat s puppet masterem a předávat informace pomocí SSH síťovému zařízení.</p>
+                <p>Puppet funguje na tom principu, že si síťové zařízení aplikuje konfiguraci z puppet mastera (tento způsob se nazývá "pull model").</p>
+                <p>Na puppet masterovi je důležité správně nastavit tzv. "<b>manifest</b>", ten obsahuje kód, který popisuje konfiguraci, kterou chceme aplikovat na našich síťových zařízení.</p>
+                <p>Dále se Puppet od Ansible liší tím, že je deklarativní (Funguje na tom principu, že mu povíme, co chceme a on to za nás zařídí).</p>
+                <p>Více info o Puppet najdete <a href="https://www.puppet.com/">zde</a>.</p>
+            </section>
+            <section id="Chef" class="subSection">
+                <h4>Chef</h4>
+                <p>Chef je stejně jako Puppet napsaný v Ruby.</p>
+                <p>Funguje na stejném principu jako Puppet ("agent-based", "pull model" a je také deklarativní).</p>
+                <p>Jediný velký rozdíl (kromě pojmů) oproti Puppet je ten, že nefunguje s proxy servery, tudíž je nutné mít takové síťové zařízení, které podporuje Chef.</p>
+                <p>Více informací o Chef najdete <a href="https://www.chef.io/">zde</a>.</p>
+            </section>
         </section>
     </section>
     <section id="zaver">
