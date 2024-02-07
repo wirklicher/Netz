@@ -11,9 +11,120 @@
 <body>
     <h1>Ansible</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy automatizace sítí</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy automatizace sítí, základní znalost linuxu, případně MacOS</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Představte si, že máte nakonfigurovat nové bezpečnostní politiky na starších Cisco routerech a switchcích. Buď byste mohli konfigurovat jeden router a switch po jednom, čímž byste přišli o svůj drahocený čas a riskovali byste to, že během konfigurace uděláte nějakou chybu nebo byste mohli použít Ansible, který všechny tyto bezpečnostní politiky nakonfiguruje za vás.</p>
+        <p>Ansible je open-source konfigurační nástroj, pomocí kterého můžete konfigurovat a spravovat síťová zařízení, čímž si oproti tradičnímu způsobu ušetříte čas, snížíte pravděpodobnost lidské chyby a do budoucna budete mít jakýkoliv změny konfigurace zdokumentovaný a budete je moci aplikovat i na nová zařízení.</p>
+        <section id="BasicInfo" class="subSection">
+            <h4>Základní informace o Ansible</h4>
+            <ul>
+                <li class="req">Je napsaný v Pythonu</li>
+                <li class="req">Používá YAML</li>
+                <li class="req">Je agentless => nemusí být nainstalovaný na síťových zařízení, stačí jej mít pouze nainstalovaný u sebe v počítači/na serveru => je vhodný i ke konfiguraci starších zařízení</li>
+                <li class="req">Funguje na principu pull-modelu => Ansible se z vašeho zařízení připojí na daná síťová zařízení, kde udělá vše potřebné</li>
+                <li class="req">K aplikaci konfigurace na síťová zařízení používá SSH či případně NETCONF</li>
+                <li class="req">Je postaven na "rozkazovací způsobu" => musíme mu přesně popsat, co má udělat krok za krokem, aby mohl naplnit naše očekávání</li>
+            </ul>
+        </section>
+    </section>
+    <section id="AnsibleInstallation">
+        <h3>Instalace Ansible</h3>
+        <p>Ansible se instaluje pouze na tzv. "Control Node", která musí běžet na Linuxu či MacOS (v případě windows lze použít WSL).</p>
+        <p>Instalace se liší podle toho jakou distribuci linuxu máte.</p>
+        <section id="ArchLinux" class="subSection">
+            <h4>Instalace na ArchLinux</h4>
+            <p class="beforecode">1. Nejdříve distribuci zaktualizujte: </p>
+            <pre>sudo pacman -Syu</pre>
+            <p class="beforecode">2. Nainstalujte Ansible pomocí příkazu: </p>
+            <pre>sudo pacman -S ansible</pre>
+        </section>
+        <section id="FedoraLinux" class="subSection">
+            <h4>Instalace na Fedora Linux</h4>
+            <p class="beforecode">Na Fedora linux se Ansible instaluje pomocí příkazu: </p>
+            <pre>sudo dnf install ansible</pre>
+        </section>
+        <section id="UbuntuLinux" class="subSection">
+            <h4>Instalace na Ubuntu Linux</h4>
+            <p class="beforecode">Ansible se instaluje na Ubuntu Linux a distribuce na něm postavených pomocí příkazů: </p>
+            <pre>sudo apt update
+sudo apt install software-properties-common
+sudo apt install ansible</pre>
+        </section>
+        <section id="MacOS" class="subSection">
+            <h4>Instalace na MacOS</h4>
+            <p class="beforecode">Nejdřív je třeba nainstalovat homebrew package manager, to lze provést pomocí příkazu -</p>
+            <pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
+            <p class="beforecode">Poté již můžeme nainstalovat Ansible:</p>
+            <pre>brew install ansible</pre>
+        </section>
+    </section>
+    <section id="ConfiguringUsingAnsible">
+        <h3>Konfigurace sítí pomocí Ansible</h3>
+        <p>Před konfigurací jednotlivých zařízení je nutné se ujistit, že jsou z Control Node dosažitelné a lze se na ně připojit vzdáleně pomocí SSH.</p>
+        <p>Jestliže vše funguje jak má, můžeme začít nastavovat Ansible a začít konfigurovat síť.</p>
+        <p>Je vhodné začít manuálním dns mapováním, které se provádí v souboru "/etc/hosts", tam namapujeme jednotlivé IP adresy k námi zvoleným jménům. Tento krok sice není povinný, ale ušetří nám poté vypisování jednotlivých ip adres.</p>
+        <p>Nyní je třeba v souboru "<b>/etc/ansible/hosts</b>" definovat jednotlivá síťová zařízení, které budeme chtít přes Ansible spravovat a konfigurovat. Síťová zařízení v tomto souboru také můžeme dávat do jednotlivých skupinek. Dále v něm můžeme uvést i přístupové údaje jako uživatelské jméno a heslo k SSH a Priviledged EXEC módu, nicméně to není nutné a lze je definovat později bezpečnějším způsobem.</p>
+        <p class="beforecode">Ukázka /etc/ansible/hosts souboru:</p>
+        <pre>[routers]
+R1
+R2
+R3
+R4
+            
+
+            
+[switches]
+SW1
+SW2
+SW3
+SW4
+SW5
+SW6
+SW7
+            
+
+            
+[superdupernetwork:children]
+routers
+switches
+            
+[superdupernetwork:vars]
+ansible_user=admin
+ansible_password=cisco123
+ansible_connection=network_cli
+ansible_network_os=ios
+ansible_become=true
+ansible_become_password=cisco123
+</pre>
+        <p>Jak můžete vyčíst z příkladu, skupina se definuje pomocí hranatých závorek do kterých vpíšeme název skupiny, pod řádek se skupinou se píší jména zařízení, které jste si zvolili, pokud jste ten krok přeskočili, místo jmen zařízení píšete ip adresy.</p>
+        <p>Jestliže budeme chtít spojit vícero skupin do jedné větší, můžeme to udělat tak, že za jméno skupiny napíšeme :children a pod to napíšeme skupiny, které v té dané skupině budou zahrnuty.</p>
+        <p>Dále si můžete všimnout výrazu [superdupernetwork:vars], ten definuje různé proměnné používané pro danou skupinu, tudíž přes to můžete definovat přihlašovací údáje k zařízení.</p>
+        <p>Pozn. k ukázce, ansible_connection a ansible_network_os slouží k tomu, aby se ansible mohl správně připojit k daným zařízením. Ansible_become a ansible_become_password slouží k tomu, aby informovaly Ansible o tom zda zařízení má zaheslovaný priviledged EXEC mód a případně tak poskytly heslo.</p>
+        <p>Více o tom, jak správně nastavit /etc/ansible/host můžete najít <a href="https://docs.ansible.com/ansible/latest/network/getting_started/first_inventory.html">zde</a>.</p>
+        <p class="beforecode">Pro otestovaní zda se ansible může dostat na všechna zařízení definované v souboru doporučuji spustit tento příkaz:</p>
+        <pre>ansible [jméno_skupiny] -m ping</pre>
+        <p>Nyní se vrhneme na vytváření konfigurací pro síťová zařízení, ty definujeme v souborech, které se nazývají "<b>playbooks</b>". Z mých vlastních zkušeností doporučuji si tyto playbooks vytvořit novou složku v "/etc/ansible". Playbooks se píší v YAML, tudíž tyto soubory budou mít koncovku .yml případně .yaml.</p>
+        <p class="beforecode">Ukázka playbook: </p>
+        <pre>---
+- name: Configuring OSPF on loopback interface
+  hosts: routers
+  gather_facts: false
+
+  tasks:
+    - name: Configuring OSPF on loopback interface
+      ios_config:
+        lines:
+         - int lo0
+         - ip ospf 1 area 0
+        save_when: modified
+      register: print_output</pre>
+      <p>YAML soubor vždy začíná třemi pomlčkami, poté danou konfiguraci nějak pojmenujeme a stanovíme základní informace jako třeba skupinu hostů, kde konfiguraci chceme nastavit.</p>
+      <p>Pod tasks specifikujeme jednotlivé úkoly, které má Ansible na daných zařízení provést. V případě ukázky se jedná o pouhé zapnutí opsf protokolu na specifických interfacích.</p>
+      <p>O to, aby Ansible věděl, jak má k jednotlivým zařízením přistupovat, se stará modul, v případě ukázky je modulem ios_config, který slouží pro konfiguraci síťových zařízení, které používají Cisco IOS.</p>
+      <p>V lines poté definujeme jednotlivé kroky díky kterým na interfacích zapneme OSPF.</p>
+      <p>Save_when poté slouží k tomu, aby se konfigurace uložila do dlouhodobější paměťi zařízení.</p>
+      <p>Register: print_output nám pak zaručí, že vše podstatné nám bude vypsáno.</p>
     </section>
     <section id="prehledPrikazu">
         <h3>Přehled příkazů (PT)</h3>
