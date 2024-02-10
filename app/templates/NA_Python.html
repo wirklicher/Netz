@@ -14,90 +14,187 @@
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy automatizace sítí, základní znalost Pythonu</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Zkuste si na moment představit, že byste měli nakonfigurovat a spravovat obří síť, která je plná různých routerů a switchů. Buď byste k tomu mohli přistoupit tradičním způsobem a konfigurovat jedno zařízení po druhém a nebo byste mohli využít vaší znalosti programovacího jazyku Python a síť nakonfigurovat přes něj.</p>
+        <p>Python je interpretovaný programovací jazyk znamý především pro svou dostupnost a všestrannost (lze využít k tvorbě mobilních aplikací, AI, či umí konfigurovat a spravovat sítě). Nazvat jej všestranným můžeme například z toho důvodu, že pro něj existuje spousta knihoven, který jeho sféru působení rozšiřují.</p>
     </section>
-    <section id="prehledPrikazu">
-        <h3>Přehled příkazů (PT)</h3>
-            <div class="overflowTable">
-                <table>
-                    <tr>
-                        <th>Příkazy</th>
-                        <th>Popis</th>
-                        <th>Mód</th>
-                    </tr>
-                    <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                </table>
-            </div>
+    <section id="PythonLibraries">
+        <h3>Python knihovny určené pro automatizaci sítí</h3>
+        <section id="Netmiko" class="subSection">
+            <h4>Netmiko</h4>
+            <p>První knihovnou, kterou si tu představíme je <b>Netmiko</b>.</p>
+            <p>Netmiko se za nás dokáže připojit na zařízení a provádět na něm námi zvolené příkazy.</p>
+            <p>Podporuje multi-vendor a multi-platform sítě (sítě, kde se používají síťová zařízení od různých výrobců běžících na odlišných operačních systémech). Přesto musím upozornit, že v případě Netmika musíte znát syntax pro jednotlivé operační systémy síťových zařízeních.</p>
+            <p>Oproti jiným knihovnám podporuje i připojení přes telnet.</p>
+            <p class="beforecode">Ukázka skriptu, který vypne CDP a zapne LLDP na SW1 a SW2 pomocí Netmiko:</p>
+            <pre>
+from netmiko import Connect Handler
+
+SW1 = {
+    "device_type": "cisco_ios",
+    "ip": "192.168.0.253",
+    "username": "admin",
+    "password": "cisco",
+    "secret": "cisco"
+}
+
+SW2 = {
+    "device_type": "cisco_ios",
+    "ip": "192.168.0.252",
+    "username": "admin",
+    "password": "cisco",
+    "secret": "cisco"
+}
+
+switches = (SW1, SW2)
+commands = ["no cdp run", "lldp run"]
+
+for switch in switches:
+    net_connect = ConnectHandler(**switch)
+    print("Konfigurace zařízení s IP adresou: ", switch["ip"])
+    print("----------------------------------------------------------------------------------------------")
+    net_connect.enable()
+    net_connect.send_config_set(commands)
+    net_connect.save_config()
+    print(net_connect.send_command("sh cdp"))
+    print()
+    print(net_connect.send_command("sh lldp"))
+    print()</pre>
+            <p class="beforecode">Výstup po spuštění tohoto kódu: </p>
+            <pre>
+Konfigurace zařízení s ip adresou:  192.168.0.253
+----------------------------------------------------------------------------------------------
+% CDP is not enabled
+
+
+Global LLDP Information:
+    Status: ACTIVE
+    LLDP advertisements are sent every 30 seconds
+    LLDP hold time advertised is 120 seconds
+    LLDP interface reinitialisation delay is 2 seconds
+
+Konfigurace zařízení s ip adresou:  192.168.0.252
+----------------------------------------------------------------------------------------------
+% CDP is not enabled
+
+
+Global LLDP Information:
+    Status: ACTIVE
+    LLDP advertisements are sent every 30 seconds
+    LLDP hold time advertised is 120 seconds
+    LLDP interface reinitialisation delay is 2 seconds
+</pre>
+            <p>Pojďme si vysvětlit, co kód řádek po řádku - </p>
+            <p>Nejdříve importujeme z netmika ConnectHandler, pomocí kterého se na zařízení budeme připojovat.</p>
+            <p>Poté definujeme jednotlivá zařízení s jejich přístupovými údaji, jenom zde poznamenám, že password je heslo pro SSH a secret je heslo pro priviledged EXEC mód.</p>
+            <p>Dále definuji tuple switchů a list příkazů, které netmiko implementuje v global config módu.</p>
+            <p>Teď používám cyklus for, který pro každý zařízení provede konfiguraci.</p>
+            <p>Tedy, nejdříve se pomocí ConnectHandleru vytvoří spojení s daným zařízením, to spojení dále v kódu najdeme pod proměnnou net_connect.</p>
+            <p>Poté v kódu pro přehlednost vypisuji to, které zařízení se zrovna konfiguruje atd.</p>
+            <p>Dále se přihlašuji do priviledged EXEC módu pomocí "net_connect.enable()", na to navazuji tím, že přes net_connect pošlu dané příkazy na zařízení. Další řádek konfiguraci ukládá a ostatní řádku pak už jen spouští jednotlivé "show" příkazy v priviledged EXEC módu.</p>
+        </section>
+        <section id="Napalm" class="subSection">
+            <h4>Napalm</h4>
+            <p>Napalm nebo-li Network Automation and Programmability Abstraction Layer with Multivendor support je další knihovna Pythonu, kterou můžete využít ke spravování vašich počítačových sítí.</p>
+            <p>Jak už z názvu vypovídá, stejně jako Netmiko podporuje multi-vendor a mutli-platform sítě. V čem se ale od Netmika liší je to, že pro získávání různých informací ze zařízení používá jednu metodu pro všechna zařízení, tudíž si nemusíte pamatovat syntax pro každý operační systém, který v síti máte.</p>
+            <p>Pro to, aby Napalm mohlo nakonfigurovat zařízení vyžaduje mít na síťových zařízeních zapnuté scp!</p>
+            <p class="beforecode">Ukázka skriptu, který vypne CDP a zapne LLDP na SW1 a SW2 pomocí Napalm:</p>
+            <pre>
+from napalm import get_network_driver
+
+SW1 = {
+    "hostname": "192.168.0.253",
+    "username": "admin",
+    "password": "cisco",
+    "optional_args": {"secret": "cisco"}
+        }
+SW2 = {
+    "hostname": "192.168.0.252",
+    "username": "admin",
+    "password": "cisco",
+    "optional_args": {"secret": "cisco"}
+        }
+
+driver = get_network_driver('ios')
+
+switches = (SW1, SW2)
+
+for switch in switches:
+    net_conn = driver(**switch)
+    net_conn.open()
+    print("Konfigurace zařízení s IP adresou: ", switch["hostname"])
+    net_conn.load_merge_candidate(filename="./cdplldp.conf")
+    print(net_conn.compare_config())
+    commit = input("Jste spokojeni se zmenama? Y/N ")
+    if commit != "Y":
+        net_conn.discard_config()
+    else:
+        net_conn.commit_config()
+
+    print("--------------------------------------------------------------")
+    net_conn.close()
+</pre>
+            <p class="beforecode">cdplldp.conf:</p>
+<pre>
+no cdp run 
+lldp run
+</pre>
+            <p class="beforecode">Výstup: </p>
+<pre>
+Konfigurace zařízení s IP adresou:  192.168.0.253
+-no cdp run
++lldp run
+Jste spokojeni se změnama? Y/N Y
+--------------------------------------------------------------
+Konfigurace zařízení s IP adresou:  192.168.0.252
+-no cdp run
++lldp run
+Jste spokojeni se změnama? Y/N Y
+--------------------------------------------------------------   
+</pre>
+            <p>Vysvětlení kódu:</p>
+            <p>"from napalm import get_network_driver" nám importuje driver pomocí kterého potom komunikujeme s danými zařízeními.</p>
+            <p>"SW1 = {...}, SW2 = {...}" nám opět definují údaje potřebné k tomu, abychom se pomocí Napalm mohli připojit na zařízení.</p>
+            <p>"driver = get_network_driver('ios')" nám vybere driver určený pro komunikaci se zařízeními, které mají jako operační systém Cisco IOS.</p>
+            <p>"switches = (SW1, SW2)"" nám vytváří tuple.</p>
+            <p>Pomocí cyklu "for switch in switches" který pro každé zařízení v tuple provede naši konfiguraci.</p>
+            <p>"net_conn = driver(**switch)" nám definuje spojení k danému síťovému zařízení.</p>
+            <p>"net_conn.open()" otevře to spojení.</p>
+            <p>"print" zde opět slouží pro přehlednost</p>
+            <p>Prostřednictvím příkazu "net_conn.load_merge_candidate(filename="./cdplldp.conf")" přidáme do nynější konfigurace zařízení naší konfiguraci, kterou definujeme v souboru "cdplldp.conf".</p>
+            <p>Příkaz "print(net_conn.compare_config())" nám vypíše co se v konfiguraci oproti nynějšímu stavu změní.</p>
+            <p>Teď si můžeme vybrat či tyto změny skutečně provedeme či je necháme být. Tomu se věnují řádky začínající slovy commit, if, net_conn, else, net_conn.</p>
+            <p>Nakonec se ještě ukončí spojení.</p>
+        </section>
+        <section id="Requests" class="subSection">
+            <h4>Requests</h4>
+            <p>Requests je knihovna, u který nemusí být na první pohled zřejmý, že lze použít k automatizaci sítě.</p>
+            <p>Tato knihovna vám umožní posílat HTTP žádosti, což se může hodit, pokud zrovna konfigurujete síťové zařízení, které je podporuje (například novější Cisco Nexus switche či APIC - Cisco ACI ovladač).</p>
+            <p class="beforecode">Ukázka skriptu, který vypne CDP a zapne LLDP na NX-OS switchi pomocí request:</p>
+            <pre>
+import requests
+import json
+url = "http://10.10.20.95/ins"
+myheaders={'content-type':'application/json'}
+payload={
+    "ins_api": {
+        "version": "1.0",
+        "type": "cli_show",
+        "chunk": "0",
+        "sid": "sid",
+        "input": "no cdp run ;lldp run",
+        "output_format": "json"
+    }
+}
+
+response = requests.port(url, data=json.dumps(paylod), headers=myheaders, auth=(switchuser,switchpassword)).json()</pre>
+        <p>Vysvětlení kódu:</p>
+        <p>Import requests a import json nám importují requests a json knihovny.</p>
+        <p>Do proměnné "url" vložíme url pomocí které budeme konfigurovat dané zařízení.</p>
+        <p>"myheaders" nám definuje header, který se použije v HTTP žádosti.</p>
+        <p>Payload nám definuje to, co se má v té HTTP žádosti poslat, vyzdvihl bych zde hlavně "input", k němuž vkládáme příkazy, které se mají na stroji provést.</p>
+        <p>Nakonec posíláme samotnou HTTP žádost a odpověď na ni ukládáme do response proměnné v json formátu.</p>
+        </section>
     </section>
-    <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
     </section>

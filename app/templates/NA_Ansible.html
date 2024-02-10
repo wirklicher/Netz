@@ -64,7 +64,7 @@ sudo apt install ansible</pre>
         <p>Před konfigurací jednotlivých zařízení je nutné se ujistit, že jsou z Control Node dosažitelné a lze se na ně připojit vzdáleně pomocí SSH.</p>
         <p>Jestliže vše funguje jak má, můžeme začít nastavovat Ansible a začít konfigurovat síť.</p>
         <p>Je vhodné začít manuálním dns mapováním, které se provádí v souboru "/etc/hosts", tam namapujeme jednotlivé IP adresy k námi zvoleným jménům. Tento krok sice není povinný, ale ušetří nám poté vypisování jednotlivých ip adres.</p>
-        <p>Nyní je třeba v souboru "<b>/etc/ansible/hosts</b>" definovat jednotlivá síťová zařízení, které budeme chtít přes Ansible spravovat a konfigurovat. Síťová zařízení v tomto souboru také můžeme dávat do jednotlivých skupinek. Dále v něm můžeme uvést i přístupové údaje jako uživatelské jméno a heslo k SSH a Priviledged EXEC módu, nicméně to není nutné a lze je definovat později bezpečnějším způsobem.</p>
+        <p>Nyní je třeba v souboru "<b>/etc/ansible/hosts</b>" (tomuto souboru se také přezdívá <b>Inventory</b>) definovat jednotlivá síťová zařízení, které budeme chtít přes Ansible spravovat a konfigurovat. Síťová zařízení v tomto souboru také můžeme dávat do jednotlivých skupinek. Dále v něm můžeme uvést i přístupové údaje jako uživatelské jméno a heslo k SSH a Priviledged EXEC módu, nicméně to není nutné a lze je definovat později bezpečnějším způsobem.</p>
         <p class="beforecode">Ukázka /etc/ansible/hosts souboru:</p>
         <pre>[routers]
 R1
@@ -124,93 +124,17 @@ ansible_become_password=cisco123
       <p>O to, aby Ansible věděl, jak má k jednotlivým zařízením přistupovat, se stará modul, v případě ukázky je modulem ios_config, který slouží pro konfiguraci síťových zařízení, které používají Cisco IOS.</p>
       <p>V lines poté definujeme jednotlivé kroky díky kterým na interfacích zapneme OSPF.</p>
       <p>Save_when poté slouží k tomu, aby se konfigurace uložila do dlouhodobější paměťi zařízení.</p>
-      <p>Register: print_output nám pak zaručí, že vše podstatné nám bude vypsáno.</p>
+      <p>Register: print_output nám pak zaručí, že nám bude vše podstatné vypsáno.</p>
+      <p class="beforecode">Playbook se spouští pomocí příkazu:</p>
+      <pre>ansible-playbook -i {cesta-k-inventory} {playbook}</pre>
+      <p>Po spuštění příkazu se Ansible pokusí vykonat vše, co jste si v playbook přáli.</p>
+      <p>V případě, že by vás Ansible zaujalo, si jej můžete vyzkoušet <a href="https://developer.cisco.com/learning/labs/ansible-03_ansible-hands-on/ansible-hands-on/">zde</a>.</p>
     </section>
-    <section id="prehledPrikazu">
-        <h3>Přehled příkazů (PT)</h3>
-            <div class="overflowTable">
-                <table>
-                    <tr>
-                        <th>Příkazy</th>
-                        <th>Popis</th>
-                        <th>Mód</th>
-                    </tr>
-                    <tr>
-                        <td>vlan {vlan-id}</td>
-                        <td>Vytvoří VLAN a přepne do VLAN interfacu</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>name {vlan-name}</td>
-                        <td>Pojmenuje VLAN</td>
-                        <td>VLAN interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport mode {access | trunk | dynamic desirable | dynamic auto}</td>
-                        <td>Přepne interface do modu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport nonegotiate</td>
-                        <td>Vypne DTP na interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport access vlan {vlan-id}</td>
-                        <td>Přiřadí VLANu k danému interfacu</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk encapsulation {protocol}</td>
-                        <td>Nastaví trunking protokol na switchi</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk native vlan {vlan-id}</td>
-                        <td>Nastaví Native VLAN</td>
-                        <td>Interface</td>
-                    </tr>
-                    <tr>
-                        <td>switchport trunk allowed vlan {add | all | except | remove} {vlan-id}</td>
-                        <td>Nastaví povolené VLANy na trunku</td>
-                        <td>Interface</th>
-                    </tr>
-                    <tr>
-                        <td>encapsulation dot1q {VLAN_ID}</td>
-                        <td>Nastaví sub interface pro danou VLAN</td>
-                        <td>router - sub interface</td>
-                    </tr>
-                    <tr>
-                        <td>vtp mode {transparent | off}</td>
-                        <td>Vypne VTP</td>
-                        <td>Global Config</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces switchport</td>
-                        <td>Zobrazí informace o interfaci</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show interfaces {interface-id} trunk</td>
-                        <td>Zobrazí informace o truncích</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vlan brief</td>
-                        <td>Zobrazí informace o VLAN</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                    <tr>
-                        <td>show vtp status</td>
-                        <td>Zobrazí informace o VTP</td>
-                        <td>Priviledged EXEC</td>
-                    </tr>
-                </table>
-            </div>
-    </section>
-    <div class="height_spacer"></div>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Ansible je konfigurační nástroj, který vám může pomoci s konfigurací počítačových sítí.</p>
+        <p>Jeho výhodou oproti ostatním způsobům automatizace je to, že nemusí být přítomný i na samotném síťovém zařízení, tudíž je vhodný i pro konfiguraci starších zařízeních.</p>
+        <p>Ansible funguje na tom principu, že nejdříve v Inventory definujete síťová zařízení, které budete chtít pomocí Ansible spravovat, poté v playbook popíšete, co přesně na daných zařízeních chce udělat. Ansible se pak pomocí SSH připojí na specifikovaná zařízení připojí a vše, co mu bylo dáno, vykoná.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
