@@ -95,7 +95,7 @@ Global LLDP Information:
         <section id="Napalm" class="subSection">
             <h4>Napalm</h4>
             <p>Napalm nebo-li Network Automation and Programmability Abstraction Layer with Multivendor support je další knihovna Pythonu, kterou můžete využít ke spravování vašich počítačových sítí.</p>
-            <p>Jak už z názvu vypovídá, stejně jako Netmiko podporuje multi-vendor a mutli-platform sítě. V čem se ale od Netmika liší je to, že pro získávání různých informací ze zařízení používá jednu metodu pro všechna zařízení, tudíž si nemusíte pamatovat syntax pro každý operační systém, který v síti máte.</p>
+            <p>Jak už z názvu vypovídá, stejně jako Netmiko podporuje multi-vendor a mutli-platform sítě. V čem se ale od Netmika liší je to, že pro získávání různých informací ze zařízení používá jednu metodu pro všechna zařízení, tudíž si nemusíte pamatovat syntax "show příkazů" pro každý operační systém, který v síti máte.</p>
             <p>Pro to, aby Napalm mohlo nakonfigurovat zařízení vyžaduje mít na síťových zařízeních zapnuté scp!</p>
             <p class="beforecode">Ukázka skriptu, který vypne CDP a zapne LLDP na SW1 a SW2 pomocí Napalm:</p>
             <pre>
@@ -197,6 +197,11 @@ response = requests.port(url, data=json.dumps(paylod), headers=myheaders, auth=(
     </section>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Python je programovací jazyk, který se pro jeho dostupnost, všestrannost používá ke konfiguraci a správě počítačových sítí.</p>
+        <p>Python knihovny, které se například používají ke správě sítí jsou: Netmiko, Napalm a Requests.</p>
+        <p>Netmiko funguje na tom principu, že se vzdáleně pomocí SSH/telnet připojí na dané síťové zařízení a provede na něm požadované příkazy.</p>
+        <p>Napalm zas funguje tak, že prostřednictvím scp konfiguraci na zařízení nahradí nebo ji sjednodnotí. Výhodou Napalm je jeho podpora multi-vendor a multi-platform sítí (není nutné znát syntax show příkazů pro jednotlivá zařízení).</p>
+        <p>Requests poté konfiguruje a spravuje síť prostřednictvím HTTP žádostí, což nejde použít u starších zařízení.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
