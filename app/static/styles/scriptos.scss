@@ -130,7 +130,7 @@ main {
     overflow: hidden;
     transition: max-height 0.3s;
     max-height: 0;
-    padding-left: 6em;
+    padding-left: 3.5em;
 }
 
 .submenu a {
@@ -319,6 +319,7 @@ input:checked:after {
     .submenu {
         text-align: start;
         background-color: var(--menu-color);
+        padding-left: 6em;
     }
 
     .hamburger {
