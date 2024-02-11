@@ -14,85 +14,81 @@
     <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: Základy automatizace sítí</h5>
     <section id="uvod">
         <h3 id="problematika">Úvod do problematiky</h3>
+        <p>Novější síťová zařízení se mnohdy spíše konfigurují přes GUI (Graphical User Interface), což někdy může udělat konfiguraci bolestivější, protože to mnohdy znamená, že abyste plně nastavili síť, tak se musíte proklikat několika formuláři, což může zabrat spoustu času. Nicméně na tento novodobý problém existuje řešení v podobě nástroje Terraform.</p>
+        <section id="Terraform" class="subSection">
+            <h4>Co je to ten Terraform?</h4>
+            <p>Terraform je open-source nástroj, který nám může posloužit ke konfiguraci novějších síťových zařízení.</p>
+            <p>Ke konfiguraci zařízení používá RESTCONF, který je založen na REST API, proto se používá především pro konfiguraci novějších síťových zařízení.</p>
+            <p>Stejně jako Ansible je "agentless", tudíž není potřeba jej nějaký způsobem instalovat na daná síťová zařízení.</p>
+            <p>Stejně jako Puppet a Chef je deklarativní, což znamená, že nám stačí pouze definovat pouze konečný stav, ne jednotlivé kroky, jak se k němu dostat.</p>
+            <p>Je psaný v programovacím jazyce Go a je založen na HCL syntaxu, jeho soubory končí koncovkou <b>.tf</b>.</p>
+            <p>Terraform se také používá pro konfiguraci cloudů (AWS, Azure, Google Cloud).</p>
+            <p>Výhodou Terraformu je to, že sleduje změny v konfiguraci (podobně jako například GIT). To nám třeba poté umožní smazat ze strojů veškerou konfiguraci, kterou jsme pomocí Terraformu nasadili, jedním příkazem.</p>
+        </section>
+        <section id="TerraformInstallation" class="subSection">
+            <h4>Instalace Terraformu</h4>
+            <section id="Windows" class="subSection">
+                <h5>Windows</h5>
+                <p>Na Windows lze Terraform dostat pouze pomocí binárního souboru, který si můžete stáhnout <a href="https://developer.hashicorp.com/terraform/install">zde</a>.</p>
+                <p>Po stažení zip extrahujte a běžte do proměnných prostředí (System Enviroment Variables), kam přidáte cestu k složce kterou jste předtím vyextrahovali.</p>
+                <p>Poté stačí otevřít CMD a zkontrolovat si, zda jste to udělali správně, například pomocí příkazu "terraform --version".</p>
+            </section>
+            <section id="Linux" class="subSection">
+                <h5>Linux</h5>
+                <p>Nainstalovat Terraform na Linux můžeme pomocí dvou možností, buď pomocí package manageru (což se liší dle distrubucí) nebo pomocí kompilovaných binárních souborů, které stáhnete <a href="https://developer.hashicorp.com/terraform/install">zde</a>.</p>
+                <p class="beforecode">Pro ukázku zde přikládám instalaci Terraformu na Debian/Ubuntu distribuce -</p>
+                <pre>wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform</pre>
+            </section>
+            <section id="MacOS" class="subSection">
+                <h5>MacOS</h5>
+                <p class="beforecode">Na MacOS pouze stačí spustit tyto dva příkazy -</p>
+                <pre>brew tap hashicorp/tap
+brew install hashicorp/tap/terraform</pre>
+            </section>
+        </section>
+    </section>
+    <section id="TerraformShowcase">
+        <h3>Ukázka Terraformu</h3>
+        <p class="beforecode">Máme následujicí kód, který slouží ke konfiguraci Cisco ACI -</p>
+        <pre>
+terraform {
+    required_providers {
+        aci = {
+            source = "ciscodevnet/aci"
+        }
+    }
+}
+
+provider "aci" {
+    username = "admin"
+    password = "cisco"
+    url = "192.168.0.253"
+    insecure = true
+}
+
+resource "aci_lldp_interface_policy" "LLDP_ENABLED" {
+    name = "LLDP_ENABLED"
+    admin_rx_st = "enabled"
+    admin_tx_st = "enabled"
+    annotation = "Configured by Terraform"
+}
+
+resource "aci_cdp_interface_policy" "CDP_DISABLED" {
+    name = "CDP_DISABLED"
+    admin_st = "disabled"
+    annotation = "Configured by Terraform"
+}
+        </pre>
+        <p>Terraform se skládá z <b>provideru</b> a <b>resources</b>.</p>
+        <p>Provider nám definuje zařízení (v tomto případě ovladač), které budeme pomocí Terraform konfigurovat.</p>
+        <p>Resource poté popisují jednotlivé objekty (v našem případě politiky ohledně LLDP a CDP), které budeme pomocí Terraformu vytvářet či měnit.</p>
     </section>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Terraform je "agentless" open-source nástroj, který vám pomůže s automatizací počítačových sítí s novějším hardwarem podporujicí REST API jako třeba (APIC, Nexus switch).</p>
     </section>
     <div class="height_spacer"></div>
-    <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>
-    <div id="templateline2" style='margin: auto;'></div>
-    <div class="height_spacer"></div>
-    <div class="btns_quiz">
-        <a class="btnquiz" id="play">Hrát</a>
-    </div>
-    <div class="quiz" id="quiz">
-        
-        <div class="question" id="question">
-            <div class="headerquest">
-                <h2 id="questionNo">1.</h2>
-                <h2 id="questionText"></h2>
-                <div class="timer" id="timer">
-                    <h6>čas:&nbsp</h6>
-                    
-                    <div class="timenum">
-                        <div class="line2"></div>
-                        <div class="circleback">
-                            <h6 id="time">00</h6>
-                        </div>
-                        <div class="line2"></div>
-                    </div>
-            </div>
-            </div>
-        </div>
-        <div class="mainer">
-            <div class="height_spacer"></div>
-            <div class="cont">
-                <div class="abc">
-                    <p class="letter">A</p>
-                    <div class="height_spacer2"></div>
-                    <p class="letter">B</p>
-                    <div class="height_spacer2"></div>
-                    <p class="letter">C</p>
-                    <div class="height_spacer2"></div>
-                    <p class="letter">D</p>
-                </div>
-                
-                <div class="line"></div>
-                <div id="optionList">
-                    <h4 class='choice_que noBorder' id="opt1"></h4>
-                    <div class="height_spacer"></div>
-                    <h4 class='choice_que noBorder' id="opt2"></h4>
-                    <div class="height_spacer"></div>
-                    <h4 class='choice_que noBorder' id="opt3"></h4>
-                    <div class="height_spacer"></div>
-                    <h4 class='choice_que noBorder' id="opt4"></h4>
-                    <div class="height_spacer"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="answersSection">
-            <div class="answers">
-                <div class="bgans">
-                    <h3 id="total_correct" class="noBorder">0</h3>
-                </div>
-                <div class="bgbtn" id="next_quest">
-                    <h3 class="noBorder">Další</h3>
-                </div>
-            </div>
-        </div>
-
-        
-    </div>
-    <div class="result hidden">
-        <img src="../static/styles/images/logos/trophy.svg" alt="" id="trophy" width="25%" height="25%">
-        <h2>Výsledky</h2>
-        <p id="points"></p>
-        <div class="height_spacer"></div>
-        <a class="playagainbtn" id="playagain">Hrát znovu</a>
-    </div>
-    <div class="height_spacer"></div>
-<script src="../static/quiz.js"></script>
-<script src="../static/quest.js"></script>
 </body>
 </html>
