@@ -11,12 +11,12 @@
 <body>
     <h1>Základy automatizace sítí</h1>
     <div id="templateline"></div>
-    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>:</h5>
+    <h5 for="" id="znalosti" class="noBorder"><b>Předpokládané znalosti</b>: základy směrování, základní znalost L2 (co dělá switch, VLANy, ARP), SSH & telnet</h5>
     <section id="CCNAREq">
         <h5>CCNA požadavky:</h5>
         <ul>
             <li class="req">Umět vysvětlit, jaké dopady má automatizace na síť</li>
-            <li class="req">Být schopen/schopna porovnat tradiční síť se sítí, která je spravována z jednoho prvku</li>
+            <li class="req">Být schopen/schopna porovnat tradiční síť s centrálně spravovanou sítí</li>
             <li class="req">Rozumět "controller-based" a software defined architekturám (pojmy: Overlay, Underlay, Fabric, data plane, control plane, north-bound a south-bound API)</li>
             <li class="req">Porovnat tradiční správu "kampusové" sítě se správou sítě pomocí Cisco DNA Center</li>
             <li class="req">Být schopen/schopna charakterizovat REST-based API (CRUD, HTTP metody, JSON/XML)</li>
@@ -36,33 +36,33 @@
         </ul>
         <section id="Planes" class="subSection">
             <h4>Rozdělení funkčnosti síťových zařízení</h4>
-            <p>Předtím než hupsneme do samotného vysvětlování automatizace sítí se musíme seznámit se třemi různými vrstvami zařízení (tzv. "planes"), které nám dají širší představu o tom, co se v síti vlastně automatizuje.</p>
+            <p>Předtím než hupsneme do samotného vysvětlování automatizace sítí, se musíme seznámit se třemi různými vrstvami zařízení (tzv. "planes"), které nám dají širší představu o tom, co se v síti vlastně automatizuje.</p>
             <section id="DataPlane" class="subSection">
                 <h5>Data Plane</h5>
                 <p>Pojmem "data plane" označujeme tu funkci zařízení, která dělá vše k tomu, aby doručila data.</p>
-                <p>To zahrnuje vše od přijimutí dat, přes zpracování až po odeslání.</p>
+                <p>To zahrnuje vše od <b>přijimutí dat, přes zpracování až po odeslání</b>.</p>
                 <p>Příklad data plane funkce u switche: Switch dostane unicastový rámec, koukne se do své mac adresové tabulky a podle ní pošle rámec dál...</p>
-                <p>Další příklady data plane činností:</p>
+                <p>Další příklady data plane:</p>
                 <ul>
                     <li class="req">zahazování zpráv</li>
                     <li class="req">zapouzdřování a rozbalování zpráv</li>
                     <li class="req">změna zdrojové IP adresy (NAT)</li>
                 </ul>
-                <p>Ještě poznamenám, že kromě "data plane" názvu se můžete setkat ještě s označením "forwarding plane".</p>
+                <p>Ještě poznamenám, že kromě "data plane" názvu se můžete setkat ještě s označením "<b>forwarding plane</b>".</p>
             </section>
             <section id="ControlPlane" class="subSection">
                 <h5>Control Plane</h5>
-                <p>"Mozek" síťových zařízení</p>
-                <p>Za "control plane" označujeme tu funkčnost zařízení, která zařizuje to, co data plane potřebuje k tomu, aby bylo schopné odesílat data.</p>
+                <p>Za "control plane" označujeme tu funkci zařízení, která zařizuje to, co data plane potřebuje k tomu, aby bylo schopné odesílat data.</p>
                 <p>A vlastně dokáže řídit to, podle čeho se data plane rozhoduje.</p>
-                <p>Většina procesů control plane na základě různých algoritmů a logického rozhodování tvoří "tabulky" (např. směrovací tabulku)</p>
-                <p>Control plane využívá směrovací protokoly, ARP, STP a jiné protokoly.</p>
-                <p>Control plane si můžeme ukázat na Spanning Tree Protokolu, STP jako takové nemá vliv na doručování dat, avšak upozorňuje data plane na to, kterými porty lze data přenášet, aby nevznikla broadcastová bouře.</p>
+                <p>Většina procesů control plane na základě různých algoritmů a logického rozhodování tvoří "tabulky" (např. směrovací tabulku).</p>
+                <p>Využívá směrovací protokoly, ARP, STP a jiné protokoly.</p>
+                <p>Krásný příklad control plane si můžeme ukázat na Spanning Tree Protokolu, STP jako takové nemá vliv na doručování dat, avšak upozorňuje data plane na to, kterými porty lze data přenášet, aby nevznikla broadcastová bouře.</p>
+                <p>Control Plane je v podstatě takový mozek síťových zařízení.</p>
             </section>
             <section id="ManagementPlane" class="subSection">
                 <h5>Management Plane</h5>
                 <p>Management plane nám umožňuje spravovat zařízení.</p>
-                <p>Mezi protokoly, které patří pod management plane patří: SNMP, SSH, Telnet, Syslog</p>
+                <p>Mezi protokoly, které pod management plane patří řadíme: SNMP, SSH, Telnet, Syslog.</p>
             </section>
             <img src="../static/styles/images/NA/Planes.png" alt="Planes" class="configImage">
         </section>
@@ -70,7 +70,7 @@
     <section id="SDN">
         <h3>SDN</h3>
         <p>Jednu z možností, jak lze zautomatizovat síť nám definuje <b>SDN</b> (Software Defined Networking).</p>
-        <p>SDN nám představuje koncept centralizovaného řízení sítě, kdy ze síťových zařízení vyjmeme "control plane" a její činnost (případně část činnosti - závisí na centrálnímu ovladači) přenecháme centralizovanému ovladači (tzv. Controller).</p>
+        <p>SDN nám představuje koncept centralizovaného řízení sítě, kdy ze síťových zařízení vyjmeme "control plane" a její činnost (případně část činnosti - což závisí na centrálnímu ovladači) přenecháme centralizovanému ovladači (tzv. Controller).</p>
         <p>Například - Centralizovaný ovladač vykoná dané algoritmy (např. OSPF, STP, ARP), které by jinak udělalo dané síťové zařízení, jejich výsledky zpracuje a řekne "data plane" jednotlivých zařízení, co mají dělat k tomu, aby byla schopna doručovat data.</p>
         <p>Centralizovaný ovladač komunikuje se síťovými zařízeními prostřednictvím tzv. "<b>Southbound Interface - SBI</b>". Pojem "SBI" označuje softwarový interface, nikoliv fyzický!</p>
         <p>SBI se skládá z protokolu a <b>API</b> (Application Programming Interface), API je metoda pomocí které spolu aplikace můžou komunikovat.</p>
@@ -96,7 +96,7 @@
                             <tr>
                                 <th>CRUD</th>
                                 <th>HTTP metoda</th>
-                                <th>Co například dělá?</th>
+                                <th>Příklad</th>
                             </tr>
                             <tr>
                                 <td>Create</td>
@@ -176,7 +176,7 @@
                 </ul>
                 <section id="JSON" class="subSection">
                     <h5>JSON</h5>
-                    <p>JSON nebo-li Javascript Object Notation je datový typ se kterým se setkáte asi nejvíce. Pracuje s ním řada programovacích jazyků a REST APIs a vyznačuje se svou čitelností.</p>
+                    <p>JSON nebo-li Javascript Object Notation je datový formát se kterým se setkáte asi nejvíce. Pracuje s ním řada programovacích jazyků a REST APIs a vyznačuje se svou čitelností.</p>
                     <p>CCNA po vás vyžaduje jej znát a umět s ním pracovat.</p>
                     <p>Není citlivý na mezery.</p>
                     <p>Syntax JSONu je ve tvaru - key:value, kdy key je vždy v <b>uvozovkách</b>.</p>
@@ -200,7 +200,7 @@
                 </section>
                 <section id="XML" class="subSection">
                     <h5>XML</h5>
-                    <p>XML - Extensible Markup Language je další datový typ, který taktéž používají REST APIs, oproti JSON formátu je méně čitelný.</p>
+                    <p>XML - Extensible Markup Language je další datový formát, který rovněž používají REST APIs, oproti JSON formátu je méně čitelný.</p>
                     <p>XML není citlivý na mezery.</p>
                     <p>Píše se ve formátu &lt;key&gt;value&lt;/key&gt;.</p>
                     <p class="beforecode">Ukázka XML:</p>
@@ -222,7 +222,7 @@
                 </section>
                 <section id="YAML" class="subSection">
                     <h5>YAML</h5>
-                    <p>YAML - YAML Ain't Markup Language je datový typ, jež je používán konfiguračním nástrojem <b>Ansible</b>, o kterém si budeme povídat později.</p>
+                    <p>YAML - YAML Ain't Markup Language je datový formát, jež je používán konfiguračním nástrojem <b>Ansible</b>, o kterém si budeme povídat později.</p>
                     <p>Stejně jako JSON je lidsky čitelný.</p>
                     <p>YAML poznáme tak, že vždy začíná třemi pomlčkami.</p>
                     <p>Je citlivý na mezery.</p>
@@ -242,7 +242,7 @@ IPInterface:
         </section>
         <section id="SDNArch">
             <h3>SDN architektury</h3>
-            <p>Jak už to tak v sítích bývá pro každý typ sítě potřebujeme použít trochu jinou architekturu pro to abychom zajistili její optimální fungování.</p>
+            <p>Jak už to tak v sítích bývá, pro každý typ sítě potřebujeme použít trochu jinou architekturu pro to, abychom zajistili její optimální fungování.</p>
             <p>Se vznikem SDN Cisco vytvořilo tři základní SDN architektury - </p>
             <ul>
                 <li class="req"><b>SD-Access</b> - SDN řešení pro kampusové sítě, pro CCNA nejpodstatnější</li>
@@ -255,14 +255,14 @@ IPInterface:
                 <li class="req"><b>Overlay</b> - virtuální síť, která je založená na tunelech (VXLAN), běží na underlay</li>
                 <li class="req"><b>Fabric</b> - označuje kombinaci underlay a overlay</li>
                 <li class="req"><b>VXLAN</b> - Virtual Extensible LAN je protokol, který se používá k tvorbě tunelů</li>
-                <li class="req"><b>Intent-based networking</b> - spravování sítě tak, že ovladači vyjádříme to, čeho chceme dosáhnout a on to za nás zařídí co nejvíce vhodným způsobem, např. nechci, aby host A komunikoval s hostem B, to vyjádřím ovladači, který vybere nejlepší možný způsob, jak toho dosáhnout a provede jej.</li>
+                <li class="req"><b>Intent-based networking</b> - spravování sítě tak, že ovladači vyjádříme to, čeho chceme dosáhnout a on to za nás zařídí co nejvíce vhodným způsobem, např. nechci, aby host A komunikoval s hostem B, to vyjádřím ovladači, který vybere nejlepší možný způsob, jak toho dosáhnout a provede jej</li>
             </ul>
             <section id="SDA" class="subSection">
                 <h4>SD-Access</h4>
-                <p>SD-Access je SDN přístup Cisca určený pro "kampusové" sítě.</p>
+                <p>SD-Access je SDN přístup Cisca určený pro "<b>kampusové</b>" sítě.</p>
                 <p>Je založené na principech, které jsme si představili předtím - má ovladač, který v závislosti na možnostech ovládá control plane síťových zařízení, a také má underlay a overlay.</p>
-                <p>Jako ovladač je zde použit tzv. Cisco DNA Centrum (DNA = Digital Network Architecture). DNA Centrum je aplikace nainstalovaná na Cisco UCS serveru.</p>
-                <p>DNA Centrum může být implementováno i do již fungujicí sítě, nevýhodou této pozdní implementace je, že nedokáže přenastavit underlay síťových zařízení a tím pádem je tohle na nás a DNA Center v této situaci slouží zejména k tomu, aby nám síť dokumentoval a sledoval její stav.</p>
+                <p>Jako ovladač je zde použito tzv. <b>Cisco DNA Centrum</b> (DNA = Digital Network Architecture). DNA Centrum je aplikace nainstalovaná na Cisco UCS serveru.</p>
+                <p>DNA Centrum může být implementováno i do již fungujicí sítě, nevýhodou této pozdní implementace je, že nedokáže přenastavit underlay síťových zařízení a tím pádem je tohle na nás. DNA Center v této situaci slouží zejména k tomu, aby nám síť dokumentoval a sledoval její stav.</p>
                 <p>DNA Centrum se dá ovládat pomocí GUI nebo pomocí různých skript.</p>
                 <p>Velkou výhodou DNA Centra je to, že při tvorbě nové sítě (s hardwarem, který to podporuje) za nás vytvoří a nakonfiguruje celou "fabriku", což nám oproti tradičnímu způsobu dokáže ulehčit spoustu práce.</p>
                 <p>Další výhodou DNA Centra může být i to, že <b>podporuje "intent-based networking"</b>.</p>
@@ -273,37 +273,47 @@ IPInterface:
             <h3>Konfigurační nástroje</h3>
             <p>Konfigurační nástroje jsou takovým mezikrokem mezi tradiční správou sítě a mezi plnohodnotnou SDN.</p>
             <p>Tyto nástroje nám pomáhají s automatizací sítě tím, že za nás dokážou konfigurovat a spravovat síť.</p>
-            <p>Mezi tyto nástroje patří - Ansible, Puppet a Chef.</p>
+            <p>Mezi tyto nástroje patří - <b>Ansible</b>, <b>Puppet</b> a <b>Chef</b>.</p>
             <section id="Ansible" class="subSection">
                 <h4>Ansible</h4>
                 <p>Ansible je open-source konfigurační nástroj napsaný v Pythonu.</p>
                 <p>Je tzv. "<b>agentless</b>", to znamená, že si jej pouze stačí nainstalovat na vaše zařízení bez nutnosti jej ještě instalovat na samotná síťová zařízení.</p>
-                <p>Na zařízení, kde máte Ansible nainstalovaný nastavíte vše potřebné a poté vybraným síťovým zařízením pošlete danou konfiguraci ("pull model"), to se stane prostřednictvím SSH či případně NETCONFu.</p>
-                <p>Ansible pracuje s několika soubory, mezi ty základní patří Playbook a Inventory.</p>
-                <p>Pomocí playbook definujeme to, co chceme na vybraných síťových zařízení provést, playbook je psán v YAML.</p>
+                <p>Na zařízení, kde máte Ansible nainstalovaný nastavíte vše potřebné a poté vybraným síťovým zařízením pošlete danou konfiguraci ("pull model"), to se děje prostřednictvím SSH či případně NETCONFu.</p>
+                <p>Ansible pracuje s několika soubory, mezi ty základní patří <b>Playbook</b> a <b>Inventory</b>.</p>
+                <p>Pomocí playbook definujeme to, co chceme na vybraných síťových zařízení provést, playbook je psán v <b>YAML</b>.</p>
                 <p>Inventory nám definuje jednotlivá síťová zařízení.</p>
-                <p>Ansible funguje na "rozkazovacím" principu, kdy my přes playbook definujeme přesně to, co se má provést, než abychom pouze definovali konečný stav, jak to bývá u deklaritivního způsobu.</p>
+                <p>Ansible funguje na "<b>rozkazovacím" principu</b>, kdy my přes playbook definujeme přesně to, co se má provést, než abychom pouze definovali konečný stav, jak to bývá u deklaritivního způsobu.</p>
             </section>
             <section id="Puppet" class="subSection">
                 <h4>Puppet</h4>
                 <p>Puppet je konfigurační nástroj napsaný v Ruby.</p>
-                <p>Oproti Ansible je tzv "agent-based" - to znamená, že je nutné jej mít nainstalovaný, kromě linuxového serveru, i na samotném síťovém zařízení, které chceme konfigurovat/spravovat. To může být na některých starších zařízení problém, lze to však obejít tím, že mezi síťové zařízení a puppet mastera dáme proxy server, který bude komunikovat s puppet masterem a předávat informace pomocí SSH síťovému zařízení.</p>
+                <p>Oproti Ansible je tzv "<b>agent-based</b>" - to znamená, že je nutné jej mít nainstalovaný, kromě linuxového serveru, i na samotném síťovém zařízení, které chceme konfigurovat/spravovat. To může být na některých starších zařízení problém, lze to však obejít tím, že mezi síťové zařízení a puppet mastera dáme proxy server, který bude komunikovat s puppet masterem a předávat informace pomocí SSH síťovému zařízení.</p>
                 <p>Puppet funguje na tom principu, že si síťové zařízení aplikuje konfiguraci z puppet mastera (tento způsob se nazývá "pull model").</p>
                 <p>Na puppet masterovi je důležité správně nastavit tzv. "<b>manifest</b>", ten obsahuje kód, který popisuje konfiguraci, kterou chceme aplikovat na našich síťových zařízení.</p>
-                <p>Dále se Puppet od Ansible liší tím, že je deklarativní (Funguje na tom principu, že mu povíme, co chceme a on to za nás zařídí).</p>
+                <p>Dále se Puppet od Ansible liší tím, že je <b>deklarativní</b> (Funguje na tom principu, že mu povíme, co chceme a on to za nás zařídí).</p>
                 <p>Více info o Puppet najdete <a href="https://www.puppet.com/">zde</a>.</p>
             </section>
             <section id="Chef" class="subSection">
                 <h4>Chef</h4>
                 <p>Chef je stejně jako Puppet napsaný v Ruby.</p>
                 <p>Funguje na stejném principu jako Puppet ("agent-based", "pull model" a je také deklarativní).</p>
-                <p>Jediný velký rozdíl (kromě pojmů) oproti Puppet je ten, že nefunguje s proxy servery, tudíž je nutné mít takové síťové zařízení, které podporuje Chef.</p>
+                <p>Jediný velký rozdíl (kromě pojmů) oproti Puppet je ten, že <b>nefunguje s proxy servery</b>, tudíž je nutné mít takové síťové zařízení, které podporuje Chef.</p>
                 <p>Více informací o Chef najdete <a href="https://www.chef.io/">zde</a>.</p>
             </section>
         </section>
     </section>
     <section id="zaver">
         <h3>Závěr</h3>
+        <p>Automatizace počítačových sítí nám dokáže ušetřit čas, zjednodušit správu zařízení a snížit počet lidských chyb.</p>
+        <p>Celé toto téma stojí na rozdělení funkčnosti zařízení na 3 samostatné funkce - Data Plane, Control Plane, Management Plane.</p>
+        <p>Data Plane se stará o přijímání, zpracování a odesílání dat, Control plane se stará o algoritmy jejichž výsledky ovlivňují data plane, Management plane nám pak usnadňuje a umožňuje správu zařízení.</p>
+        <p>Jeden ze způsobů jak síť zautomatizovat nám definuje SDN (Software Defined Network). Tento způsob pracuje s tou myšlenkou, že control plane funkce bude ze zařízení vyjmuta a místo toho bude řízená centrálním ovladačem.</p>
+        <p>Použití jednoho centrálně řízeného ovladače má za následek to, že už nemusíme několik zařízení spravovat po jednom, ale můžeme je všechny pohodlně spravovat z ovladače.</p>
+        <p>Ovladač komunikuje se zařízeními prostřednictvím tzv. SBI (Southbound interface). Dále také může komunikovat s programy třetích stran a skripty prostřednictvím NBI (Northbound interface).</p>
+        <p>NBI je založeno na REST APIs.</p>
+        <p>REST APIs, nebo-li Representational State Transfer API nám definují způsob, jakým aplikace mezi sebou komunikují. REST APIs většinou používají ke komunikaci HTTP(s) protokol a JSON formát.</p>
+        <p>Cisco vytvořilo tři základní SDN architektury - SD-WAN, SD-Access a ACI.</p>
+        <p>Jestliže chceme plně přejít na SDN, musíme k tomu mít odpovídající hardware, což ne tak vždy je, proto je zde ještě možnost síť zautomatizovat pomocí konfiguračních nástrojů jako třeba Ansible, Puppet či Chef.</p>
     </section>
     <div class="height_spacer"></div>
     <h3 style="text-align: center;" class="noBorder">Chcete si latku procvičit?</h3>

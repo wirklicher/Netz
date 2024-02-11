@@ -83,12 +83,12 @@ Global LLDP Information:
     LLDP hold time advertised is 120 seconds
     LLDP interface reinitialisation delay is 2 seconds
 </pre>
-            <p>Pojďme si vysvětlit, co kód řádek po řádku - </p>
+            <p>Vysvětlení kódu:</p>
             <p>Nejdříve importujeme z netmika ConnectHandler, pomocí kterého se na zařízení budeme připojovat.</p>
             <p>Poté definujeme jednotlivá zařízení s jejich přístupovými údaji, jenom zde poznamenám, že password je heslo pro SSH a secret je heslo pro priviledged EXEC mód.</p>
             <p>Dále definuji tuple switchů a list příkazů, které netmiko implementuje v global config módu.</p>
             <p>Teď používám cyklus for, který pro každý zařízení provede konfiguraci.</p>
-            <p>Tedy, nejdříve se pomocí ConnectHandleru vytvoří spojení s daným zařízením, to spojení dále v kódu najdeme pod proměnnou net_connect.</p>
+            <p>Tedy, nejdříve se v cyklu pomocí ConnectHandleru vytvoří spojení s daným zařízením, to spojení dále v kódu najdeme pod proměnnou net_connect.</p>
             <p>Poté v kódu pro přehlednost vypisuji to, které zařízení se zrovna konfiguruje atd.</p>
             <p>Dále se přihlašuji do priviledged EXEC módu pomocí "net_connect.enable()", na to navazuji tím, že přes net_connect pošlu dané příkazy na zařízení. Další řádek konfiguraci ukládá a ostatní řádku pak už jen spouští jednotlivé "show" příkazy v priviledged EXEC módu.</p>
         </section>
@@ -151,7 +151,7 @@ Konfigurace zařízení s IP adresou:  192.168.0.252
 Jste spokojeni se změnama? Y/N Y
 --------------------------------------------------------------   
 </pre>
-            <p>Vysvětlení kódu:</p>
+            <p>Pojďme si vysvětlit, co kód řádek po řádku - </p>
             <p>"from napalm import get_network_driver" nám importuje driver pomocí kterého potom komunikujeme s danými zařízeními.</p>
             <p>"SW1 = {...}, SW2 = {...}" nám opět definují údaje potřebné k tomu, abychom se pomocí Napalm mohli připojit na zařízení.</p>
             <p>"driver = get_network_driver('ios')" nám vybere driver určený pro komunikaci se zařízeními, které mají jako operační systém Cisco IOS.</p>
@@ -159,7 +159,7 @@ Jste spokojeni se změnama? Y/N Y
             <p>Pomocí cyklu "for switch in switches" který pro každé zařízení v tuple provede naši konfiguraci.</p>
             <p>"net_conn = driver(**switch)" nám definuje spojení k danému síťovému zařízení.</p>
             <p>"net_conn.open()" otevře to spojení.</p>
-            <p>"print" zde opět slouží pro přehlednost</p>
+            <p>"print" zde opět slouží pro přehlednost.</p>
             <p>Prostřednictvím příkazu "net_conn.load_merge_candidate(filename="./cdplldp.conf")" přidáme do nynější konfigurace zařízení naší konfiguraci, kterou definujeme v souboru "cdplldp.conf".</p>
             <p>Příkaz "print(net_conn.compare_config())" nám vypíše co se v konfiguraci oproti nynějšímu stavu změní.</p>
             <p>Teď si můžeme vybrat či tyto změny skutečně provedeme či je necháme být. Tomu se věnují řádky začínající slovy commit, if, net_conn, else, net_conn.</p>
@@ -201,7 +201,7 @@ response = requests.port(url, data=json.dumps(paylod), headers=myheaders, auth=(
         <p>Python knihovny, které se například používají ke správě sítí jsou: Netmiko, Napalm a Requests.</p>
         <p>Netmiko funguje na tom principu, že se vzdáleně pomocí SSH/telnet připojí na dané síťové zařízení a provede na něm požadované příkazy.</p>
         <p>Napalm zas funguje tak, že prostřednictvím scp konfiguraci na zařízení nahradí nebo ji sjednodnotí. Výhodou Napalm je jeho podpora multi-vendor a multi-platform sítí (není nutné znát syntax show příkazů pro jednotlivá zařízení).</p>
-        <p>Requests poté konfiguruje a spravuje síť prostřednictvím HTTP žádostí, což nejde použít u starších zařízení.</p>
+        <p>Requests poté konfiguruje a spravuje síť prostřednictvím HTTP(s) žádostí, což nejde použít u starších zařízení.</p>
     </section>
     <div class="height_spacer"></div>
 </body>

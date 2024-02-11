@@ -34,9 +34,9 @@
         <p>Instalace se liší podle toho jakou distribuci linuxu máte.</p>
         <section id="ArchLinux" class="subSection">
             <h4>Instalace na ArchLinux</h4>
-            <p class="beforecode">1. Nejdříve distribuci zaktualizujte: </p>
+            <p class="beforecode">Nejdříve distribuci zaktualizujte: </p>
             <pre>sudo pacman -Syu</pre>
-            <p class="beforecode">2. Nainstalujte Ansible pomocí příkazu: </p>
+            <p class="beforecode">Poté Ansible nainstalujte pomocí příkazu: </p>
             <pre>sudo pacman -S ansible</pre>
         </section>
         <section id="FedoraLinux" class="subSection">
@@ -61,10 +61,10 @@ sudo apt install ansible</pre>
     </section>
     <section id="ConfiguringUsingAnsible">
         <h3>Konfigurace sítí pomocí Ansible</h3>
-        <p>Před konfigurací jednotlivých zařízení je nutné se ujistit, že jsou z Control Node dosažitelné a lze se na ně připojit vzdáleně pomocí SSH.</p>
+        <p>Před konfigurací jednotlivých zařízení je nutné se ujistit, že jsou z Control Node dosažitelné a že se lze na ně připojit vzdáleně pomocí SSH.</p>
         <p>Jestliže vše funguje jak má, můžeme začít nastavovat Ansible a začít konfigurovat síť.</p>
         <p>Je vhodné začít manuálním dns mapováním, které se provádí v souboru "/etc/hosts", tam namapujeme jednotlivé IP adresy k námi zvoleným jménům. Tento krok sice není povinný, ale ušetří nám poté vypisování jednotlivých ip adres.</p>
-        <p>Nyní je třeba v souboru "<b>/etc/ansible/hosts</b>" (tomuto souboru se také přezdívá <b>Inventory</b>) definovat jednotlivá síťová zařízení, které budeme chtít přes Ansible spravovat a konfigurovat. Síťová zařízení v tomto souboru také můžeme dávat do jednotlivých skupinek. Dále v něm můžeme uvést i přístupové údaje jako uživatelské jméno a heslo k SSH a Priviledged EXEC módu, nicméně to není nutné a lze je definovat později bezpečnějším způsobem.</p>
+        <p>Nyní je třeba v souboru "<b>/etc/ansible/hosts</b>" (tomuto souboru se také přezdívá <b>Inventory</b>) definovat jednotlivá síťová zařízení, která budeme chtít přes Ansible spravovat a konfigurovat. Síťová zařízení v tomto souboru také můžeme dávat do jednotlivých skupinek. Dále v něm můžeme uvést i přístupové údaje jako uživatelské jméno a heslo k SSH a Priviledged EXEC módu, nicméně to není nutné a lze je definovat později bezpečnějším způsobem pomocí Ansible Vault.</p>
         <p class="beforecode">Ukázka /etc/ansible/hosts souboru:</p>
         <pre>[routers]
 R1
@@ -97,14 +97,14 @@ ansible_network_os=ios
 ansible_become=true
 ansible_become_password=cisco123
 </pre>
-        <p>Jak můžete vyčíst z příkladu, skupina se definuje pomocí hranatých závorek do kterých vpíšeme název skupiny, pod řádek se skupinou se píší jména zařízení, které jste si zvolili, pokud jste ten krok přeskočili, místo jmen zařízení píšete ip adresy.</p>
-        <p>Jestliže budeme chtít spojit vícero skupin do jedné větší, můžeme to udělat tak, že za jméno skupiny napíšeme :children a pod to napíšeme skupiny, které v té dané skupině budou zahrnuty.</p>
+        <p>Jak můžete vyčíst z příkladu, skupina se definuje pomocí hranatých závorek, do kterých vpíšeme název skupiny, pod řádek se skupinou se píší jména zařízení, které jste si zvolili, pokud jste ten krok přeskočili, místo jmen zařízení píšete ip adresy.</p>
+        <p>Jestliže budeme chtít spojit vícero skupin do jedné větší, můžeme to udělat tak, že za jméno skupiny, která bude obsahovat ty ostatní skupiny napíšeme :children a pod to napíšeme skupiny, které v té dané skupině budou zahrnuty.</p>
         <p>Dále si můžete všimnout výrazu [superdupernetwork:vars], ten definuje různé proměnné používané pro danou skupinu, tudíž přes to můžete definovat přihlašovací údáje k zařízení.</p>
         <p>Pozn. k ukázce, ansible_connection a ansible_network_os slouží k tomu, aby se ansible mohl správně připojit k daným zařízením. Ansible_become a ansible_become_password slouží k tomu, aby informovaly Ansible o tom zda zařízení má zaheslovaný priviledged EXEC mód a případně tak poskytly heslo.</p>
         <p>Více o tom, jak správně nastavit /etc/ansible/host můžete najít <a href="https://docs.ansible.com/ansible/latest/network/getting_started/first_inventory.html">zde</a>.</p>
-        <p class="beforecode">Pro otestovaní zda se ansible může dostat na všechna zařízení definované v souboru doporučuji spustit tento příkaz:</p>
+        <p class="beforecode">Pro otestovaní, zda se ansible může dostat na všechna zařízení definované v souboru, doporučuji spustit tento příkaz:</p>
         <pre>ansible [jméno_skupiny] -m ping</pre>
-        <p>Nyní se vrhneme na vytváření konfigurací pro síťová zařízení, ty definujeme v souborech, které se nazývají "<b>playbooks</b>". Z mých vlastních zkušeností doporučuji si tyto playbooks vytvořit novou složku v "/etc/ansible". Playbooks se píší v YAML, tudíž tyto soubory budou mít koncovku .yml případně .yaml.</p>
+        <p>Nyní se vrhneme na vytváření konfigurací pro síťová zařízení, ty definujeme v souborech, které se nazývají "<b>playbooks</b>". Z mých vlastních zkušeností doporučuji si pro tyto playbooks vytvořit novou složku v "/etc/ansible". Playbooks se píší v YAML, tudíž tyto soubory budou mít koncovku .yml případně .yaml.</p>
         <p class="beforecode">Ukázka playbook: </p>
         <pre>---
 - name: Configuring OSPF on loopback interface
@@ -122,8 +122,8 @@ ansible_become_password=cisco123
       <p>YAML soubor vždy začíná třemi pomlčkami, poté danou konfiguraci nějak pojmenujeme a stanovíme základní informace jako třeba skupinu hostů, kde konfiguraci chceme nastavit.</p>
       <p>Pod tasks specifikujeme jednotlivé úkoly, které má Ansible na daných zařízení provést. V případě ukázky se jedná o pouhé zapnutí opsf protokolu na specifických interfacích.</p>
       <p>O to, aby Ansible věděl, jak má k jednotlivým zařízením přistupovat, se stará modul, v případě ukázky je modulem ios_config, který slouží pro konfiguraci síťových zařízení, které používají Cisco IOS.</p>
-      <p>V lines poté definujeme jednotlivé kroky díky kterým na interfacích zapneme OSPF.</p>
-      <p>Save_when poté slouží k tomu, aby se konfigurace uložila do dlouhodobější paměťi zařízení.</p>
+      <p>V lines poté definujeme jednotlivé kroky, díky kterým na interfacích zapneme OSPF.</p>
+      <p>Save_when poté slouží k tomu, aby se konfigurace uložila do dlouhodobější paměti zařízení.</p>
       <p>Register: print_output nám pak zaručí, že nám bude vše podstatné vypsáno.</p>
       <p class="beforecode">Playbook se spouští pomocí příkazu:</p>
       <pre>ansible-playbook -i {cesta-k-inventory} {playbook}</pre>
