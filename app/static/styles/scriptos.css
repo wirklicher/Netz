@@ -113,7 +113,7 @@ main h1 {
   overflow: hidden;
   transition: max-height 0.3s;
   max-height: 0;
-  padding-left: 3.7em;
+  padding-left: 6em;
 }
 
 .submenu a {
@@ -315,6 +315,7 @@ input:checked:after {
     margin: auto;
     flex-direction: column;
     justify-content: space-between;
+    overflow-y: scroll;
   }
   #Ulscriptos {
     background-color: var(--menu-color);
@@ -325,7 +326,6 @@ input:checked:after {
     margin: auto;
   }
   .sub_btn {
-    padding-left: 10%;
     padding-top: 1.2em;
     padding-bottom: 1.2em;
     z-index: 3;

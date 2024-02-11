@@ -19,6 +19,9 @@
 .dark_mode pre {
   background-color: #242424;
   border-color: var(--secondary-color);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: justify;
 }
 .dark_mode tr:nth-child(odd) {
   background-color: #232323;
@@ -102,7 +105,9 @@ p {
   font-size: 1.2rem;
 }
 
-a, a:visited, a:focus {
+a,
+a:visited,
+a:focus {
   color: var(--secondary-color);
 }
 
@@ -127,7 +132,8 @@ td {
   font-size: 1.2em;
 }
 
-th, td {
+th,
+td {
   padding: 5px 12px;
 }
 
@@ -143,6 +149,8 @@ pre {
   background-color: #eee;
   white-space: pre-wrap;
   font-size: 1.2em;
+  word-wrap: break-word;
+  text-align: justify;
 }
 
 #templateline {
@@ -517,6 +525,9 @@ pre {
   }
   pre {
     max-width: 90%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
   }
   h1 {
     font-size: 2.5em;

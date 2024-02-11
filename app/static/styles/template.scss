@@ -1,4 +1,3 @@
-
 $spacer: 15px;
 
 //Změny v defaultu HTML
@@ -18,14 +17,19 @@ $spacer: 15px;
 .dark_mode {
     --menu-color: #252525;
     --primary-color: #121212;
-    --secondary-color: #db861f;;
+    --secondary-color: #db861f;
+    ;
     --text-color: white;
 
     pre {
         background-color: #242424;
-        border-color:var(--secondary-color);
+        border-color: var(--secondary-color);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
     }
-    tr:nth-child(odd){
+
+    tr:nth-child(odd) {
         background-color: #232323;
     }
 
@@ -40,7 +44,7 @@ $spacer: 15px;
 
 html {
     background-color: var(--primary-color);
-    
+
 }
 
 body {
@@ -113,7 +117,9 @@ p {
     font-size: 1.2rem;
 }
 
-a, a:visited, a:focus {
+a,
+a:visited,
+a:focus {
     color: var(--secondary-color);
 }
 
@@ -125,13 +131,13 @@ img {
 
 table {
     width: 100%;
-    text-align:left;
+    text-align: left;
     border-spacing: 0;
 }
 
 th {
     background-color: #07313f;
-    color:#db861f;
+    color: #db861f;
     text-transform: uppercase;
     font-size: 1.5em;
 }
@@ -140,24 +146,27 @@ td {
     font-size: 1.2em;
 }
 
-th, td {
+th,
+td {
     padding: 5px 12px;
 }
 
-tr:nth-child(odd){
+tr:nth-child(odd) {
     background-color: #eeeeee;
 }
 
 //pre
 
 pre {
-    width:100%;
+    width: 100%;
     border-left: 4px solid #07313f;
     margin: 10px 0;
     padding: 5px 12px;
     background-color: #eee;
     white-space: pre-wrap;
     font-size: 1.2em;
+    word-wrap: break-word;
+    text-align: justify;
 }
 
 //Podtržítka
@@ -167,7 +176,7 @@ pre {
     width: 100%;
     height: 1px;
     border-top: solid 2px var(--secondary-color);
-    
+
 }
 
 #templateline2 {
@@ -201,10 +210,11 @@ pre {
 }
 
 .noBorder {
-    padding-bottom:0;
+    padding-bottom: 0;
     z-index: 0;
     border-bottom: none;
 }
+
 .noBorder:before {
     border-bottom: none;
 }
@@ -306,7 +316,7 @@ pre {
     display: flex;
     justify-content: space-between;
     width: 95%;
-    margin:auto;
+    margin: auto;
 }
 
 .abc {
@@ -323,7 +333,7 @@ pre {
     margin-bottom: 14.5px;
 }
 
-.line2{
+.line2 {
     background-color: #07313f;
     width: 7px;
     height: 5px;
@@ -348,11 +358,11 @@ pre {
     height: 50px;
     cursor: pointer;
     border-radius: 2em;
-    border:  #F1F1E6 solid 2px;
+    border: #F1F1E6 solid 2px;
     font-size: 1.5em;
     font-family: monospace;
     font-weight: 300;
-    color:#F1F1E6;
+    color: #F1F1E6;
     padding-left: 45px;
     align-items: center;
     max-width: none;
@@ -365,7 +375,7 @@ pre {
     color: #47AF7C;
 }
 
-#answersSection{
+#answersSection {
     height: 75px;
     background-color: #083a4a;
     display: flex;
@@ -421,7 +431,7 @@ pre {
 
 .correct {
     border-color: #47AF7C;
-    color:#47AF7C; 
+    color: #47AF7C;
 }
 
 
@@ -438,7 +448,7 @@ pre {
     border-radius: 1.2rem;
 }
 
-.bgbtn:hover{
+.bgbtn:hover {
     transition: all .5s;
     transform: scale(1.025);
 
@@ -449,11 +459,11 @@ pre {
     background-color: #F1F1E6;
     color: black;
     border-radius: 1.2rem;
-    
+
 }
 
 .hidden {
-    display:none;
+    display: none;
 }
 
 .result {
@@ -479,7 +489,7 @@ pre {
     text-decoration: none;
     border-radius: 1rem;
     background-color: #F1F1E6;
-    color:#07313f;
+    color: #07313f;
 }
 
 .playagainbtn:hover {
@@ -501,7 +511,7 @@ pre {
 }
 
 .ordered {
-    list-style:decimal;
+    list-style: decimal;
     list-style-position: inside;
     padding-left: 1.5rem;
     font-size: 1.2em;
@@ -509,7 +519,7 @@ pre {
 
 
 .configImage {
-    width:100%;
+    width: 100%;
     min-width: 300px;
     max-width: fit-content;
 }
@@ -523,28 +533,32 @@ pre {
         font-size: 1.1rem;
         font-weight: 700;
     }
+
     .choice_que {
         font-size: 1rem;
     }
-    
+
     .answers {
         font-size: 1rem;
     }
 }
+
 @media only screen and (max-width: 750px) {
 
     #questionText {
         font-size: .9rem;
         font-weight: 700;
     }
+
     .choice_que {
         font-size: .75rem;
     }
+
     .answers {
         font-size: .75rem;
     }
 
-    
+
 }
 
 
@@ -556,6 +570,9 @@ pre {
 
     pre {
         max-width: 90%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
     }
 
     h1 {
@@ -563,5 +580,3 @@ pre {
     }
 
 }
-
-
