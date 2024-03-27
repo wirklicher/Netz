@@ -7,4 +7,4 @@ Ke spuštění stránky je nutné mít nainstalovaný Python nebo allow CORS ext
 
 ### Spuštění pomocí pythonu
 Jestliže chcete spustit stránku přes python, otevřete si ve složce app cmd a spusťte příkaz:
-`code`python -m http.server	`code`
+`python -m http.server`
