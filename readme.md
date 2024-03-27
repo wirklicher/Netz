@@ -10,3 +10,6 @@ Ke spuštění stránky je nutné mít nainstalovaný Python nebo allow CORS ext
 Jestliže chcete spustit stránku přes python, otevřete si ve složce app cmd a spusťte příkaz:
 
 `python -m http.server`
+
+Poté ve webové prohlížeči přejděte na stránku localhost:8000 a klikněte na templates.
+
